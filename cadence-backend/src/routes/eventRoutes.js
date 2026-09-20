@@ -9,6 +9,12 @@ import {
   deleteBudgetItem,
   getBudgetSummary,
 } from '../controllers/budgetController.js';
+import {
+  getTimelineItems,
+  createTimelineItem,
+  updateTimelineItem,
+  deleteTimelineItem,
+} from '../controllers/timelineController.js';
 
 const router = express.Router();
 
@@ -26,5 +32,9 @@ router.post('/:eventId/budget', createBudgetItem);
 router.put('/:eventId/budget/:id', updateBudgetItem);
 router.delete('/:eventId/budget/:id', deleteBudgetItem);
 router.get('/:eventId/budget/summary', getBudgetSummary);
+router.get('/:eventId/timeline', getTimelineItems);
+router.post('/:eventId/timeline', createTimelineItem);
+router.put('/:eventId/timeline/:id', updateTimelineItem);
+router.delete('/:eventId/timeline/:id', deleteTimelineItem);
 
 export default router;
