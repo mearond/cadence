@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { pool } from '../config/db.js';
+import jwt from 'jsonwebtoken';
 
 export async function signup(req, res) {
   const { orgName, name, email, password } = req.body;
@@ -34,5 +35,49 @@ export async function signup(req, res) {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Something went wrong creating your account.' });
+  }
+}
+
+export async function login(req, res) {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Email and password are required.' });
+  }
+
+  try {
+    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    const user = result.rows[0];
+
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid email or password.' });
+    }
+
+    const passwordMatches = await bcrypt.compare(password, user.password_hash);
+    if (!passwordMatches) {
+      return res.status(401).json({ error: 'Invalid email or password.' });
+    }
+
+    const token = jwt.sign(
+      { userId: user.id, orgId: user.org_id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      message: 'Login successful.',
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        org_id: user.org_id,
+        preferred_language: user.preferred_language,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Something went wrong logging in.' });
   }
 }
