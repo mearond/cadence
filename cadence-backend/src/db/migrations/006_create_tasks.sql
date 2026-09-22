@@ -1,0 +1,21 @@
+CREATE TABLE tasks (
+  id SERIAL PRIMARY KEY,
+  event_id INTEGER REFERENCES events(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  status VARCHAR(20) NOT NULL DEFAULT 'pending',
+  priority VARCHAR(20) NOT NULL DEFAULT 'medium',
+  assigned_to INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  due_date DATE,
+  created_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE task_checkpoints (
+  id SERIAL PRIMARY KEY,
+  task_id INTEGER REFERENCES tasks(id) ON DELETE CASCADE,
+  label VARCHAR(255) NOT NULL,
+  checked BOOLEAN DEFAULT FALSE,
+  added_by INTEGER REFERENCES users(id) ON DELETE SET NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
