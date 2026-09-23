@@ -20,6 +20,7 @@ import {
   addCheckpoint, toggleCheckpoint, deleteCheckpoint,
 } from '../controllers/taskController.js';
 import { getApprovals, createApprovalRequest, deleteApprovalRequest } from '../controllers/approvalController.js';
+import { inviteClientToEvent } from '../controllers/clientInviteController.js';
 
 const router = express.Router();
 
@@ -53,5 +54,7 @@ router.delete('/:eventId/tasks/:taskId/checkpoints/:checkpointId', deleteCheckpo
 router.get('/:eventId/approvals', getApprovals);
 router.post('/:eventId/approvals', createApprovalRequest);
 router.delete('/:eventId/approvals/:id', deleteApprovalRequest);
+
+router.post('/:eventId/invite-client', inviteClientToEvent);
 
 export default router;
