@@ -1,0 +1,15 @@
+{
+  "app": {
+    "name": "ካደንስ"
+  },
+  "nav": {
+    "dashboard": "ዳሽቦርድ",
+    "events": "ዝግጅቶች",
+    "logout": "ውጣ"
+  },
+  "auth": {
+    "signIn": "ግባ",
+    "email": "ኢሜይል",
+    "password": "የይለፍ ቃል"
+  }
+}

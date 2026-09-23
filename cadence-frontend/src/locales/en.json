@@ -1,0 +1,15 @@
+{
+  "app": {
+    "name": "Cadence"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "events": "Events",
+    "logout": "Logout"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "email": "Email",
+    "password": "Password"
+  }
+}
