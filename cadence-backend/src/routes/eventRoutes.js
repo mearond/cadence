@@ -19,6 +19,7 @@ import {
   getTasks, createTask, updateTask, deleteTask,
   addCheckpoint, toggleCheckpoint, deleteCheckpoint,
 } from '../controllers/taskController.js';
+import { getApprovals, createApprovalRequest, deleteApprovalRequest } from '../controllers/approvalController.js';
 
 const router = express.Router();
 
@@ -48,5 +49,9 @@ router.delete('/:eventId/tasks/:id', deleteTask);
 router.post('/:eventId/tasks/:taskId/checkpoints', addCheckpoint);
 router.put('/:eventId/tasks/:taskId/checkpoints/:checkpointId/toggle', toggleCheckpoint);
 router.delete('/:eventId/tasks/:taskId/checkpoints/:checkpointId', deleteCheckpoint);
+
+router.get('/:eventId/approvals', getApprovals);
+router.post('/:eventId/approvals', createApprovalRequest);
+router.delete('/:eventId/approvals/:id', deleteApprovalRequest);
 
 export default router;

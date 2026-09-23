@@ -6,6 +6,7 @@ import authRoutes from './routes/authRoutes.js';
 import { requireAuth } from './middleware/authMiddleware.js';
 import eventRoutes from './routes/eventRoutes.js';
 import vendorRoutes from './routes/vendorRoutes.js';
+import clientRoutes from './routes/clientRoutes.js';
 
 dotenv.config();
 
@@ -17,6 +18,8 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/vendors', vendorRoutes);
+app.use('/api/client', clientRoutes);
+
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Cadence backend is running' });
