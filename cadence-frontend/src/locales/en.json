@@ -11,5 +11,10 @@
     "signIn": "Sign In",
     "email": "Email",
     "password": "Password"
+  },
+  "dashboard": {
+  "welcomeBack": "Welcome back",
+  "orgId": "Organization",
+  "role": "Role"
   }
 }

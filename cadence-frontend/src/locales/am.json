@@ -11,5 +11,10 @@
     "signIn": "ግባ",
     "email": "ኢሜይል",
     "password": "የይለፍ ቃል"
+  },
+  "dashboard": {
+  "welcomeBack": "እንኳን ደህና መጡ",
+  "orgId": "ድርጅት",
+  "role": "ሚና"
   }
 }
