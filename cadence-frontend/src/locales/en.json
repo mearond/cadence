@@ -55,5 +55,53 @@
         "endDate": "End Date",
         "guestCount": "Guests",
         "notSet": "Not set"
+    },
+    "eventTabs": {
+        "overview": "Overview",
+        "timeline": "Timeline",
+        "budget": "Budget",
+        "vendors": "Vendors",
+        "tasks": "Tasks"
+    },
+    "timeline": {
+        "add": "Add Item",
+        "empty": "No timeline items yet.",
+        "title": "Title",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "save": "Save"
+    },
+    "budget": {
+        "add": "Add Item",
+        "empty": "No budget items yet.",
+        "category": "Category",
+        "name": "Name",
+        "estimated": "Estimated",
+        "actual": "Actual",
+        "totalEstimated": "Total Estimated",
+        "totalActual": "Total Actual",
+        "totalVat": "VAT (15%)",
+        "save": "Save"
+    },
+    "vendors": {
+        "add": "Add Vendor",
+        "empty": "No vendors booked yet.",
+        "name": "Vendor Name",
+        "amount": "Contract Amount (ETB)",
+        "paymentStatus": "Payment Status",
+        "save": "Save",
+        "status": {
+            "unpaid": "Unpaid",
+            "partial": "Partially Paid",
+            "paid": "Paid"
+        }
+    },
+    "tasks": {
+        "add": "Add Task",
+        "empty": "No tasks yet.",
+        "title": "Title",
+        "priority": "Priority",
+        "save": "Save",
+        "checkpoints": "checkpoints done"
     }
 }

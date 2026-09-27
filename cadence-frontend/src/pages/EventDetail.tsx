@@ -4,6 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { ArrowLeft, CalendarDays, Users } from 'lucide-react';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import { fetchEventById, type Event } from '../lib/events';
+import TimelineTab from '../components/events/TimelineTab';
+import BudgetTab from '../components/events/BudgetTab';
+import VendorsTab from '../components/events/VendorsTab';
+import TasksTab from '../components/events/TasksTab';
 
 export default function EventDetail() {
   const { id } = useParams();
@@ -11,6 +15,7 @@ export default function EventDetail() {
   const navigate = useNavigate();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'budget' | 'vendors' | 'tasks'>('overview');
 
   useEffect(() => {
     if (!id) return;
@@ -86,6 +91,26 @@ export default function EventDetail() {
           <p className="text-sm text-teal-dark font-medium">{event.guest_count ?? t('eventDetail.notSet')}</p>
         </div>
       </div>
+      <div className="flex gap-1 mt-6 mb-5 border-b border-sage/30">
+        {(['overview', 'timeline', 'budget', 'vendors', 'tasks'] as const).map((tab) => (
+            <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === tab
+                ? 'border-gold text-teal-dark'
+                : 'border-transparent text-teal-dark/40 hover:text-teal-dark/70'
+            }`}
+            >
+            {t(`eventTabs.${tab}`)}
+            </button>
+        ))}
+        </div>
+
+        {activeTab === 'timeline' && <TimelineTab eventId={id!} />}
+        {activeTab === 'budget' && <BudgetTab eventId={id!} />}
+        {activeTab === 'vendors' && <VendorsTab eventId={id!} />}
+        {activeTab === 'tasks' && <TasksTab eventId={id!} />}
     </DashboardLayout>
   );
 }

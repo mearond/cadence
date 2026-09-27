@@ -55,5 +55,53 @@
         "endDate": "መጨረሻ ቀን",
         "guestCount": "እንግዶች",
         "notSet": "አልተቀመጠም"
+    },
+    "eventTabs": {
+        "overview": "አጠቃላይ እይታ",
+        "timeline": "የጊዜ ሰሌዳ",
+        "budget": "በጀት",
+        "vendors": "አቅራቢዎች",
+        "tasks": "ተግባራት"
+    },
+    "timeline": {
+        "add": "ንጥል ጨምር",
+        "empty": "እስካሁን የጊዜ ሰሌዳ ንጥል የለም።",
+        "title": "ርዕስ",
+        "startTime": "መጀመሪያ ሰዓት",
+        "endTime": "መጨረሻ ሰዓት",
+        "save": "አስቀምጥ"
+    },
+    "budget": {
+        "add": "ንጥል ጨምር",
+        "empty": "እስካሁን የበጀት ንጥል የለም።",
+        "category": "ምድብ",
+        "name": "ስም",
+        "estimated": "የተገመተ",
+        "actual": "ትክክለኛ",
+        "totalEstimated": "ጠቅላላ የተገመተ",
+        "totalActual": "ጠቅላላ ትክክለኛ",
+        "totalVat": "ተ.እ.ታ (15%)",
+        "save": "አስቀምጥ"
+    },
+    "vendors": {
+        "add": "አቅራቢ ጨምር",
+        "empty": "እስካሁን አቅራቢ አልተያዘም።",
+        "name": "የአቅራቢ ስም",
+        "amount": "የኮንትራት መጠን (ብር)",
+        "paymentStatus": "የክፍያ ሁኔታ",
+        "save": "አስቀምጥ",
+        "status": {
+            "unpaid": "አልተከፈለም",
+            "partial": "በከፊል ተከፍሏል",
+            "paid": "ተከፍሏል"
+        }
+    },
+    "tasks": {
+        "add": "ተግባር ጨምር",
+        "empty": "እስካሁን ተግባር የለም።",
+        "title": "ርዕስ",
+        "priority": "ቅድሚያ",
+        "save": "አስቀምጥ",
+        "checkpoints": "ተጠናቀዋል"
     }
 }
