@@ -16,8 +16,14 @@ export async function fetchEvents(): Promise<Event[]> {
   return response.data;
 }
 
+export async function fetchEventById(id: string): Promise<Event> {
+  const response = await api.get(`/events/${id}`);
+  return response.data;
+}
+
 export async function createEvent(data: {
   name: string;
+  nameAm?: string;
   eventType: string;
   startDate: string;
   endDate?: string;

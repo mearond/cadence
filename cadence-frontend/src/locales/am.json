@@ -37,5 +37,23 @@
         "religious": "ሃይማኖታዊ",
         "memorial": "መታሰቢያ"
     }
+    },
+    "eventForm": {
+        "createTitle": "አዲስ ዝግጅት ይፍጠሩ",
+        "name": "የዝግጅት ስም",
+        "nameAm": "የዝግጅት ስም (አማርኛ)",
+        "eventType": "የዝግጅት አይነት",
+        "startDate": "መጀመሪያ ቀን",
+        "endDate": "መጨረሻ ቀን",
+        "guestCount": "የሚጠበቁ እንግዶች",
+        "create": "ዝግጅት ፍጠር",
+        "cancel": "ሰርዝ"
+    },
+    "eventDetail": {
+        "back": "ወደ ዝግጅቶች ተመለስ",
+        "startDate": "መጀመሪያ ቀን",
+        "endDate": "መጨረሻ ቀን",
+        "guestCount": "እንግዶች",
+        "notSet": "አልተቀመጠም"
     }
 }

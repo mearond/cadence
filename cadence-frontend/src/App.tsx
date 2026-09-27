@@ -3,6 +3,8 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import Events from './pages/Events';
+import NewEvent from './pages/NewEvent';
+import EventDetail from './pages/EventDetail';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/events/new" element={<ProtectedRoute><NewEvent /></ProtectedRoute>} />
+        <Route path="/events/:id" element={<ProtectedRoute><EventDetail /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );
