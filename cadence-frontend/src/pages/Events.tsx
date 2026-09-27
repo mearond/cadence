@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Plus, CalendarDays, Users } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Plus, CalendarDays, Users, Trash2 } from 'lucide-react';
 import DashboardLayout from '../components/layout/DashboardLayout';
-import { fetchEvents, type Event } from '../lib/events';
+import { fetchEvents, deleteEvent, type Event } from '../lib/events';
 
 const statusColors: Record<string, string> = {
   planning: 'bg-gold-light/40 text-[#8a6a1f]',
@@ -34,6 +35,13 @@ export default function Events() {
       year: 'numeric',
     });
 
+  const handleDelete = async (e: React.MouseEvent, eventId: number) => {
+    e.stopPropagation();
+    if (!confirm('Delete this event? This cannot be undone.')) return;
+    await deleteEvent(eventId);
+    setEvents((prev) => prev.filter((ev) => ev.id !== eventId));
+  };
+
   return (
     <DashboardLayout>
       <div className="flex items-center justify-between mb-6">
@@ -58,14 +66,24 @@ export default function Events() {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {events.map((event) => {
+        {events.map((event, i) => {
           const displayName = i18n.language === 'am' && event.name_am ? event.name_am : event.name;
           return (
-            <button
+            <motion.button
               key={event.id}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: i * 0.05 }}
               onClick={() => navigate(`/events/${event.id}`)}
-              className="text-left bg-white rounded-2xl border border-sage/30 p-5 hover:shadow-md hover:border-gold/40 transition-all"
+              className="text-left bg-white rounded-2xl border border-sage/30 p-5 hover:shadow-md hover:border-gold/40 transition-all relative group"
             >
+              <button
+                onClick={(e) => handleDelete(e, event.id)}
+                className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 text-teal-dark/30 hover:text-terracotta transition-all p-1"
+              >
+                <Trash2 size={14} />
+              </button>
+
               <div className="flex items-center justify-between mb-3">
                 <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-full ${statusColors[event.status] || ''}`}>
                   {t(`eventsPage.status.${event.status}`)}
@@ -74,7 +92,7 @@ export default function Events() {
                   {t(`eventsPage.type.${event.event_type}`)}
                 </span>
               </div>
-              <h3 className="font-semibold text-teal-dark mb-2">{displayName}</h3>
+              <h3 className="font-semibold text-teal-dark mb-2 pr-5">{displayName}</h3>
               <div className="flex items-center gap-3 text-xs text-teal-dark/50">
                 <span className="flex items-center gap-1">
                   <CalendarDays size={12} />
@@ -87,7 +105,7 @@ export default function Events() {
                   </span>
                 )}
               </div>
-            </button>
+            </motion.button>
           );
         })}
       </div>

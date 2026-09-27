@@ -88,3 +88,6 @@ export async function toggleTaskCheckpoint(eventId: string, taskId: number, chec
   const response = await api.put(`/events/${eventId}/tasks/${taskId}/checkpoints/${checkpointId}/toggle`);
   return response.data;
 }
+export async function deleteEvent(id: number): Promise<void> {
+  await api.delete(`/events/${id}`);
+}
