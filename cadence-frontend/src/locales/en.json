@@ -16,5 +16,26 @@
   "welcomeBack": "Welcome back",
   "orgId": "Organization",
   "role": "Role"
-  }
+  },
+  "eventsPage": {
+    "title": "Events",
+    "newEvent": "New Event",
+    "noEvents": "No events yet. Create your first one to get started.",
+    "guests": "guests",
+    "status": {
+        "planning": "Planning",
+        "confirmed": "Confirmed",
+        "in-progress": "In Progress",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+    },
+    "type": {
+        "conference": "Conference",
+        "wedding": "Wedding",
+        "corporate": "Corporate",
+        "graduation": "Graduation",
+        "religious": "Religious",
+        "memorial": "Memorial"
+    }
+    }
 }

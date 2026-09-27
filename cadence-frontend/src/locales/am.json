@@ -16,5 +16,26 @@
   "welcomeBack": "እንኳን ደህና መጡ",
   "orgId": "ድርጅት",
   "role": "ሚና"
-  }
+  },
+  "eventsPage": {
+    "title": "ዝግጅቶች",
+    "newEvent": "አዲስ ዝግጅት",
+    "noEvents": "እስካሁን ምንም ዝግጅት የለም። የመጀመሪያውን ይፍጠሩ።",
+    "guests": "እንግዶች",
+    "status": {
+        "planning": "በዕቅድ ላይ",
+        "confirmed": "ተረጋግጧል",
+        "in-progress": "በሂደት ላይ",
+        "completed": "ተጠናቋል",
+        "cancelled": "ተሰርዟል"
+    },
+    "type": {
+        "conference": "ኮንፈረንስ",
+        "wedding": "ሠርግ",
+        "corporate": "ኮርፖሬት",
+        "graduation": "ምረቃ",
+        "religious": "ሃይማኖታዊ",
+        "memorial": "መታሰቢያ"
+    }
+    }
 }
