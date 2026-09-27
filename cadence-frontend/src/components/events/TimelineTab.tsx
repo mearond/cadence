@@ -31,7 +31,10 @@ export default function TimelineTab({ eventId }: { eventId: string }) {
       <div className="space-y-3 mb-4">
         {items.map((item) => (
           <div key={item.id} className="flex items-center gap-3 py-2 border-b border-sage/20 last:border-0">
-            <div className="w-16 shrink-0 text-xs font-semibold text-gold">{item.start_time?.slice(0, 5)}</div>
+          <div className="w-28 shrink-0 text-xs font-semibold text-gold">
+                {item.start_time?.slice(0, 5)}
+                {item.end_time && <span className="text-teal-dark/40 font-normal"> – {item.end_time.slice(0, 5)}</span>}
+            </div>
             <Clock size={14} className="text-teal-deep/40 shrink-0" />
             <p className="text-sm text-teal-dark">{item.title}</p>
           </div>

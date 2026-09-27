@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import { useAuthStore } from '../store/authStore';
+import { motion } from 'framer-motion';
 
 export default function Dashboard() {
   const { t } = useTranslation();
@@ -8,12 +9,17 @@ export default function Dashboard() {
 
   return (
     <DashboardLayout>
-      <div className="bg-teal-deep rounded-2xl px-7 py-6 mb-6">
+        <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            className="bg-teal-deep rounded-2xl px-7 py-6 mb-6"
+        >
         <h1 className="text-2xl font-bold text-white mb-1">{t('nav.dashboard')}</h1>
         <p className="text-sm text-white/70">
             {t('dashboard.welcomeBack')}, {user?.name}.
         </p>
-      </div>
+      </motion.div>
 
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-sage/30 max-w-md">
         <div className="flex items-center gap-2 mb-2">

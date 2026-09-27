@@ -22,6 +22,16 @@ export default function NewEvent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (endDate && startDate && endDate < startDate) {
+        setError('End date cannot be before the start date.');
+        return;
+    }
+    if (guestCount && Number(guestCount) < 0) {
+        setError('Guest count cannot be negative.');
+        return;
+    }
+
     setLoading(true);
     try {
       const event = await createEvent({
@@ -42,11 +52,11 @@ export default function NewEvent() {
 
   return (
     <DashboardLayout>
-      <div className="max-w-lg">
-        <h1 className="text-2xl font-bold text-teal-dark mb-6">{t('eventForm.createTitle')}</h1>
+            <div className="max-w-lg mx-auto">
+                <h1 className="text-2xl font-bold text-teal-dark mb-6 text-center">{t('eventForm.createTitle')}</h1>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-sage/30 p-6 space-y-4">
-          <div>
+                <form onSubmit={handleSubmit} className="bg-sage-light/40 rounded-3xl border border-sage/30 p-7 space-y-4">
+            <div>
             <label className="block text-xs font-medium text-teal-dark/60 mb-1.5">{t('eventForm.name')}</label>
             <input
               value={name}
@@ -96,6 +106,7 @@ export default function NewEvent() {
               <input
                 type="date"
                 value={endDate}
+                min={startDate || undefined}
                 onChange={(e) => setEndDate(e.target.value)}
                 className="w-full border border-sage/40 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40"
               />
@@ -105,10 +116,11 @@ export default function NewEvent() {
           <div>
             <label className="block text-xs font-medium text-teal-dark/60 mb-1.5">{t('eventForm.guestCount')}</label>
             <input
-              type="number"
-              value={guestCount}
-              onChange={(e) => setGuestCount(e.target.value)}
-              className="w-full border border-sage/40 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40"
+                type="number"
+                min={0}
+                value={guestCount}
+                onChange={(e) => setGuestCount(e.target.value)}
+                className="w-full border border-sage/40 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40"
             />
           </div>
 
