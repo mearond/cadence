@@ -22,9 +22,10 @@ export default function Sidebar() {
     >
       <button
         onClick={toggleSidebar}
-        className="absolute -right-3.5 top-8 w-7 h-7 rounded-full bg-teal-deep text-white flex items-center justify-center shadow-md border-2 border-cream hover:bg-teal-dark z-20"
+        title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        className="absolute -right-3.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-teal-deep text-white flex items-center justify-center shadow-md border-2 border-cream hover:bg-teal-dark transition-colors z-20"
       >
-        {collapsed ? <ChevronRight size={13} /> : <ChevronLeft size={13} />}
+        {collapsed ? <ChevronRight size={14} strokeWidth={2.5} /> : <ChevronLeft size={14} strokeWidth={2.5} />}
       </button>
 
       <div className="px-6 py-7 overflow-hidden">
