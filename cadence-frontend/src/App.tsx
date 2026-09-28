@@ -5,6 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Events from './pages/Events';
 import NewEvent from './pages/NewEvent';
 import EventDetail from './pages/EventDetail';
+import ClientPortal from './pages/ClientPortal';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         />
         <Route path="/events/new" element={<ProtectedRoute><NewEvent /></ProtectedRoute>} />
         <Route path="/events/:id" element={<ProtectedRoute><EventDetail /></ProtectedRoute>} />
+        <Route path="/portal" element={<ProtectedRoute><ClientPortal /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   );

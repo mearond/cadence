@@ -25,7 +25,9 @@ export default function Login() {
       setError(result.error ?? 'Something went wrong.');
       return;
     }
-    navigate('/dashboard');
+    
+    const loggedInUser = useAuthStore.getState().user;
+    navigate(loggedInUser?.role === 'client' ? '/portal' : '/dashboard');
   };
 
   return (
