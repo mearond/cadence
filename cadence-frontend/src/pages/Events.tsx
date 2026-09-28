@@ -70,41 +70,41 @@ export default function Events() {
           const displayName = i18n.language === 'am' && event.name_am ? event.name_am : event.name;
           return (
             <motion.button
-              key={event.id}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: i * 0.05 }}
-              onClick={() => navigate(`/events/${event.id}`)}
-              className="text-left bg-white rounded-2xl border border-sage/30 p-5 hover:shadow-md hover:border-gold/40 transition-all relative group"
-            >
-              <button
-                onClick={(e) => handleDelete(e, event.id)}
-                className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 text-teal-dark/30 hover:text-terracotta transition-all p-1"
-              >
-                <Trash2 size={14} />
-              </button>
+                key={event.id}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: i * 0.05 }}
+                onClick={() => navigate(`/events/${event.id}`)}
+                className="text-left bg-white rounded-2xl border border-sage/30 p-5 pb-4 hover:shadow-md hover:border-gold/40 transition-all relative group"
+                >
+                <div className="flex items-center justify-between mb-3">
+                    <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-full ${statusColors[event.status] || ''}`}>
+                    {t(`eventsPage.status.${event.status}`)}
+                    </span>
+                    <span className="text-[11px] text-teal-dark/40 font-medium uppercase">
+                    {t(`eventsPage.type.${event.event_type}`)}
+                    </span>
+                </div>
+                <h3 className="font-semibold text-teal-dark mb-2">{displayName}</h3>
 
-              <div className="flex items-center justify-between mb-3">
-                <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-full ${statusColors[event.status] || ''}`}>
-                  {t(`eventsPage.status.${event.status}`)}
-                </span>
-                <span className="text-[11px] text-teal-dark/40 font-medium uppercase">
-                  {t(`eventsPage.type.${event.event_type}`)}
-                </span>
-              </div>
-              <h3 className="font-semibold text-teal-dark mb-2 pr-5">{displayName}</h3>
-              <div className="flex items-center gap-3 text-xs text-teal-dark/50">
-                <span className="flex items-center gap-1">
-                  <CalendarDays size={12} />
-                  {formatDate(event.start_date)}
-                </span>
-                {event.guest_count && (
-                  <span className="flex items-center gap-1">
-                    <Users size={12} />
-                    {event.guest_count} {t('eventsPage.guests')}
-                  </span>
-                )}
-              </div>
+                <div className="flex items-end justify-between">
+                    <span className="flex items-center gap-1 text-xs text-teal-dark/50">
+                    <CalendarDays size={12} />
+                    {formatDate(event.start_date)}
+                    {event.guest_count && (
+                        <span className="flex items-center gap-1 ml-2">
+                        <Users size={12} />
+                        {event.guest_count} {t('eventsPage.guests')}
+                        </span>
+                    )}
+                    </span>
+                    <button
+                    onClick={(e) => handleDelete(e, event.id)}
+                    className="opacity-0 group-hover:opacity-100 text-teal-dark/30 hover:text-terracotta transition-all p-1 -mb-1 -mr-1"
+                    >
+                    <Trash2 size={14} />
+                    </button>
+                </div>
             </motion.button>
           );
         })}
