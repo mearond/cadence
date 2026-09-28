@@ -94,7 +94,18 @@
             "unpaid": "አልተከፈለም",
             "partial": "በከፊል ተከፍሏል",
             "paid": "ተከፍሏል"
-        }
+        },
+        "newVendor": "አዲስ አቅራቢ",
+        "createTitle": "አዲስ አቅራቢ",
+        "category": "ምድብ",
+        "categoryNone": "ያለ ምድብ",
+        "phone": "ስልክ",
+        "email": "ኢሜይል",
+        "tin": "የግብር መለያ ቁጥር",
+        "notes": "ማስታወሻ",
+        "cancel": "ይቅር",
+        "createError": "አቅራቢውን መፍጠር አልተቻለም።",
+        "booked": "የተያዙ አቅራቢዎች"
     },
     "tasks": {
         "add": "ተግባር ጨምር",

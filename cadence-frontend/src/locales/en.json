@@ -94,7 +94,18 @@
             "unpaid": "Unpaid",
             "partial": "Partially Paid",
             "paid": "Paid"
-        }
+        },
+        "newVendor": "New Vendor",
+        "createTitle": "New Vendor",
+        "category": "Category",
+        "categoryNone": "No category",
+        "phone": "Phone",
+        "email": "Email",
+        "tin": "TIN Number",
+        "notes": "Notes",
+        "cancel": "Cancel",
+        "createError": "Could not create vendor.",
+        "booked": "Booked Vendors"
     },
     "tasks": {
         "add": "Add Task",

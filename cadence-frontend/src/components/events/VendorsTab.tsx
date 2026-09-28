@@ -1,22 +1,25 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus } from 'lucide-react';
+import { Plus, Building2 } from 'lucide-react';
 import { fetchEventVendors, fetchAllVendors, bookVendor } from '../../lib/events';
+import VendorFormModal from './VendorFormModal';
 
 export default function VendorsTab({ eventId }: { eventId: string }) {
   const { t } = useTranslation();
   const [booked, setBooked] = useState<any[]>([]);
   const [allVendors, setAllVendors] = useState<any[]>([]);
   const [adding, setAdding] = useState(false);
+  const [showNewVendor, setShowNewVendor] = useState(false);
   const [vendorId, setVendorId] = useState('');
   const [amount, setAmount] = useState('');
   const [status, setStatus] = useState('unpaid');
 
   const load = () => fetchEventVendors(eventId).then(setBooked);
+  const loadVendors = () => fetchAllVendors().then(setAllVendors);
 
   useEffect(() => {
     load();
-    fetchAllVendors().then(setAllVendors);
+    loadVendors();
   }, [eventId]);
 
   const handleAdd = async () => {
@@ -28,6 +31,17 @@ export default function VendorsTab({ eventId }: { eventId: string }) {
 
   return (
     <div className="bg-white rounded-2xl border border-sage/30 p-6">
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-xs font-semibold text-teal-dark/40 uppercase tracking-wide">{t('vendors.booked')}</p>
+        <button
+          onClick={() => setShowNewVendor(true)}
+          className="flex items-center gap-1.5 text-xs font-semibold text-teal-deep hover:text-teal-dark"
+        >
+          <Building2 size={13} />
+          {t('vendors.newVendor')}
+        </button>
+      </div>
+
       {booked.length === 0 && !adding && <p className="text-sm text-teal-dark/50 mb-4">{t('vendors.empty')}</p>}
 
       <div className="space-y-2 mb-4">
@@ -63,6 +77,8 @@ export default function VendorsTab({ eventId }: { eventId: string }) {
           <Plus size={15} />{t('vendors.add')}
         </button>
       )}
+
+      {showNewVendor && <VendorFormModal onClose={() => setShowNewVendor(false)} onCreated={loadVendors} />}
     </div>
   );
 }

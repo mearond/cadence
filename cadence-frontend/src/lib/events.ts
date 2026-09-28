@@ -70,6 +70,40 @@ export async function bookVendor(eventId: string, data: { vendorId: number; cont
   const response = await api.post(`/events/${eventId}/vendors`, data);
   return response.data;
 }
+export interface VendorCategory {
+  id: number;
+  name_en: string;
+  name_am: string;
+}
+
+export interface Vendor {
+  id: number;
+  name: string;
+  category_id: number | null;
+  phone: string | null;
+  email: string | null;
+  tin_number: string | null;
+  notes: string | null;
+  category_name_en?: string;
+  category_name_am?: string;
+}
+
+export async function fetchVendorCategories(): Promise<VendorCategory[]> {
+  const response = await api.get('/vendors/categories');
+  return response.data;
+}
+
+export async function createVendor(data: {
+  name: string;
+  categoryId?: number;
+  phone?: string;
+  email?: string;
+  tinNumber?: string;
+  notes?: string;
+}): Promise<Vendor> {
+  const response = await api.post('/vendors', data);
+  return response.data;
+}
 
 // Tasks
 export async function fetchTasks(eventId: string) {
