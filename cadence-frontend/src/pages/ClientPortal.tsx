@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CalendarDays } from 'lucide-react';
 import ClientLayout from '../components/layout/ClientLayout';
+import DateDisplay from '../components/shared/DateDisplay';
 import { fetchMyEvents, type ClientEventSummary } from '../lib/client';
 
 export default function ClientPortal() {
@@ -45,13 +46,9 @@ export default function ClientPortal() {
               className="w-full text-left bg-white rounded-2xl border border-sage/30 p-5 hover:border-gold/40 hover:shadow-md transition-all"
             >
               <h3 className="font-semibold text-teal-dark mb-1">{displayName}</h3>
-              <span className="flex items-center gap-1 text-xs text-teal-dark/50">
-                <CalendarDays size={12} />
-                {new Date(event.start_date).toLocaleDateString(i18n.language === 'am' ? 'am-ET' : 'en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
+              <span className="flex items-start gap-1 text-xs text-teal-dark/50">
+                <CalendarDays size={12} className="mt-0.5 shrink-0" />
+                <DateDisplay iso={event.start_date} />
               </span>
             </button>
           );

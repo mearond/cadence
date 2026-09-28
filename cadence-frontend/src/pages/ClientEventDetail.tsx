@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CalendarDays, MapPin, Users } from 'lucide-react';
 import ClientLayout from '../components/layout/ClientLayout';
+import DateDisplay from '../components/shared/DateDisplay';
 import { fetchMyEventDetail, respondToApproval, type ClientEventDetail as EventDetailType } from '../lib/client';
 
 const statusColors: Record<string, string> = {
@@ -44,22 +45,23 @@ export default function ClientEventDetail() {
 
   const { event, timeline, budgetSummary, approvals } = data;
   const displayName = i18n.language === 'am' && event.name_am ? event.name_am : event.name;
-  const formatDate = (iso: string) =>
-    new Date(iso).toLocaleDateString(i18n.language === 'am' ? 'am-ET' : 'en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
 
   return (
     <ClientLayout>
       <div className="bg-teal-deep rounded-2xl p-6 text-white mb-6">
         <h1 className="text-xl font-bold mb-2">{displayName}</h1>
-        <div className="flex flex-wrap items-center gap-4 text-sm text-white/80">
-          <span className="flex items-center gap-1.5">
-            <CalendarDays size={14} />
-            {formatDate(event.start_date)}
-            {event.end_date && ` – ${formatDate(event.end_date)}`}
+        <div className="flex flex-wrap items-start gap-4 text-sm text-white/80">
+          <span className="flex items-start gap-1.5">
+            <CalendarDays size={14} className="mt-0.5 shrink-0" />
+            <span>
+              <DateDisplay iso={event.start_date} />
+              {event.end_date && (
+                <>
+                  {' – '}
+                  <DateDisplay iso={event.end_date} />
+                </>
+              )}
+            </span>
           </span>
           {event.venue_name && (
             <span className="flex items-center gap-1.5">
