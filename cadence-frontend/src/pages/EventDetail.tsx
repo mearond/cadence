@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, CalendarDays, Users } from 'lucide-react';
 import DashboardLayout from '../components/layout/DashboardLayout';
+import DateDisplay from '../components/shared/DateDisplay';
 import { fetchEventById, type Event } from '../lib/events';
 import TimelineTab from '../components/events/TimelineTab';
 import BudgetTab from '../components/events/BudgetTab';
@@ -23,15 +24,6 @@ export default function EventDetail() {
       .then(setEvent)
       .finally(() => setLoading(false));
   }, [id]);
-
-  const formatDate = (iso: string | null) =>
-    iso
-      ? new Date(iso).toLocaleDateString(i18n.language === 'am' ? 'am-ET' : 'en-US', {
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric',
-        })
-      : t('eventDetail.notSet');
 
   if (loading) {
     return (
@@ -74,14 +66,18 @@ export default function EventDetail() {
             <CalendarDays size={13} />
             {t('eventDetail.startDate')}
           </p>
-          <p className="text-sm text-teal-dark font-medium">{formatDate(event.start_date)}</p>
+          <p className="text-sm text-teal-dark font-medium">
+            {event.start_date ? <DateDisplay iso={event.start_date} /> : t('eventDetail.notSet')}
+          </p>
         </div>
         <div className="bg-white rounded-2xl border border-sage/30 p-5">
           <p className="text-xs font-semibold text-teal-dark/50 uppercase mb-2 flex items-center gap-1.5">
             <CalendarDays size={13} />
             {t('eventDetail.endDate')}
           </p>
-          <p className="text-sm text-teal-dark font-medium">{formatDate(event.end_date)}</p>
+          <p className="text-sm text-teal-dark font-medium">
+            {event.end_date ? <DateDisplay iso={event.end_date} /> : t('eventDetail.notSet')}
+          </p>
         </div>
         <div className="bg-white rounded-2xl border border-sage/30 p-5">
           <p className="text-xs font-semibold text-teal-dark/50 uppercase mb-2 flex items-center gap-1.5">
@@ -93,24 +89,24 @@ export default function EventDetail() {
       </div>
       <div className="flex gap-1 mt-6 mb-5 border-b border-sage/30">
         {(['overview', 'timeline', 'budget', 'vendors', 'tasks'] as const).map((tab) => (
-            <button
+          <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
-                activeTab === tab
+              activeTab === tab
                 ? 'border-gold text-teal-dark'
                 : 'border-transparent text-teal-dark/40 hover:text-teal-dark/70'
             }`}
-            >
+          >
             {t(`eventTabs.${tab}`)}
-            </button>
+          </button>
         ))}
-        </div>
+      </div>
 
-        {activeTab === 'timeline' && <TimelineTab eventId={id!} />}
-        {activeTab === 'budget' && <BudgetTab eventId={id!} />}
-        {activeTab === 'vendors' && <VendorsTab eventId={id!} />}
-        {activeTab === 'tasks' && <TasksTab eventId={id!} />}
+      {activeTab === 'timeline' && <TimelineTab eventId={id!} />}
+      {activeTab === 'budget' && <BudgetTab eventId={id!} />}
+      {activeTab === 'vendors' && <VendorsTab eventId={id!} />}
+      {activeTab === 'tasks' && <TasksTab eventId={id!} />}
     </DashboardLayout>
   );
 }
