@@ -114,5 +114,25 @@
         "priority": "Priority",
         "save": "Save",
         "checkpoints": "checkpoints done"
-    }
+    },
+    "portal": {
+        "myEvents": "My Events",
+        "noEvents": "No events yet.",
+        "timeline": "Schedule",
+        "budget": "Budget Summary",
+        "totalEstimated": "Total Estimated",
+        "totalActual": "Total Actual",
+        "approvals": {
+            "title": "Approvals",
+            "empty": "No approval requests yet.",
+            "comment": "Add a comment (optional)",
+            "approve": "Approve",
+            "requestChanges": "Request Changes",
+            "status": {
+            "pending": "Pending",
+            "approved": "Approved",
+            "changes_requested": "Changes Requested"
+            }
+        }
+        }
 }

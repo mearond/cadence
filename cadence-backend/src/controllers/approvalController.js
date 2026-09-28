@@ -77,6 +77,19 @@ export async function deleteApprovalRequest(req, res) {
 
 // --- Client side ---
 
+export async function getMyEvents(req, res) {
+  try {
+    const result = await pool.query(
+      'SELECT id, name, name_am, event_type, status, start_date FROM events WHERE client_id = $1 ORDER BY start_date DESC',
+      [req.user.userId]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not fetch your events.' });
+  }
+}
+
 export async function getMyEventAsClient(req, res) {
   const { eventId } = req.params;
   const hasAccess = await verifyClientAccess(eventId, req.user.userId);

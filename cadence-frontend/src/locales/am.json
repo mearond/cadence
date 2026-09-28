@@ -114,5 +114,25 @@
         "priority": "ቅድሚያ",
         "save": "አስቀምጥ",
         "checkpoints": "ተጠናቀዋል"
-    }
+    },
+    "portal": {
+        "myEvents": "የእኔ ዝግጅቶች",
+        "noEvents": "እስካሁን ምንም ዝግጅት የለም።",
+        "timeline": "መርሃ ግብር",
+        "budget": "የበጀት ማጠቃለያ",
+        "totalEstimated": "ጠቅላላ የተገመተ",
+        "totalActual": "ጠቅላላ እውነተኛ",
+        "approvals": {
+            "title": "ማጽደቆች",
+            "empty": "እስካሁን የማጽደቅ ጥያቄ የለም።",
+            "comment": "አስተያየት ያክሉ (አማራጭ)",
+            "approve": "አጽድቅ",
+            "requestChanges": "ለውጥ ጠይቅ",
+            "status": {
+            "pending": "በመጠባበቅ ላይ",
+            "approved": "ጸድቋል",
+            "changes_requested": "ለውጥ ተጠይቋል"
+            }
+        }
+        }
 }

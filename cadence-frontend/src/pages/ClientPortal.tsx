@@ -1,14 +1,62 @@
-import { useAuthStore } from '../store/authStore';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { CalendarDays } from 'lucide-react';
+import ClientLayout from '../components/layout/ClientLayout';
+import { fetchMyEvents, type ClientEventSummary } from '../lib/client';
 
 export default function ClientPortal() {
-  const user = useAuthStore((s) => s.user);
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const [events, setEvents] = useState<ClientEventSummary[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchMyEvents().then((data) => {
+      setEvents(data);
+      setLoading(false);
+      if (data.length === 1) {
+        navigate(`/portal/events/${data[0].id}`, { replace: true });
+      }
+    });
+  }, [navigate]);
+
+  if (loading || events.length === 1) {
+    return (
+      <ClientLayout>
+        <p className="text-sm text-teal-dark/50">...</p>
+      </ClientLayout>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-cream flex items-center justify-center p-6">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-teal-dark mb-2">Welcome, {user?.name}</h1>
-        <p className="text-sm text-teal-dark/50">Your event portal is coming soon.</p>
+    <ClientLayout>
+      <h1 className="text-xl font-bold text-teal-dark mb-5">{t('portal.myEvents')}</h1>
+
+      {events.length === 0 && <p className="text-sm text-teal-dark/50">{t('portal.noEvents')}</p>}
+
+      <div className="space-y-3">
+        {events.map((event) => {
+          const displayName = i18n.language === 'am' && event.name_am ? event.name_am : event.name;
+          return (
+            <button
+              key={event.id}
+              onClick={() => navigate(`/portal/events/${event.id}`)}
+              className="w-full text-left bg-white rounded-2xl border border-sage/30 p-5 hover:border-gold/40 hover:shadow-md transition-all"
+            >
+              <h3 className="font-semibold text-teal-dark mb-1">{displayName}</h3>
+              <span className="flex items-center gap-1 text-xs text-teal-dark/50">
+                <CalendarDays size={12} />
+                {new Date(event.start_date).toLocaleDateString(i18n.language === 'am' ? 'am-ET' : 'en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}
+              </span>
+            </button>
+          );
+        })}
       </div>
-    </div>
+    </ClientLayout>
   );
 }
