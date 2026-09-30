@@ -55,7 +55,10 @@
     "endDate": "End Date",
     "guestCount": "Expected Guests",
     "create": "Create Event",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "editTitle": "Edit Event",
+    "status": "Status",
+    "save": "Save Changes"
   },
   "eventDetail": {
     "back": "Back to Events",

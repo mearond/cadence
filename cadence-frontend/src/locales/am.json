@@ -55,7 +55,10 @@
     "endDate": "መጨረሻ ቀን",
     "guestCount": "የሚጠበቁ እንግዶች",
     "create": "ዝግጅት ፍጠር",
-    "cancel": "ሰርዝ"
+    "cancel": "ሰርዝ",
+    "editTitle": "ዝግጅት አርትዕ",
+    "status": "ሁኔታ",
+    "save": "ለውጦችን አስቀምጥ"
   },
   "eventDetail": {
     "back": "ወደ ዝግጅቶች ተመለስ",

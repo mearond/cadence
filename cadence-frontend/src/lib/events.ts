@@ -198,3 +198,19 @@ export async function updateTask(
 export async function deleteTask(eventId: string, id: number): Promise<void> {
   await api.delete(`/events/${eventId}/tasks/${id}`);
 }
+
+export async function updateEvent(
+  id: number,
+  data: Partial<{
+    name: string;
+    nameAm: string;
+    eventType: string;
+    status: string;
+    startDate: string;
+    endDate: string;
+    guestCount: number;
+  }>
+) {
+  const response = await api.put(`/events/${id}`, data);
+  return response.data;
+}

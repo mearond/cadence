@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, CalendarDays, Users, UserPlus } from 'lucide-react';
+import { ArrowLeft, CalendarDays, Users, UserPlus, Pencil } from 'lucide-react';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import DateDisplay from '../components/shared/DateDisplay';
 import { fetchEventById, type Event } from '../lib/events';
@@ -49,20 +49,23 @@ export default function EventDetail() {
   return (
     <DashboardLayout>
       <div className="flex items-center justify-between mb-4">
-        <button
-          onClick={() => navigate('/events')}
-          className="flex items-center gap-2 text-sm text-teal-dark/60 hover:text-teal-dark"
-        >
+        <button onClick={() => navigate('/events')} className="flex items-center gap-2 text-sm text-teal-dark/60 hover:text-teal-dark">
           <ArrowLeft size={15} />
           {t('eventDetail.back')}
         </button>
-        <button
-          onClick={() => setShowInvite(true)}
-          className="flex items-center gap-1.5 text-sm font-semibold text-teal-deep hover:text-teal-dark"
-        >
-          <UserPlus size={15} />
-          {t('inviteClient.title')}
-        </button>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => navigate(`/events/${id}/edit`)}
+            className="flex items-center gap-1.5 text-sm font-semibold text-teal-deep hover:text-teal-dark"
+          >
+            <Pencil size={14} />
+            {t('eventForm.editTitle')}
+          </button>
+          <button onClick={() => setShowInvite(true)} className="flex items-center gap-1.5 text-sm font-semibold text-teal-deep hover:text-teal-dark">
+            <UserPlus size={15} />
+            {t('inviteClient.title')}
+          </button>
+        </div>
       </div>
 
       <div className="bg-teal-deep rounded-2xl px-7 py-6 mb-6">
@@ -78,18 +81,14 @@ export default function EventDetail() {
             <CalendarDays size={13} />
             {t('eventDetail.startDate')}
           </p>
-          <p className="text-sm text-teal-dark font-medium">
-            {event.start_date ? <DateDisplay iso={event.start_date} /> : t('eventDetail.notSet')}
-          </p>
+          <p className="text-sm text-teal-dark font-medium">{event.start_date ? <DateDisplay iso={event.start_date} /> : t('eventDetail.notSet')}</p>
         </div>
         <div className="bg-white rounded-2xl border border-sage/30 p-5">
           <p className="text-xs font-semibold text-teal-dark/50 uppercase mb-2 flex items-center gap-1.5">
             <CalendarDays size={13} />
             {t('eventDetail.endDate')}
           </p>
-          <p className="text-sm text-teal-dark font-medium">
-            {event.end_date ? <DateDisplay iso={event.end_date} /> : t('eventDetail.notSet')}
-          </p>
+          <p className="text-sm text-teal-dark font-medium">{event.end_date ? <DateDisplay iso={event.end_date} /> : t('eventDetail.notSet')}</p>
         </div>
         <div className="bg-white rounded-2xl border border-sage/30 p-5">
           <p className="text-xs font-semibold text-teal-dark/50 uppercase mb-2 flex items-center gap-1.5">
@@ -105,9 +104,7 @@ export default function EventDetail() {
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2.5 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
-              activeTab === tab
-                ? 'border-gold text-teal-dark'
-                : 'border-transparent text-teal-dark/40 hover:text-teal-dark/70'
+              activeTab === tab ? 'border-gold text-teal-dark' : 'border-transparent text-teal-dark/40 hover:text-teal-dark/70'
             }`}
           >
             {t(`eventTabs.${tab}`)}
