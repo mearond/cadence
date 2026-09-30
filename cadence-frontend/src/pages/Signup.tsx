@@ -3,11 +3,13 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../store/authStore';
 
-export default function Login() {
+export default function Signup() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const login = useAuthStore((s) => s.login);
+  const signup = useAuthStore((s) => s.signup);
 
+  const [orgName, setOrgName] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -18,25 +20,41 @@ export default function Login() {
     setError('');
     setLoading(true);
 
-    const result = await login(email, password);
+    const result = await signup(orgName, name, email, password);
 
     setLoading(false);
     if (!result.success) {
       setError(result.error ?? 'Something went wrong.');
       return;
     }
-
-    const loggedInUser = useAuthStore.getState().user;
-    navigate(loggedInUser?.role === 'client' ? '/portal' : '/dashboard');
+    navigate('/dashboard');
   };
 
   return (
     <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
       <div className="w-full max-w-sm bg-white rounded-xl shadow-lg p-6">
         <h1 className="text-xl font-bold text-slate-900 mb-1">{t('app.name')}</h1>
-        <p className="text-sm text-slate-500 mb-5">{t('auth.signIn')}</p>
+        <p className="text-sm text-slate-500 mb-5">{t('auth.signUp')}</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-xs font-medium text-slate-500 mb-1">{t('auth.orgName')}</label>
+            <input
+              value={orgName}
+              onChange={(e) => setOrgName(e.target.value)}
+              className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-slate-500 mb-1">{t('auth.name')}</label>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"
+              required
+            />
+          </div>
           <div>
             <label className="block text-xs font-medium text-slate-500 mb-1">{t('auth.email')}</label>
             <input
@@ -65,14 +83,14 @@ export default function Login() {
             disabled={loading}
             className="w-full bg-blue-600 text-white font-medium py-2.5 rounded-lg hover:bg-blue-700 disabled:opacity-50"
           >
-            {loading ? '...' : t('auth.signIn')}
+            {loading ? '...' : t('auth.createAccount')}
           </button>
         </form>
 
         <p className="text-xs text-slate-500 text-center mt-4">
-          {t('auth.noAccount')}{' '}
-          <Link to="/signup" className="text-blue-600 font-medium hover:underline">
-            {t('auth.signUpLink')}
+          {t('auth.haveAccount')}{' '}
+          <Link to="/login" className="text-blue-600 font-medium hover:underline">
+            {t('auth.signInLink')}
           </Link>
         </p>
       </div>

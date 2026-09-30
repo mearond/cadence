@@ -10,12 +10,20 @@
   "auth": {
     "signIn": "Sign In",
     "email": "Email",
-    "password": "Password"
+    "password": "Password",
+    "signUp": "Sign Up",
+    "orgName": "Agency Name",
+    "name": "Your Name",
+    "createAccount": "Create Account",
+    "haveAccount": "Already have an account?",
+    "noAccount": "Don't have an account?",
+    "signInLink": "Sign in",
+    "signUpLink": "Sign up"
   },
   "dashboard": {
-  "welcomeBack": "Welcome back",
-  "orgId": "Organization",
-  "role": "Role"
+    "welcomeBack": "Welcome back",
+    "orgId": "Organization",
+    "role": "Role"
   },
   "eventsPage": {
     "title": "Events",
@@ -23,116 +31,142 @@
     "noEvents": "No events yet. Create your first one to get started.",
     "guests": "guests",
     "status": {
-        "planning": "Planning",
-        "confirmed": "Confirmed",
-        "in-progress": "In Progress",
-        "completed": "Completed",
-        "cancelled": "Cancelled"
+      "planning": "Planning",
+      "confirmed": "Confirmed",
+      "in-progress": "In Progress",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
     },
     "type": {
-        "conference": "Conference",
-        "wedding": "Wedding",
-        "corporate": "Corporate",
-        "graduation": "Graduation",
-        "religious": "Religious",
-        "memorial": "Memorial"
+      "conference": "Conference",
+      "wedding": "Wedding",
+      "corporate": "Corporate",
+      "graduation": "Graduation",
+      "religious": "Religious",
+      "memorial": "Memorial"
     }
+  },
+  "eventForm": {
+    "createTitle": "Create New Event",
+    "name": "Event Name",
+    "nameAm": "Event Name (Amharic)",
+    "eventType": "Event Type",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "guestCount": "Expected Guests",
+    "create": "Create Event",
+    "cancel": "Cancel"
+  },
+  "eventDetail": {
+    "back": "Back to Events",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "guestCount": "Guests",
+    "notSet": "Not set"
+  },
+  "eventTabs": {
+    "overview": "Overview",
+    "timeline": "Timeline",
+    "budget": "Budget",
+    "vendors": "Vendors",
+    "tasks": "Tasks",
+    "approvals": "Approvals"
+  },
+  "timeline": {
+    "add": "Add Item",
+    "empty": "No timeline items yet.",
+    "title": "Title",
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "save": "Save"
+  },
+  "budget": {
+    "add": "Add Item",
+    "empty": "No budget items yet.",
+    "category": "Category",
+    "name": "Name",
+    "estimated": "Estimated",
+    "actual": "Actual",
+    "totalEstimated": "Total Estimated",
+    "totalActual": "Total Actual",
+    "totalVat": "VAT (15%)",
+    "save": "Save"
+  },
+  "vendors": {
+    "add": "Add Vendor",
+    "empty": "No vendors booked yet.",
+    "name": "Vendor Name",
+    "amount": "Contract Amount (ETB)",
+    "paymentStatus": "Payment Status",
+    "save": "Save",
+    "status": {
+      "unpaid": "Unpaid",
+      "partial": "Partially Paid",
+      "paid": "Paid"
     },
-    "eventForm": {
-        "createTitle": "Create New Event",
-        "name": "Event Name",
-        "nameAm": "Event Name (Amharic)",
-        "eventType": "Event Type",
-        "startDate": "Start Date",
-        "endDate": "End Date",
-        "guestCount": "Expected Guests",
-        "create": "Create Event",
-        "cancel": "Cancel"
-    },
-    "eventDetail": {
-        "back": "Back to Events",
-        "startDate": "Start Date",
-        "endDate": "End Date",
-        "guestCount": "Guests",
-        "notSet": "Not set"
-    },
-    "eventTabs": {
-        "overview": "Overview",
-        "timeline": "Timeline",
-        "budget": "Budget",
-        "vendors": "Vendors",
-        "tasks": "Tasks"
-    },
-    "timeline": {
-        "add": "Add Item",
-        "empty": "No timeline items yet.",
-        "title": "Title",
-        "startTime": "Start Time",
-        "endTime": "End Time",
-        "save": "Save"
-    },
-    "budget": {
-        "add": "Add Item",
-        "empty": "No budget items yet.",
-        "category": "Category",
-        "name": "Name",
-        "estimated": "Estimated",
-        "actual": "Actual",
-        "totalEstimated": "Total Estimated",
-        "totalActual": "Total Actual",
-        "totalVat": "VAT (15%)",
-        "save": "Save"
-    },
-    "vendors": {
-        "add": "Add Vendor",
-        "empty": "No vendors booked yet.",
-        "name": "Vendor Name",
-        "amount": "Contract Amount (ETB)",
-        "paymentStatus": "Payment Status",
-        "save": "Save",
-        "status": {
-            "unpaid": "Unpaid",
-            "partial": "Partially Paid",
-            "paid": "Paid"
-        },
-        "newVendor": "New Vendor",
-        "createTitle": "New Vendor",
-        "category": "Category",
-        "categoryNone": "No category",
-        "phone": "Phone",
-        "email": "Email",
-        "tin": "TIN Number",
-        "notes": "Notes",
-        "cancel": "Cancel",
-        "createError": "Could not create vendor.",
-        "booked": "Booked Vendors"
-    },
-    "tasks": {
-        "add": "Add Task",
-        "empty": "No tasks yet.",
-        "title": "Title",
-        "priority": "Priority",
-        "save": "Save",
-        "checkpoints": "checkpoints done"
-    },
-    "portal": {
-        "myEvents": "My Events",
-        "noEvents": "No events yet.",
-        "timeline": "Schedule",
-        "budget": "Budget Summary",
-        "totalEstimated": "Total Estimated",
-        "totalActual": "Total Actual",
-        "approvals": {
-            "title": "Approvals",
-            "empty": "No approval requests yet.",
-            "comment": "Add a comment (optional)",
-            "approve": "Approve",
-            "requestChanges": "Request Changes",
-            "status": {
-            "pending": "Pending",
-            "approved": "Approved",
-            "changes_requested": "Changes Requested"
-            }
-        }
-        }
+    "newVendor": "New Vendor",
+    "createTitle": "New Vendor",
+    "category": "Category",
+    "categoryNone": "No category",
+    "phone": "Phone",
+    "email": "Email",
+    "tin": "TIN Number",
+    "notes": "Notes",
+    "cancel": "Cancel",
+    "createError": "Could not create vendor.",
+    "booked": "Booked Vendors"
+  },
+  "tasks": {
+    "add": "Add Task",
+    "empty": "No tasks yet.",
+    "title": "Title",
+    "priority": "Priority",
+    "save": "Save",
+    "checkpoints": "checkpoints done"
+  },
+  "portal": {
+    "myEvents": "My Events",
+    "noEvents": "No events yet.",
+    "timeline": "Schedule",
+    "budget": "Budget Summary",
+    "totalEstimated": "Total Estimated",
+    "totalActual": "Total Actual",
+    "approvals": {
+      "title": "Approvals",
+      "empty": "No approval requests yet.",
+      "comment": "Add a comment (optional)",
+      "approve": "Approve",
+      "requestChanges": "Request Changes",
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "changes_requested": "Changes Requested"
+      }
+    }
+  },
+  "approvals": {
+    "empty": "No approval requests yet.",
+    "itemType": "Item type (e.g. budget, vendor, timeline)",
+    "formTitle": "Title",
+    "description": "Description (optional)",
+    "save": "Send Request",
+    "add": "New Approval Request",
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "changes_requested": "Changes Requested"
+    }
+  },
+  "inviteClient": {
+    "title": "Invite Client",
+    "name": "Client Name",
+    "email": "Client Email",
+    "send": "Send Invite",
+    "done": "Done",
+    "copy": "Copy credentials",
+    "copied": "Copied",
+    "tempPassword": "Temporary Password",
+    "existingClient": "Linked an existing client account — no new password generated.",
+    "error": "Could not invite client."
+  }
 }

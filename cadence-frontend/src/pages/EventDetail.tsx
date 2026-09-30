@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, CalendarDays, Users } from 'lucide-react';
+import { ArrowLeft, CalendarDays, Users, UserPlus } from 'lucide-react';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import DateDisplay from '../components/shared/DateDisplay';
 import { fetchEventById, type Event } from '../lib/events';
@@ -9,6 +9,8 @@ import TimelineTab from '../components/events/TimelineTab';
 import BudgetTab from '../components/events/BudgetTab';
 import VendorsTab from '../components/events/VendorsTab';
 import TasksTab from '../components/events/TasksTab';
+import ApprovalsTab from '../components/events/ApprovalsTab';
+import InviteClientModal from '../components/events/InviteClientModal';
 
 export default function EventDetail() {
   const { id } = useParams();
@@ -16,7 +18,8 @@ export default function EventDetail() {
   const navigate = useNavigate();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'budget' | 'vendors' | 'tasks'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'budget' | 'vendors' | 'tasks' | 'approvals'>('overview');
+  const [showInvite, setShowInvite] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -45,13 +48,22 @@ export default function EventDetail() {
 
   return (
     <DashboardLayout>
-      <button
-        onClick={() => navigate('/events')}
-        className="flex items-center gap-2 text-sm text-teal-dark/60 hover:text-teal-dark mb-4"
-      >
-        <ArrowLeft size={15} />
-        {t('eventDetail.back')}
-      </button>
+      <div className="flex items-center justify-between mb-4">
+        <button
+          onClick={() => navigate('/events')}
+          className="flex items-center gap-2 text-sm text-teal-dark/60 hover:text-teal-dark"
+        >
+          <ArrowLeft size={15} />
+          {t('eventDetail.back')}
+        </button>
+        <button
+          onClick={() => setShowInvite(true)}
+          className="flex items-center gap-1.5 text-sm font-semibold text-teal-deep hover:text-teal-dark"
+        >
+          <UserPlus size={15} />
+          {t('inviteClient.title')}
+        </button>
+      </div>
 
       <div className="bg-teal-deep rounded-2xl px-7 py-6 mb-6">
         <h1 className="text-2xl font-bold text-white mb-1">{displayName}</h1>
@@ -87,12 +99,12 @@ export default function EventDetail() {
           <p className="text-sm text-teal-dark font-medium">{event.guest_count ?? t('eventDetail.notSet')}</p>
         </div>
       </div>
-      <div className="flex gap-1 mt-6 mb-5 border-b border-sage/30">
-        {(['overview', 'timeline', 'budget', 'vendors', 'tasks'] as const).map((tab) => (
+      <div className="flex gap-1 mt-6 mb-5 border-b border-sage/30 overflow-x-auto">
+        {(['overview', 'timeline', 'budget', 'vendors', 'tasks', 'approvals'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+            className={`px-4 py-2.5 text-sm font-medium border-b-2 whitespace-nowrap transition-colors ${
               activeTab === tab
                 ? 'border-gold text-teal-dark'
                 : 'border-transparent text-teal-dark/40 hover:text-teal-dark/70'
@@ -107,6 +119,9 @@ export default function EventDetail() {
       {activeTab === 'budget' && <BudgetTab eventId={id!} />}
       {activeTab === 'vendors' && <VendorsTab eventId={id!} />}
       {activeTab === 'tasks' && <TasksTab eventId={id!} />}
+      {activeTab === 'approvals' && <ApprovalsTab eventId={id!} />}
+
+      {showInvite && <InviteClientModal eventId={id!} onClose={() => setShowInvite(false)} />}
     </DashboardLayout>
   );
 }

@@ -7,6 +7,7 @@ import NewEvent from './pages/NewEvent';
 import EventDetail from './pages/EventDetail';
 import ClientPortal from './pages/ClientPortal';
 import ClientEventDetail from './pages/ClientEventDetail';
+import Signup from './pages/Signup';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/events/:id" element={<ProtectedRoute><EventDetail /></ProtectedRoute>} />
         <Route path="/portal" element={<ProtectedRoute><ClientPortal /></ProtectedRoute>} />
         <Route path="/portal/events/:id" element={<ProtectedRoute><ClientEventDetail /></ProtectedRoute>} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </BrowserRouter>
   );

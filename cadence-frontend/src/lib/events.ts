@@ -125,3 +125,76 @@ export async function toggleTaskCheckpoint(eventId: string, taskId: number, chec
 export async function deleteEvent(id: number): Promise<void> {
   await api.delete(`/events/${id}`);
 }
+export interface ApprovalRequest {
+  id: number;
+  event_id: number;
+  item_type: string;
+  title: string;
+  description: string | null;
+  status: 'pending' | 'approved' | 'changes_requested';
+  client_comment: string | null;
+  requested_by: number;
+  created_at: string;
+  responded_at: string | null;
+}
+
+export async function fetchApprovals(eventId: string): Promise<ApprovalRequest[]> {
+  const response = await api.get(`/events/${eventId}/approvals`);
+  return response.data;
+}
+
+export async function createApprovalRequest(
+  eventId: string,
+  data: { itemType: string; title: string; description?: string }
+): Promise<ApprovalRequest> {
+  const response = await api.post(`/events/${eventId}/approvals`, data);
+  return response.data;
+}
+
+export async function deleteApprovalRequest(eventId: string, id: number): Promise<void> {
+  await api.delete(`/events/${eventId}/approvals/${id}`);
+}
+
+export async function inviteClient(
+  eventId: string,
+  data: { name: string; email: string }
+): Promise<{ message: string; client: { id: number; name: string; email: string }; temporaryPassword: string | null }> {
+  const response = await api.post(`/events/${eventId}/invite-client`, data);
+  return response.data;
+}
+
+export async function updateBudgetItem(
+  eventId: string,
+  id: number,
+  data: { category: string; name: string; estimatedAmountEtb: number; actualAmountEtb: number }
+) {
+  const response = await api.put(`/events/${eventId}/budget/${id}`, data);
+  return response.data;
+}
+export async function deleteBudgetItem(eventId: string, id: number): Promise<void> {
+  await api.delete(`/events/${eventId}/budget/${id}`);
+}
+
+export async function updateTimelineItem(
+  eventId: string,
+  id: number,
+  data: { startTime: string; endTime?: string; title: string }
+) {
+  const response = await api.put(`/events/${eventId}/timeline/${id}`, data);
+  return response.data;
+}
+export async function deleteTimelineItem(eventId: string, id: number): Promise<void> {
+  await api.delete(`/events/${eventId}/timeline/${id}`);
+}
+
+export async function updateTask(
+  eventId: string,
+  id: number,
+  data: Partial<{ title: string; description: string; status: string; priority: string; assignedTo: number; dueDate: string }>
+) {
+  const response = await api.put(`/events/${eventId}/tasks/${id}`, data);
+  return response.data;
+}
+export async function deleteTask(eventId: string, id: number): Promise<void> {
+  await api.delete(`/events/${eventId}/tasks/${id}`);
+}

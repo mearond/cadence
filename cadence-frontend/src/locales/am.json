@@ -10,12 +10,20 @@
   "auth": {
     "signIn": "ግባ",
     "email": "ኢሜይል",
-    "password": "የይለፍ ቃል"
+    "password": "የይለፍ ቃል",
+    "signUp": "ተመዝገብ",
+    "orgName": "የድርጅት ስም",
+    "name": "ስምዎ",
+    "createAccount": "አካውንት ፍጠር",
+    "haveAccount": "አካውንት አለዎት?",
+    "noAccount": "አካውንት የለዎትም?",
+    "signInLink": "ግባ",
+    "signUpLink": "ተመዝገብ"
   },
   "dashboard": {
-  "welcomeBack": "እንኳን ደህና መጡ",
-  "orgId": "ድርጅት",
-  "role": "ሚና"
+    "welcomeBack": "እንኳን ደህና መጡ",
+    "orgId": "ድርጅት",
+    "role": "ሚና"
   },
   "eventsPage": {
     "title": "ዝግጅቶች",
@@ -23,116 +31,142 @@
     "noEvents": "እስካሁን ምንም ዝግጅት የለም። የመጀመሪያውን ይፍጠሩ።",
     "guests": "እንግዶች",
     "status": {
-        "planning": "በዕቅድ ላይ",
-        "confirmed": "ተረጋግጧል",
-        "in-progress": "በሂደት ላይ",
-        "completed": "ተጠናቋል",
-        "cancelled": "ተሰርዟል"
+      "planning": "በዕቅድ ላይ",
+      "confirmed": "ተረጋግጧል",
+      "in-progress": "በሂደት ላይ",
+      "completed": "ተጠናቋል",
+      "cancelled": "ተሰርዟል"
     },
     "type": {
-        "conference": "ኮንፈረንስ",
-        "wedding": "ሠርግ",
-        "corporate": "ኮርፖሬት",
-        "graduation": "ምረቃ",
-        "religious": "ሃይማኖታዊ",
-        "memorial": "መታሰቢያ"
+      "conference": "ኮንፈረንስ",
+      "wedding": "ሠርግ",
+      "corporate": "ኮርፖሬት",
+      "graduation": "ምረቃ",
+      "religious": "ሃይማኖታዊ",
+      "memorial": "መታሰቢያ"
     }
+  },
+  "eventForm": {
+    "createTitle": "አዲስ ዝግጅት ይፍጠሩ",
+    "name": "የዝግጅት ስም",
+    "nameAm": "የዝግጅት ስም (አማርኛ)",
+    "eventType": "የዝግጅት አይነት",
+    "startDate": "መጀመሪያ ቀን",
+    "endDate": "መጨረሻ ቀን",
+    "guestCount": "የሚጠበቁ እንግዶች",
+    "create": "ዝግጅት ፍጠር",
+    "cancel": "ሰርዝ"
+  },
+  "eventDetail": {
+    "back": "ወደ ዝግጅቶች ተመለስ",
+    "startDate": "መጀመሪያ ቀን",
+    "endDate": "መጨረሻ ቀን",
+    "guestCount": "እንግዶች",
+    "notSet": "አልተቀመጠም"
+  },
+  "eventTabs": {
+    "overview": "አጠቃላይ እይታ",
+    "timeline": "የጊዜ ሰሌዳ",
+    "budget": "በጀት",
+    "vendors": "አቅራቢዎች",
+    "tasks": "ተግባራት",
+    "approvals": "ማጽደቆች"
+  },
+  "timeline": {
+    "add": "ንጥል ጨምር",
+    "empty": "እስካሁን የጊዜ ሰሌዳ ንጥል የለም።",
+    "title": "ርዕስ",
+    "startTime": "መጀመሪያ ሰዓት",
+    "endTime": "መጨረሻ ሰዓት",
+    "save": "አስቀምጥ"
+  },
+  "budget": {
+    "add": "ንጥል ጨምር",
+    "empty": "እስካሁን የበጀት ንጥል የለም።",
+    "category": "ምድብ",
+    "name": "ስም",
+    "estimated": "የተገመተ",
+    "actual": "ትክክለኛ",
+    "totalEstimated": "ጠቅላላ የተገመተ",
+    "totalActual": "ጠቅላላ ትክክለኛ",
+    "totalVat": "ተ.እ.ታ (15%)",
+    "save": "አስቀምጥ"
+  },
+  "vendors": {
+    "add": "አቅራቢ ጨምር",
+    "empty": "እስካሁን አቅራቢ አልተያዘም።",
+    "name": "የአቅራቢ ስም",
+    "amount": "የኮንትራት መጠን (ብር)",
+    "paymentStatus": "የክፍያ ሁኔታ",
+    "save": "አስቀምጥ",
+    "status": {
+      "unpaid": "አልተከፈለም",
+      "partial": "በከፊል ተከፍሏል",
+      "paid": "ተከፍሏል"
     },
-    "eventForm": {
-        "createTitle": "አዲስ ዝግጅት ይፍጠሩ",
-        "name": "የዝግጅት ስም",
-        "nameAm": "የዝግጅት ስም (አማርኛ)",
-        "eventType": "የዝግጅት አይነት",
-        "startDate": "መጀመሪያ ቀን",
-        "endDate": "መጨረሻ ቀን",
-        "guestCount": "የሚጠበቁ እንግዶች",
-        "create": "ዝግጅት ፍጠር",
-        "cancel": "ሰርዝ"
-    },
-    "eventDetail": {
-        "back": "ወደ ዝግጅቶች ተመለስ",
-        "startDate": "መጀመሪያ ቀን",
-        "endDate": "መጨረሻ ቀን",
-        "guestCount": "እንግዶች",
-        "notSet": "አልተቀመጠም"
-    },
-    "eventTabs": {
-        "overview": "አጠቃላይ እይታ",
-        "timeline": "የጊዜ ሰሌዳ",
-        "budget": "በጀት",
-        "vendors": "አቅራቢዎች",
-        "tasks": "ተግባራት"
-    },
-    "timeline": {
-        "add": "ንጥል ጨምር",
-        "empty": "እስካሁን የጊዜ ሰሌዳ ንጥል የለም።",
-        "title": "ርዕስ",
-        "startTime": "መጀመሪያ ሰዓት",
-        "endTime": "መጨረሻ ሰዓት",
-        "save": "አስቀምጥ"
-    },
-    "budget": {
-        "add": "ንጥል ጨምር",
-        "empty": "እስካሁን የበጀት ንጥል የለም።",
-        "category": "ምድብ",
-        "name": "ስም",
-        "estimated": "የተገመተ",
-        "actual": "ትክክለኛ",
-        "totalEstimated": "ጠቅላላ የተገመተ",
-        "totalActual": "ጠቅላላ ትክክለኛ",
-        "totalVat": "ተ.እ.ታ (15%)",
-        "save": "አስቀምጥ"
-    },
-    "vendors": {
-        "add": "አቅራቢ ጨምር",
-        "empty": "እስካሁን አቅራቢ አልተያዘም።",
-        "name": "የአቅራቢ ስም",
-        "amount": "የኮንትራት መጠን (ብር)",
-        "paymentStatus": "የክፍያ ሁኔታ",
-        "save": "አስቀምጥ",
-        "status": {
-            "unpaid": "አልተከፈለም",
-            "partial": "በከፊል ተከፍሏል",
-            "paid": "ተከፍሏል"
-        },
-        "newVendor": "አዲስ አቅራቢ",
-        "createTitle": "አዲስ አቅራቢ",
-        "category": "ምድብ",
-        "categoryNone": "ያለ ምድብ",
-        "phone": "ስልክ",
-        "email": "ኢሜይል",
-        "tin": "የግብር መለያ ቁጥር",
-        "notes": "ማስታወሻ",
-        "cancel": "ይቅር",
-        "createError": "አቅራቢውን መፍጠር አልተቻለም።",
-        "booked": "የተያዙ አቅራቢዎች"
-    },
-    "tasks": {
-        "add": "ተግባር ጨምር",
-        "empty": "እስካሁን ተግባር የለም።",
-        "title": "ርዕስ",
-        "priority": "ቅድሚያ",
-        "save": "አስቀምጥ",
-        "checkpoints": "ተጠናቀዋል"
-    },
-    "portal": {
-        "myEvents": "የእኔ ዝግጅቶች",
-        "noEvents": "እስካሁን ምንም ዝግጅት የለም።",
-        "timeline": "መርሃ ግብር",
-        "budget": "የበጀት ማጠቃለያ",
-        "totalEstimated": "ጠቅላላ የተገመተ",
-        "totalActual": "ጠቅላላ እውነተኛ",
-        "approvals": {
-            "title": "ማጽደቆች",
-            "empty": "እስካሁን የማጽደቅ ጥያቄ የለም።",
-            "comment": "አስተያየት ያክሉ (አማራጭ)",
-            "approve": "አጽድቅ",
-            "requestChanges": "ለውጥ ጠይቅ",
-            "status": {
-            "pending": "በመጠባበቅ ላይ",
-            "approved": "ጸድቋል",
-            "changes_requested": "ለውጥ ተጠይቋል"
-            }
-        }
-        }
+    "newVendor": "አዲስ አቅራቢ",
+    "createTitle": "አዲስ አቅራቢ",
+    "category": "ምድብ",
+    "categoryNone": "ያለ ምድብ",
+    "phone": "ስልክ",
+    "email": "ኢሜይል",
+    "tin": "የግብር መለያ ቁጥር",
+    "notes": "ማስታወሻ",
+    "cancel": "ይቅር",
+    "createError": "አቅራቢውን መፍጠር አልተቻለም።",
+    "booked": "የተያዙ አቅራቢዎች"
+  },
+  "tasks": {
+    "add": "ተግባር ጨምር",
+    "empty": "እስካሁን ተግባር የለም።",
+    "title": "ርዕስ",
+    "priority": "ቅድሚያ",
+    "save": "አስቀምጥ",
+    "checkpoints": "ተጠናቀዋል"
+  },
+  "portal": {
+    "myEvents": "የእኔ ዝግጅቶች",
+    "noEvents": "እስካሁን ምንም ዝግጅት የለም።",
+    "timeline": "መርሃ ግብር",
+    "budget": "የበጀት ማጠቃለያ",
+    "totalEstimated": "ጠቅላላ የተገመተ",
+    "totalActual": "ጠቅላላ እውነተኛ",
+    "approvals": {
+      "title": "ማጽደቆች",
+      "empty": "እስካሁን የማጽደቅ ጥያቄ የለም።",
+      "comment": "አስተያየት ያክሉ (አማራጭ)",
+      "approve": "አጽድቅ",
+      "requestChanges": "ለውጥ ጠይቅ",
+      "status": {
+        "pending": "በመጠባበቅ ላይ",
+        "approved": "ጸድቋል",
+        "changes_requested": "ለውጥ ተጠይቋል"
+      }
+    }
+  },
+  "approvals": {
+    "empty": "እስካሁን የማጽደቅ ጥያቄ የለም።",
+    "itemType": "የንጥል አይነት (ለምሳሌ: በጀት፣ አቅራቢ፣ መርሃ ግብር)",
+    "formTitle": "ርዕስ",
+    "description": "መግለጫ (አማራጭ)",
+    "save": "ጥያቄ ላክ",
+    "add": "አዲስ የማጽደቅ ጥያቄ",
+    "status": {
+      "pending": "በመጠባበቅ ላይ",
+      "approved": "ጸድቋል",
+      "changes_requested": "ለውጥ ተጠይቋል"
+    }
+  },
+  "inviteClient": {
+    "title": "ደንበኛ ጋብዝ",
+    "name": "የደንበኛ ስም",
+    "email": "የደንበኛ ኢሜይል",
+    "send": "ግብዣ ላክ",
+    "done": "ተጠናቋል",
+    "copy": "የመግቢያ መረጃ ቅዳ",
+    "copied": "ተቀድቷል",
+    "tempPassword": "ጊዜያዊ የይለፍ ቃል",
+    "existingClient": "ነባር የደንበኛ አካውንት ተያይዟል — አዲስ የይለፍ ቃል አልተፈጠረም።",
+    "error": "ደንበኛውን መጋበዝ አልተቻለም።"
+  }
 }

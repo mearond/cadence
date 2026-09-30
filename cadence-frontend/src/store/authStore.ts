@@ -14,15 +14,15 @@ interface AuthStore {
   user: User | null;
   token: string | null;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  signup: (orgName: string, name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
-
 }
 
 const storedToken = localStorage.getItem('cadence_token');
 const storedUserJson = localStorage.getItem('cadence_user');
 const storedUser = storedUserJson ? JSON.parse(storedUserJson) : null;
 
-export const useAuthStore = create<AuthStore>((set) => ({
+export const useAuthStore = create<AuthStore>((set, get) => ({
   user: storedUser,
   token: storedToken,
 
@@ -42,10 +42,19 @@ export const useAuthStore = create<AuthStore>((set) => ({
     }
   },
 
+  signup: async (orgName, name, email, password) => {
+    try {
+      await api.post('/auth/signup', { orgName, name, email, password });
+      return await get().login(email, password);
+    } catch (err: any) {
+      const message = err.response?.data?.error || 'Could not create your account. Please try again.';
+      return { success: false, error: message };
+    }
+  },
+
   logout: () => {
     localStorage.removeItem('cadence_token');
     localStorage.removeItem('cadence_user');
     set({ token: null, user: null });
   },
-
 }));
