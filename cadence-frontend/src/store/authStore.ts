@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import axios from 'axios';
 import api from '../lib/api';
 
 interface User {
@@ -16,6 +17,13 @@ interface AuthStore {
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signup: (orgName: string, name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
+}
+
+function getErrorMessage(err: unknown, fallback: string): string {
+  if (axios.isAxiosError(err)) {
+    return err.response?.data?.error || fallback;
+  }
+  return fallback;
 }
 
 const storedToken = localStorage.getItem('cadence_token');
@@ -36,9 +44,8 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
       set({ token, user });
       return { success: true };
-    } catch (err: any) {
-      const message = err.response?.data?.error || 'Login failed. Please try again.';
-      return { success: false, error: message };
+    } catch (err) {
+      return { success: false, error: getErrorMessage(err, 'Login failed. Please try again.') };
     }
   },
 
@@ -46,9 +53,8 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     try {
       await api.post('/auth/signup', { orgName, name, email, password });
       return await get().login(email, password);
-    } catch (err: any) {
-      const message = err.response?.data?.error || 'Could not create your account. Please try again.';
-      return { success: false, error: message };
+    } catch (err) {
+      return { success: false, error: getErrorMessage(err, 'Could not create your account. Please try again.') };
     }
   },
 
