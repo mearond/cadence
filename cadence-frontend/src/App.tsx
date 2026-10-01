@@ -5,9 +5,12 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Events from './pages/Events';
 import NewEvent from './pages/NewEvent';
 import EventDetail from './pages/EventDetail';
+import EditEvent from './pages/EditEvent';
 import ClientPortal from './pages/ClientPortal';
 import ClientEventDetail from './pages/ClientEventDetail';
 import Signup from './pages/Signup';
+import SetPassword from './pages/SetPassword';
+import Vendors from './pages/Vendors';
 
 function App() {
   return (
@@ -32,6 +35,9 @@ function App() {
         />
         <Route path="/events/new" element={<ProtectedRoute><NewEvent /></ProtectedRoute>} />
         <Route path="/events/:id" element={<ProtectedRoute><EventDetail /></ProtectedRoute>} />
+        <Route path="/events/:id/edit" element={<ProtectedRoute><EditEvent /></ProtectedRoute>} />
+        <Route path="/vendors" element={<ProtectedRoute><Vendors /></ProtectedRoute>} />
+        <Route path="/set-password" element={<ProtectedRoute><SetPassword /></ProtectedRoute>} />
         <Route path="/portal" element={<ProtectedRoute><ClientPortal /></ProtectedRoute>} />
         <Route path="/portal/events/:id" element={<ProtectedRoute><ClientEventDetail /></ProtectedRoute>} />
         <Route path="/signup" element={<Signup />} />

@@ -62,7 +62,7 @@ export async function fetchEventVendors(eventId: string) {
   const response = await api.get(`/events/${eventId}/vendors`);
   return response.data;
 }
-export async function fetchAllVendors() {
+export async function fetchAllVendors(): Promise<Vendor[]> {
   const response = await api.get('/vendors');
   return response.data;
 }
@@ -86,6 +86,7 @@ export interface Vendor {
   notes: string | null;
   category_name_en?: string;
   category_name_am?: string;
+  booking_count?: number;
 }
 
 export async function fetchVendorCategories(): Promise<VendorCategory[]> {
@@ -158,7 +159,12 @@ export async function deleteApprovalRequest(eventId: string, id: number): Promis
 export async function inviteClient(
   eventId: string,
   data: { name: string; email: string }
-): Promise<{ message: string; client: { id: number; name: string; email: string }; temporaryPassword: string | null }> {
+): Promise<{
+  message: string;
+  client: { id: number; name: string; email: string };
+  temporaryPassword: string | null;
+  emailSent: boolean;
+}> {
   const response = await api.post(`/events/${eventId}/invite-client`, data);
   return response.data;
 }

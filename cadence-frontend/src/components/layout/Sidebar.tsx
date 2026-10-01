@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LayoutGrid, CalendarDays, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutGrid, CalendarDays, Building2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useUIStore } from '../../store/uiStore';
 
 export default function Sidebar() {
@@ -13,6 +13,25 @@ export default function Sidebar() {
     { label: t('nav.dashboard'), icon: LayoutGrid, path: '/dashboard' },
     { label: t('nav.events'), icon: CalendarDays, path: '/events' },
   ];
+
+  const operationsItems = [{ label: t('nav.vendors'), icon: Building2, path: '/vendors' }];
+
+  const renderLink = ({ label, icon: Icon, path }: { label: string; icon: typeof LayoutGrid; path: string }) => {
+    const active = location.pathname.startsWith(path);
+    return (
+      <Link
+        key={path}
+        to={path}
+        title={collapsed ? label : undefined}
+        className={`flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
+          collapsed ? 'justify-center' : ''
+        } ${active ? 'bg-teal-deep text-white shadow-sm' : 'text-teal-dark/70 hover:bg-sage-light'}`}
+      >
+        <Icon size={17} className="shrink-0" />
+        {!collapsed && <span className="whitespace-nowrap">{label}</span>}
+      </Link>
+    );
+  };
 
   return (
     <aside
@@ -37,30 +56,13 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 px-4 space-y-1">
-        {navItems.map(({ label, icon: Icon, path }) => {
-          const active = location.pathname.startsWith(path);
-          return (
-            <Link
-              key={path}
-              to={path}
-              title={collapsed ? label : undefined}
-              className={`flex items-center gap-3 px-4 py-2.5 rounded-full text-sm font-medium transition-all ${
-                collapsed ? 'justify-center' : ''
-              } ${active ? 'bg-teal-deep text-white shadow-sm' : 'text-teal-dark/70 hover:bg-sage-light'}`}
-            >
-              <Icon size={17} className="shrink-0" />
-              {!collapsed && <span className="whitespace-nowrap">{label}</span>}
-            </Link>
-          );
-        })}
-      </nav>
+        {navItems.map(renderLink)}
 
-      {!collapsed && (
-        <div className="px-6 py-5">
-          <div className="h-px bg-sage/40 mb-4" />
-          <p className="text-[11px] text-teal-dark/40 tracking-wide">EVENT OPERATIONS</p>
+        <div className="pt-5 mt-5 border-t border-sage/40">
+          {!collapsed && <p className="text-[11px] text-teal-dark/40 tracking-wide px-4 mb-2">EVENT OPERATIONS</p>}
+          <div className="space-y-1">{operationsItems.map(renderLink)}</div>
         </div>
-      )}
+      </nav>
     </aside>
   );
 }

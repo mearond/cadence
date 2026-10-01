@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import { pool } from '../config/db.js';
+import { sendClientInviteEmail } from '../lib/mailer.js';
 
 export async function inviteClientToEvent(req, res) {
   const { eventId } = req.params;
@@ -44,8 +45,8 @@ export async function inviteClientToEvent(req, res) {
       const passwordHash = await bcrypt.hash(temporaryPassword, 10);
 
       const created = await pool.query(
-        `INSERT INTO users (org_id, name, email, password_hash, role)
-         VALUES ($1, $2, $3, $4, 'client')
+        `INSERT INTO users (org_id, name, email, password_hash, role, must_change_password)
+         VALUES ($1, $2, $3, $4, 'client', TRUE)
          RETURNING id, name, email, role, org_id`,
         [req.user.orgId, name, email, passwordHash]
       );
@@ -54,12 +55,31 @@ export async function inviteClientToEvent(req, res) {
 
     await pool.query('UPDATE events SET client_id = $1 WHERE id = $2', [clientUser.id, eventId]);
 
+    let emailSent = false;
+    if (temporaryPassword) {
+      try {
+        const orgResult = await pool.query('SELECT name FROM organizations WHERE id = $1', [req.user.orgId]);
+        const orgName = orgResult.rows[0]?.name || 'Cadence';
+
+        await sendClientInviteEmail({
+          to: clientUser.email || email,
+          clientName: clientUser.name || name,
+          orgName,
+          temporaryPassword,
+        });
+        emailSent = true;
+      } catch (emailErr) {
+        console.error('Could not send client invite email:', emailErr);
+      }
+    }
+
     res.status(200).json({
       message: temporaryPassword
         ? 'Client account created and linked to this event.'
         : 'Existing client linked to this event.',
       client: { id: clientUser.id, name: clientUser.name || name, email: clientUser.email || email },
       temporaryPassword,
+      emailSent,
     });
   } catch (err) {
     console.error(err);

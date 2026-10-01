@@ -5,6 +5,7 @@
   "nav": {
     "dashboard": "Dashboard",
     "events": "Events",
+    "vendors": "Vendors",
     "logout": "Logout"
   },
   "auth": {
@@ -95,7 +96,7 @@
     "totalVat": "VAT (15%)",
     "save": "Save"
   },
-  "vendors": {
+ "vendors": {
     "add": "Add Vendor",
     "empty": "No vendors booked yet.",
     "name": "Vendor Name",
@@ -103,11 +104,12 @@
     "paymentStatus": "Payment Status",
     "save": "Save",
     "status": {
-      "unpaid": "Unpaid",
-      "partial": "Partially Paid",
-      "paid": "Paid"
+        "unpaid": "Unpaid",
+        "partial": "Partially Paid",
+        "paid": "Paid"
     },
     "newVendor": "New Vendor",
+    "manageVendors": "Manage Vendors",
     "createTitle": "New Vendor",
     "category": "Category",
     "categoryNone": "No category",
@@ -118,7 +120,8 @@
     "cancel": "Cancel",
     "createError": "Could not create vendor.",
     "booked": "Booked Vendors"
-  },
+    },
+
   "tasks": {
     "add": "Add Task",
     "empty": "No tasks yet.",
@@ -127,6 +130,7 @@
     "save": "Save",
     "checkpoints": "checkpoints done"
   },
+
   "portal": {
     "myEvents": "My Events",
     "noEvents": "No events yet.",
@@ -147,6 +151,7 @@
       }
     }
   },
+
   "approvals": {
     "empty": "No approval requests yet.",
     "itemType": "Item type (e.g. budget, vendor, timeline)",
@@ -160,7 +165,8 @@
       "changes_requested": "Changes Requested"
     }
   },
-  "inviteClient": {
+
+ "inviteClient": {
     "title": "Invite Client",
     "name": "Client Name",
     "email": "Client Email",
@@ -170,6 +176,32 @@
     "copied": "Copied",
     "tempPassword": "Temporary Password",
     "existingClient": "Linked an existing client account — no new password generated.",
-    "error": "Could not invite client."
+    "error": "Could not invite client.",
+    "emailSent": "An email with these credentials has been sent to the client.",
+    "emailFailed": "Could not send the email — share these credentials with the client manually."
+ },
+
+  "vendorsPage": {
+    "title": "Vendors",
+    "addNew": "Add New",
+    "totalVendors": "Total Vendors",
+    "categoriesInUse": "Categories",
+    "totalBookings": "Total Bookings",
+    "mostPopular": "Most Popular",
+    "allVendors": "All Vendors",
+    "bookings": "bookings",
+    "empty": "No vendors yet. Add your first one to get started."
+ },
+
+ "setPassword": {
+    "title": "Set Your Password",
+    "subtitle": "Choose a new password to secure your account.",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "save": "Save Password",
+    "tooShort": "Password must be at least 8 characters.",
+    "mismatch": "Passwords do not match."
   }
+
+
 }

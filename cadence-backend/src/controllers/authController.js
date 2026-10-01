@@ -45,7 +45,7 @@ export async function login(req, res) {
 
   try {
     const result = await pool.query(
-      'SELECT id, org_id, name, email, password_hash, role, preferred_language FROM users WHERE email = $1',
+      'SELECT id, org_id, name, email, password_hash, role, preferred_language, must_change_password FROM users WHERE email = $1',
       [email]
     );
 
@@ -66,11 +66,40 @@ export async function login(req, res) {
       { expiresIn: '7d' }
     );
 
-    const { password_hash, ...safeUser } = user;
+    const { password_hash, must_change_password, ...rest } = user;
+    const safeUser = { ...rest, mustChangePassword: must_change_password };
 
     return res.json({ token, user: safeUser });
   } catch (err) {
     console.error('Login error:', err);
     return res.status(500).json({ error: 'Login failed. Please try again.' });
+  }
+}
+
+export async function setPassword(req, res) {
+  const { newPassword } = req.body;
+
+  if (!newPassword || newPassword.length < 8) {
+    return res.status(400).json({ error: 'New password must be at least 8 characters.' });
+  }
+
+  try {
+    const passwordHash = await bcrypt.hash(newPassword, 10);
+    const result = await pool.query(
+      `UPDATE users SET password_hash = $1, must_change_password = FALSE
+       WHERE id = $2
+       RETURNING id, org_id, name, email, role, preferred_language`,
+      [passwordHash, req.user.userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    const user = { ...result.rows[0], mustChangePassword: false };
+    return res.json({ user });
+  } catch (err) {
+    console.error('Set password error:', err);
+    return res.status(500).json({ error: 'Could not update password. Please try again.' });
   }
 }

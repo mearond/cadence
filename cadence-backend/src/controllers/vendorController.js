@@ -13,11 +13,14 @@ export async function getVendorCategories(req, res) {
 export async function getVendors(req, res) {
   try {
     const result = await pool.query(
-      `SELECT v.*, vc.name_en AS category_name_en, vc.name_am AS category_name_am
+      `SELECT v.*, vc.name_en AS category_name_en, vc.name_am AS category_name_am,
+              COUNT(ev.id)::int AS booking_count
        FROM vendors v
        LEFT JOIN vendor_categories vc ON v.category_id = vc.id
+       LEFT JOIN event_vendors ev ON ev.vendor_id = v.id
        WHERE v.org_id = $1
-       ORDER BY v.name`,
+       GROUP BY v.id, vc.name_en, vc.name_am
+       ORDER BY booking_count DESC, v.name`,
       [req.user.orgId]
     );
     res.json(result.rows);

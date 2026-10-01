@@ -5,6 +5,7 @@
   "nav": {
     "dashboard": "ዳሽቦርድ",
     "events": "ዝግጅቶች",
+    "vendors": "አቅራቢዎች",
     "logout": "ውጣ"
   },
   "auth": {
@@ -95,7 +96,7 @@
     "totalVat": "ተ.እ.ታ (15%)",
     "save": "አስቀምጥ"
   },
-  "vendors": {
+ "vendors": {
     "add": "አቅራቢ ጨምር",
     "empty": "እስካሁን አቅራቢ አልተያዘም።",
     "name": "የአቅራቢ ስም",
@@ -103,11 +104,12 @@
     "paymentStatus": "የክፍያ ሁኔታ",
     "save": "አስቀምጥ",
     "status": {
-      "unpaid": "አልተከፈለም",
-      "partial": "በከፊል ተከፍሏል",
-      "paid": "ተከፍሏል"
+        "unpaid": "አልተከፈለም",
+        "partial": "በከፊል ተከፍሏል",
+        "paid": "ተከፍሏል"
     },
     "newVendor": "አዲስ አቅራቢ",
+    "manageVendors": "አቅራቢዎችን አስተዳድር",
     "createTitle": "አዲስ አቅራቢ",
     "category": "ምድብ",
     "categoryNone": "ያለ ምድብ",
@@ -118,7 +120,8 @@
     "cancel": "ይቅር",
     "createError": "አቅራቢውን መፍጠር አልተቻለም።",
     "booked": "የተያዙ አቅራቢዎች"
-  },
+ },
+
   "tasks": {
     "add": "ተግባር ጨምር",
     "empty": "እስካሁን ተግባር የለም።",
@@ -170,6 +173,31 @@
     "copied": "ተቀድቷል",
     "tempPassword": "ጊዜያዊ የይለፍ ቃል",
     "existingClient": "ነባር የደንበኛ አካውንት ተያይዟል — አዲስ የይለፍ ቃል አልተፈጠረም።",
-    "error": "ደንበኛውን መጋበዝ አልተቻለም።"
-  }
+    "error": "ደንበኛውን መጋበዝ አልተቻለም።",
+    "emailSent": "ከእነዚህ መረጃዎች ጋር ኢሜይል ለደንበኛው ተልኳል።",
+    "emailFailed": "ኢሜይል መላክ አልተቻለም — እባክዎ መረጃውን በራስዎ ለደንበኛው ያጋሩ።"
+ },
+
+  "vendorsPage": {
+    "title": "አቅራቢዎች",
+    "addNew": "አዲስ ጨምር",
+    "totalVendors": "ጠቅላላ አቅራቢዎች",
+    "categoriesInUse": "ምድቦች",
+    "totalBookings": "ጠቅላላ ማስያዣዎች",
+    "mostPopular": "በጣም ተወዳጅ",
+    "allVendors": "ሁሉም አቅራቢዎች",
+    "bookings": "ማስያዣዎች",
+    "empty": "እስካሁን አቅራቢ የለም። የመጀመሪያውን ይጨምሩ።"
+   },
+
+   "setPassword": {
+        "title": "የይለፍ ቃልዎን ያዘጋጁ",
+        "subtitle": "አካውንትዎን ለማስጠበቅ አዲስ የይለፍ ቃል ይምረጡ።",
+        "newPassword": "አዲስ የይለፍ ቃል",
+        "confirmPassword": "የይለፍ ቃል ያረጋግጡ",
+        "save": "የይለፍ ቃል አስቀምጥ",
+        "tooShort": "የይለፍ ቃል ቢያንስ 8 ቁምፊዎች ሊኖረው ይገባል።",
+        "mismatch": "የይለፍ ቃላት አይመሳሰሉም።"
+    }
+
 }

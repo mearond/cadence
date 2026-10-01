@@ -9,7 +9,7 @@ export default function InviteClientModal({ eventId, onClose }: { eventId: strin
   const [email, setEmail] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-  const [result, setResult] = useState<{ email: string; temporaryPassword: string | null; message: string } | null>(null);
+  const [result, setResult] = useState<{ email: string; temporaryPassword: string | null; message: string; emailSent: boolean } | null>(null);
   const [copied, setCopied] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -19,7 +19,7 @@ export default function InviteClientModal({ eventId, onClose }: { eventId: strin
     setError('');
     try {
       const res = await inviteClient(eventId, { name: name.trim(), email: email.trim() });
-      setResult({ email: res.client.email, temporaryPassword: res.temporaryPassword, message: res.message });
+      setResult({ email: res.client.email, temporaryPassword: res.temporaryPassword, message: res.message, emailSent: res.emailSent });
     } catch (err: any) {
       setError(err.response?.data?.error || t('inviteClient.error'));
     } finally {
@@ -60,10 +60,15 @@ export default function InviteClientModal({ eventId, onClose }: { eventId: strin
               )}
             </div>
             {result.temporaryPassword && (
-              <button onClick={handleCopy} className="flex items-center gap-1.5 text-xs font-semibold text-teal-deep hover:text-teal-dark">
-                {copied ? <Check size={13} /> : <Copy size={13} />}
-                {copied ? t('inviteClient.copied') : t('inviteClient.copy')}
-              </button>
+              <>
+                <p className="text-xs text-teal-dark/50">
+                  {result.emailSent ? t('inviteClient.emailSent') : t('inviteClient.emailFailed')}
+                </p>
+                <button onClick={handleCopy} className="flex items-center gap-1.5 text-xs font-semibold text-teal-deep hover:text-teal-dark">
+                  {copied ? <Check size={13} /> : <Copy size={13} />}
+                  {copied ? t('inviteClient.copied') : t('inviteClient.copy')}
+                </button>
+              </>
             )}
             <button onClick={onClose} className="w-full bg-gold text-white text-sm font-semibold px-4 py-2 rounded-full mt-2">
               {t('inviteClient.done')}

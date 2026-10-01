@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Plus, Building2 } from 'lucide-react';
 import { fetchEventVendors, fetchAllVendors, bookVendor } from '../../lib/events';
-import VendorFormModal from './VendorFormModal';
 
 export default function VendorsTab({ eventId }: { eventId: string }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [booked, setBooked] = useState<any[]>([]);
   const [allVendors, setAllVendors] = useState<any[]>([]);
   const [adding, setAdding] = useState(false);
-  const [showNewVendor, setShowNewVendor] = useState(false);
   const [vendorId, setVendorId] = useState('');
   const [amount, setAmount] = useState('');
   const [status, setStatus] = useState('unpaid');
@@ -34,11 +34,11 @@ export default function VendorsTab({ eventId }: { eventId: string }) {
       <div className="flex items-center justify-between mb-4">
         <p className="text-xs font-semibold text-teal-dark/40 uppercase tracking-wide">{t('vendors.booked')}</p>
         <button
-          onClick={() => setShowNewVendor(true)}
+          onClick={() => navigate('/vendors')}
           className="flex items-center gap-1.5 text-xs font-semibold text-teal-deep hover:text-teal-dark"
         >
           <Building2 size={13} />
-          {t('vendors.newVendor')}
+          {t('vendors.manageVendors')}
         </button>
       </div>
 
@@ -77,8 +77,6 @@ export default function VendorsTab({ eventId }: { eventId: string }) {
           <Plus size={15} />{t('vendors.add')}
         </button>
       )}
-
-      {showNewVendor && <VendorFormModal onClose={() => setShowNewVendor(false)} onCreated={loadVendors} />}
     </div>
   );
 }

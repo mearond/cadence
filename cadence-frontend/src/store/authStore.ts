@@ -9,6 +9,7 @@ interface User {
   role: string;
   org_id: number;
   preferred_language?: string;
+  mustChangePassword?: boolean;
 }
 
 interface AuthStore {
@@ -16,6 +17,7 @@ interface AuthStore {
   token: string | null;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signup: (orgName: string, name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  changePassword: (newPassword: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 }
 
@@ -55,6 +57,18 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       return await get().login(email, password);
     } catch (err) {
       return { success: false, error: getErrorMessage(err, 'Could not create your account. Please try again.') };
+    }
+  },
+
+  changePassword: async (newPassword) => {
+    try {
+      const response = await api.put('/auth/set-password', { newPassword });
+      const updatedUser = response.data.user;
+      localStorage.setItem('cadence_user', JSON.stringify(updatedUser));
+      set({ user: updatedUser });
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: getErrorMessage(err, 'Could not update your password. Please try again.') };
     }
   },
 
