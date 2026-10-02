@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../store/authStore';
+import { isValidEmail } from '../lib/validation';
 
 export default function Signup() {
   const { t } = useTranslation();
@@ -18,8 +19,13 @@ export default function Signup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
 
+    if (!isValidEmail(email)) {
+      setError(t('auth.invalidEmail'));
+      return;
+    }
+
+    setLoading(true);
     const result = await signup(orgName, name, email, password);
 
     setLoading(false);

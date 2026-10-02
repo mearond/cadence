@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
 import { createVendor, fetchVendorCategories, type VendorCategory } from '../../lib/events';
+import { isValidEmail, sanitizePhoneInput } from '../../lib/validation';
 
 export default function VendorFormModal({
   onClose,
@@ -28,6 +29,12 @@ export default function VendorFormModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
+
+    if (email.trim() && !isValidEmail(email)) {
+      setError(t('vendors.invalidEmail'));
+      return;
+    }
+
     setSaving(true);
     setError('');
     try {
@@ -88,7 +95,13 @@ export default function VendorFormModal({
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-medium text-teal-dark/60 mb-1">{t('vendors.phone')}</label>
-              <input value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm" />
+              <input
+                value={phone}
+                onChange={(e) => setPhone(sanitizePhoneInput(e.target.value))}
+                inputMode="numeric"
+                maxLength={15}
+                className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm"
+              />
             </div>
             <div>
               <label className="block text-xs font-medium text-teal-dark/60 mb-1">{t('vendors.email')}</label>

@@ -19,7 +19,8 @@
     "haveAccount": "Already have an account?",
     "noAccount": "Don't have an account?",
     "signInLink": "Sign in",
-    "signUpLink": "Sign up"
+    "signUpLink": "Sign up",
+    "invalidEmail": "Please enter a valid email address."
   },
   "dashboard": {
     "welcomeBack": "Welcome back",
@@ -119,7 +120,8 @@
     "notes": "Notes",
     "cancel": "Cancel",
     "createError": "Could not create vendor.",
-    "booked": "Booked Vendors"
+    "booked": "Booked Vendors",
+    "invalidEmail": "Please enter a valid email address."
     },
 
   "tasks": {
@@ -178,7 +180,8 @@
     "existingClient": "Linked an existing client account — no new password generated.",
     "error": "Could not invite client.",
     "emailSent": "An email with these credentials has been sent to the client.",
-    "emailFailed": "Could not send the email — share these credentials with the client manually."
+    "emailFailed": "Could not send the email — share these credentials with the client manually.",
+    "invalidEmail": "Please enter a valid email address."
  },
 
   "vendorsPage": {

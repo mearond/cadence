@@ -19,7 +19,8 @@
     "haveAccount": "አካውንት አለዎት?",
     "noAccount": "አካውንት የለዎትም?",
     "signInLink": "ግባ",
-    "signUpLink": "ተመዝገብ"
+    "signUpLink": "ተመዝገብ",
+    "invalidEmail": "እባክዎ ትክክለኛ ኢሜይል ያስገቡ።"
   },
   "dashboard": {
     "welcomeBack": "እንኳን ደህና መጡ",
@@ -119,7 +120,8 @@
     "notes": "ማስታወሻ",
     "cancel": "ይቅር",
     "createError": "አቅራቢውን መፍጠር አልተቻለም።",
-    "booked": "የተያዙ አቅራቢዎች"
+    "booked": "የተያዙ አቅራቢዎች",
+    "invalidEmail": "እባክዎ ትክክለኛ ኢሜይል ያስገቡ።"
  },
 
   "tasks": {
@@ -175,7 +177,8 @@
     "existingClient": "ነባር የደንበኛ አካውንት ተያይዟል — አዲስ የይለፍ ቃል አልተፈጠረም።",
     "error": "ደንበኛውን መጋበዝ አልተቻለም።",
     "emailSent": "ከእነዚህ መረጃዎች ጋር ኢሜይል ለደንበኛው ተልኳል።",
-    "emailFailed": "ኢሜይል መላክ አልተቻለም — እባክዎ መረጃውን በራስዎ ለደንበኛው ያጋሩ።"
+    "emailFailed": "ኢሜይል መላክ አልተቻለም — እባክዎ መረጃውን በራስዎ ለደንበኛው ያጋሩ።",
+    "invalidEmail": "እባክዎ ትክክለኛ ኢሜይል ያስገቡ።"
  },
 
   "vendorsPage": {

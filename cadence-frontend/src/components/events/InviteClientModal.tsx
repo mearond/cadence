@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, Copy, Check } from 'lucide-react';
 import { inviteClient } from '../../lib/events';
+import { isValidEmail } from '../../lib/validation';
 
 export default function InviteClientModal({ eventId, onClose }: { eventId: string; onClose: () => void }) {
   const { t } = useTranslation();
@@ -15,6 +16,12 @@ export default function InviteClientModal({ eventId, onClose }: { eventId: strin
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim()) return;
+
+    if (!isValidEmail(email)) {
+      setError(t('inviteClient.invalidEmail'));
+      return;
+    }
+
     setSaving(true);
     setError('');
     try {
