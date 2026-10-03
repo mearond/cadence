@@ -1,18 +1,25 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Building2, Star, Tag, Phone, Mail } from 'lucide-react';
+import { Plus, Building2, Star, Tag, Phone, Mail, Pencil, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import VendorFormModal from '../components/events/VendorFormModal';
-import { fetchAllVendors, type Vendor } from '../lib/events';
+import { fetchAllVendors, deleteVendor, type Vendor } from '../lib/events';
 
 export default function Vendors() {
   const { t, i18n } = useTranslation();
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showNew, setShowNew] = useState(false);
+  const [modalTarget, setModalTarget] = useState<'new' | Vendor | null>(null);
 
   const load = () => fetchAllVendors().then(setVendors).finally(() => setLoading(false));
+
+  const handleDelete = async (e: React.MouseEvent, vendor: Vendor) => {
+    e.stopPropagation();
+    if (!confirm(t('vendors.confirmDelete'))) return;
+    await deleteVendor(vendor.id);
+    load();
+  };
 
   useEffect(() => {
     load();
@@ -39,7 +46,7 @@ export default function Vendors() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-teal-dark">{t('vendorsPage.title')}</h1>
         <button
-          onClick={() => setShowNew(true)}
+          onClick={() => setModalTarget('new')}
           className="flex items-center gap-2 bg-gold text-white px-4 py-2.5 rounded-full text-sm font-semibold hover:bg-gold/90 transition-colors shadow-sm"
         >
           <Plus size={16} />
@@ -119,15 +126,25 @@ export default function Vendors() {
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.25, delay: i * 0.03 }}
-                    className="bg-white rounded-2xl border border-sage/30 p-5"
+                    className="bg-white rounded-2xl border border-sage/30 p-5 group relative"
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-semibold text-teal-dark">{v.name}</h3>
-                      {(v.booking_count ?? 0) > 0 && (
-                        <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-sage-light text-teal-dark">
-                          {v.booking_count} {t('vendorsPage.bookings')}
-                        </span>
-                      )}
+                    <div className="flex items-center justify-between mb-2 gap-2">
+                      <h3 className="font-semibold text-teal-dark truncate">{v.name}</h3>
+                      <div className="flex items-center gap-2 shrink-0">
+                        {(v.booking_count ?? 0) > 0 && (
+                          <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-sage-light text-teal-dark">
+                            {v.booking_count} {t('vendorsPage.bookings')}
+                          </span>
+                        )}
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button onClick={() => setModalTarget(v)} className="text-teal-dark/40 hover:text-teal-deep p-1">
+                            <Pencil size={13} />
+                          </button>
+                          <button onClick={(e) => handleDelete(e, v)} className="text-teal-dark/40 hover:text-terracotta p-1">
+                            <Trash2 size={13} />
+                          </button>
+                        </div>
+                      </div>
                     </div>
                     {categoryName && <p className="text-xs text-teal-dark/50 mb-3">{categoryName}</p>}
                     <div className="space-y-1 text-xs text-teal-dark/60">
@@ -152,7 +169,13 @@ export default function Vendors() {
         </>
       )}
 
-      {showNew && <VendorFormModal onClose={() => setShowNew(false)} onCreated={load} />}
+      {modalTarget && (
+        <VendorFormModal
+          vendor={modalTarget === 'new' ? null : modalTarget}
+          onClose={() => setModalTarget(null)}
+          onCreated={load}
+        />
+      )}
     </DashboardLayout>
   );
 }

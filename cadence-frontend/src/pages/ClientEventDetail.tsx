@@ -4,7 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { CalendarDays, MapPin, Users } from 'lucide-react';
 import ClientLayout from '../components/layout/ClientLayout';
 import DateDisplay from '../components/shared/DateDisplay';
-import { fetchMyEventDetail, respondToApproval, type ClientEventDetail as EventDetailType } from '../lib/client';
+import RatingStars from '../components/shared/RatingStars';
+import {
+  fetchMyEventDetail,
+  respondToApproval,
+  fetchMyEventRating,
+  submitEventRating,
+  type ClientEventDetail as EventDetailType,
+  type ClientEventRating,
+} from '../lib/client';
 
 const statusColors: Record<string, string> = {
   pending: 'bg-gold-light/40 text-[#8a6a1f]',
@@ -19,6 +27,11 @@ export default function ClientEventDetail() {
   const [loading, setLoading] = useState(true);
   const [commentDrafts, setCommentDrafts] = useState<Record<number, string>>({});
   const [submitting, setSubmitting] = useState<number | null>(null);
+  const [rating, setRating] = useState<ClientEventRating | null>(null);
+  const [ratingLoaded, setRatingLoaded] = useState(false);
+  const [ratingValue, setRatingValue] = useState(0);
+  const [ratingComment, setRatingComment] = useState('');
+  const [submittingRating, setSubmittingRating] = useState(false);
 
   const load = () => {
     if (!id) return;
@@ -26,6 +39,24 @@ export default function ClientEventDetail() {
   };
 
   useEffect(load, [id]);
+
+  useEffect(() => {
+    if (!id || data?.event.status !== 'completed') return;
+    fetchMyEventRating(id)
+      .then(setRating)
+      .finally(() => setRatingLoaded(true));
+  }, [id, data?.event.status]);
+
+  const handleSubmitRating = async () => {
+    if (!id || ratingValue < 1) return;
+    setSubmittingRating(true);
+    try {
+      const created = await submitEventRating(id, ratingValue, ratingComment.trim() || undefined);
+      setRating(created);
+    } finally {
+      setSubmittingRating(false);
+    }
+  };
 
   const handleRespond = async (approvalId: number, status: 'approved' | 'changes_requested') => {
     if (!id) return;
@@ -158,6 +189,38 @@ export default function ClientEventDetail() {
           ))}
         </div>
       </section>
+
+      {event.status === 'completed' && ratingLoaded && (
+        <section className="bg-white rounded-2xl border border-sage/30 p-6 mt-6">
+          <h2 className="text-sm font-semibold text-teal-dark/60 uppercase tracking-wide mb-4">{t('rating.title')}</h2>
+          {rating ? (
+            <div className="space-y-1.5">
+              <RatingStars value={rating.rating} />
+              {rating.comment && <p className="text-sm text-teal-dark/70 italic mt-1">"{rating.comment}"</p>}
+              <p className="text-xs text-teal-dark/40">{t('rating.thanks')}</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <p className="text-sm text-teal-dark/60">{t('rating.prompt')}</p>
+              <RatingStars value={ratingValue} onChange={setRatingValue} size={24} />
+              <textarea
+                placeholder={t('rating.commentPlaceholder')}
+                value={ratingComment}
+                onChange={(e) => setRatingComment(e.target.value)}
+                rows={2}
+                className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm resize-none"
+              />
+              <button
+                disabled={ratingValue < 1 || submittingRating}
+                onClick={handleSubmitRating}
+                className="text-xs font-semibold px-4 py-2 rounded-full bg-gold text-white hover:bg-gold/90 disabled:opacity-50"
+              >
+                {submittingRating ? '...' : t('rating.submit')}
+              </button>
+            </div>
+          )}
+        </section>
+      )}
     </ClientLayout>
   );
 }

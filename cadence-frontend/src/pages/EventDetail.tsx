@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { ArrowLeft, CalendarDays, Users, UserPlus, Pencil } from 'lucide-react';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import DateDisplay from '../components/shared/DateDisplay';
-import { fetchEventById, type Event } from '../lib/events';
+import RatingStars from '../components/shared/RatingStars';
+import { fetchEventById, fetchEventRating, type Event, type EventRating } from '../lib/events';
 import TimelineTab from '../components/events/TimelineTab';
 import BudgetTab from '../components/events/BudgetTab';
 import VendorsTab from '../components/events/VendorsTab';
@@ -20,6 +21,7 @@ export default function EventDetail() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'budget' | 'vendors' | 'tasks' | 'approvals'>('overview');
   const [showInvite, setShowInvite] = useState(false);
+  const [rating, setRating] = useState<EventRating | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -27,6 +29,11 @@ export default function EventDetail() {
       .then(setEvent)
       .finally(() => setLoading(false));
   }, [id]);
+
+  useEffect(() => {
+    if (!id || event?.status !== 'completed') return;
+    fetchEventRating(id).then(setRating).catch(() => {});
+  }, [id, event?.status]);
 
   if (loading) {
     return (
@@ -98,6 +105,21 @@ export default function EventDetail() {
           <p className="text-sm text-teal-dark font-medium">{event.guest_count ?? t('eventDetail.notSet')}</p>
         </div>
       </div>
+
+      {event.status === 'completed' && (
+        <div className="bg-white rounded-2xl border border-sage/30 p-5 mt-4">
+          <p className="text-xs font-semibold text-teal-dark/50 uppercase mb-2">{t('rating.clientRating')}</p>
+          {rating ? (
+            <div className="space-y-1.5">
+              <RatingStars value={rating.rating} />
+              {rating.comment && <p className="text-sm text-teal-dark/70 italic">"{rating.comment}"</p>}
+            </div>
+          ) : (
+            <p className="text-sm text-teal-dark/40">{t('rating.notRatedYet')}</p>
+          )}
+        </div>
+      )}
+
       <div className="flex gap-1 mt-6 mb-5 border-b border-sage/30 overflow-x-auto">
         {(['overview', 'timeline', 'budget', 'vendors', 'tasks', 'approvals'] as const).map((tab) => (
           <button

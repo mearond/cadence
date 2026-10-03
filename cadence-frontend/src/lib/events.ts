@@ -106,6 +106,25 @@ export async function createVendor(data: {
   return response.data;
 }
 
+export async function updateVendor(
+  id: number,
+  data: Partial<{
+    name: string;
+    categoryId: number;
+    phone: string;
+    email: string;
+    tinNumber: string;
+    notes: string;
+  }>
+): Promise<Vendor> {
+  const response = await api.put(`/vendors/${id}`, data);
+  return response.data;
+}
+
+export async function deleteVendor(id: number): Promise<void> {
+  await api.delete(`/vendors/${id}`);
+}
+
 // Tasks
 export async function fetchTasks(eventId: string) {
   const response = await api.get(`/events/${eventId}/tasks`);
@@ -203,6 +222,19 @@ export async function updateTask(
 }
 export async function deleteTask(eventId: string, id: number): Promise<void> {
   await api.delete(`/events/${eventId}/tasks/${id}`);
+}
+
+export interface EventRating {
+  id: number;
+  event_id: number;
+  rating: number;
+  comment: string | null;
+  created_at: string;
+}
+
+export async function fetchEventRating(eventId: string): Promise<EventRating | null> {
+  const response = await api.get(`/events/${eventId}/rating`);
+  return response.data;
 }
 
 export async function updateEvent(

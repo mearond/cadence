@@ -1,20 +1,25 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { LayoutGrid, CalendarDays, Building2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutGrid, CalendarDays, Building2, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useUIStore } from '../../store/uiStore';
+import { useAuthStore } from '../../store/authStore';
 
 export default function Sidebar() {
   const { t } = useTranslation();
   const location = useLocation();
   const collapsed = useUIStore((s) => s.sidebarCollapsed);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
+  const role = useAuthStore((s) => s.user?.role);
 
   const navItems = [
     { label: t('nav.dashboard'), icon: LayoutGrid, path: '/dashboard' },
     { label: t('nav.events'), icon: CalendarDays, path: '/events' },
   ];
 
-  const operationsItems = [{ label: t('nav.vendors'), icon: Building2, path: '/vendors' }];
+  const operationsItems = [
+    { label: t('nav.vendors'), icon: Building2, path: '/vendors' },
+    ...(role === 'admin' ? [{ label: t('nav.staff'), icon: Users, path: '/staff' }] : []),
+  ];
 
   const renderLink = ({ label, icon: Icon, path }: { label: string; icon: typeof LayoutGrid; path: string }) => {
     const active = location.pathname.startsWith(path);

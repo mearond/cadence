@@ -70,3 +70,25 @@ export async function respondToApproval(
   });
   return response.data;
 }
+
+export interface ClientEventRating {
+  id: number;
+  event_id: number;
+  rating: number;
+  comment: string | null;
+  created_at: string;
+}
+
+export async function fetchMyEventRating(eventId: string): Promise<ClientEventRating | null> {
+  const response = await api.get(`/client/events/${eventId}/rating`);
+  return response.data;
+}
+
+export async function submitEventRating(
+  eventId: string,
+  rating: number,
+  comment?: string
+): Promise<ClientEventRating> {
+  const response = await api.post(`/client/events/${eventId}/rating`, { rating, comment });
+  return response.data;
+}

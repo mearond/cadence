@@ -1,24 +1,27 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X } from 'lucide-react';
-import { createVendor, fetchVendorCategories, type VendorCategory } from '../../lib/events';
+import { createVendor, updateVendor, fetchVendorCategories, type Vendor, type VendorCategory } from '../../lib/events';
 import { isValidEmail, sanitizePhoneInput } from '../../lib/validation';
 
 export default function VendorFormModal({
+  vendor,
   onClose,
   onCreated,
 }: {
+  vendor?: Vendor | null;
   onClose: () => void;
   onCreated: () => void;
 }) {
   const { t, i18n } = useTranslation();
+  const isEdit = !!vendor;
   const [categories, setCategories] = useState<VendorCategory[]>([]);
-  const [name, setName] = useState('');
-  const [categoryId, setCategoryId] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [tinNumber, setTinNumber] = useState('');
-  const [notes, setNotes] = useState('');
+  const [name, setName] = useState(vendor?.name ?? '');
+  const [categoryId, setCategoryId] = useState(vendor?.category_id ? String(vendor.category_id) : '');
+  const [phone, setPhone] = useState(vendor?.phone ?? '');
+  const [email, setEmail] = useState(vendor?.email ?? '');
+  const [tinNumber, setTinNumber] = useState(vendor?.tin_number ?? '');
+  const [notes, setNotes] = useState(vendor?.notes ?? '');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -38,18 +41,23 @@ export default function VendorFormModal({
     setSaving(true);
     setError('');
     try {
-      await createVendor({
+      const payload = {
         name: name.trim(),
         categoryId: categoryId ? Number(categoryId) : undefined,
         phone: phone.trim() || undefined,
         email: email.trim() || undefined,
         tinNumber: tinNumber.trim() || undefined,
         notes: notes.trim() || undefined,
-      });
+      };
+      if (isEdit && vendor) {
+        await updateVendor(vendor.id, payload);
+      } else {
+        await createVendor(payload);
+      }
       onCreated();
       onClose();
     } catch {
-      setError(t('vendors.createError'));
+      setError(isEdit ? t('vendors.updateError') : t('vendors.createError'));
     } finally {
       setSaving(false);
     }
@@ -59,7 +67,7 @@ export default function VendorFormModal({
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between px-6 py-4 border-b border-sage/30">
-          <h2 className="text-lg font-bold text-teal-dark">{t('vendors.createTitle')}</h2>
+          <h2 className="text-lg font-bold text-teal-dark">{isEdit ? t('vendors.editTitle') : t('vendors.createTitle')}</h2>
           <button onClick={onClose} className="p-1 rounded-lg hover:bg-sage-light text-teal-dark/50">
             <X size={18} />
           </button>
