@@ -7,6 +7,8 @@ import { requireAuth } from './middleware/authMiddleware.js';
 import eventRoutes from './routes/eventRoutes.js';
 import vendorRoutes from './routes/vendorRoutes.js';
 import clientRoutes from './routes/clientRoutes.js';
+import staffRoutes from './routes/staffRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
 
 dotenv.config();
 
@@ -19,6 +21,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/vendors', vendorRoutes);
 app.use('/api/client', clientRoutes);
+app.use('/api/staff', staffRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 
 app.get('/api/health', (req, res) => {

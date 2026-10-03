@@ -1,0 +1,9 @@
+ALTER TABLE users ADD COLUMN title VARCHAR(255);
+
+CREATE TABLE event_ratings (
+  id SERIAL PRIMARY KEY,
+  event_id INTEGER REFERENCES events(id) ON DELETE CASCADE UNIQUE,
+  rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  comment TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
