@@ -1,253 +1,258 @@
 {
   "app": {
-    "name": "Cadence"
+    "name": "ካደንስ"
   },
   "nav": {
-    "dashboard": "Dashboard",
-    "events": "Events",
-    "vendors": "Vendors",
-    "staff": "Staff",
-    "logout": "Logout"
+    "dashboard": "ዳሽቦርድ",
+    "events": "ዝግጅቶች",
+    "vendors": "አቅራቢዎች",
+    "staff": "ሰራተኞች",
+    "logout": "ውጣ"
   },
   "auth": {
-    "signIn": "Sign In",
-    "email": "Email",
-    "password": "Password",
-    "signUp": "Sign Up",
-    "orgName": "Agency Name",
-    "name": "Your Name",
-    "createAccount": "Create Account",
-    "haveAccount": "Already have an account?",
-    "noAccount": "Don't have an account?",
-    "signInLink": "Sign in",
-    "signUpLink": "Sign up",
-    "invalidEmail": "Please enter a valid email address."
+    "signIn": "ግባ",
+    "email": "ኢሜይል",
+    "password": "የይለፍ ቃል",
+    "signUp": "ተመዝገብ",
+    "orgName": "የድርጅት ስም",
+    "name": "ስምዎ",
+    "createAccount": "አካውንት ፍጠር",
+    "haveAccount": "አካውንት አለዎት?",
+    "noAccount": "አካውንት የለዎትም?",
+    "signInLink": "ግባ",
+    "signUpLink": "ተመዝገብ",
+    "invalidEmail": "እባክዎ ትክክለኛ ኢሜይል ያስገቡ።"
   },
   "dashboard": {
-    "welcomeBack": "Welcome back",
-    "orgId": "Organization",
-    "role": "Role",
-    "calendar": "Calendar",
-    "upcomingEvents": "Upcoming Events",
-    "noUpcoming": "No upcoming events.",
-    "pendingTasks": "Pending Tasks",
-    "noPendingTasks": "No pending tasks.",
+    "welcomeBack": "እንኳን ደህና መጡ",
+    "orgId": "ድርጅት",
+    "role": "ሚና",
+    "calendar": "ካላንደር",
+    "upcomingEvents": "መጪ ዝግጅቶች",
+    "noUpcoming": "መጪ ዝግጅት የለም።",
+    "pendingTasks": "ያልተጠናቀቁ ተግባራት",
+    "noPendingTasks": "ያልተጠናቀቀ ተግባር የለም።",
     "priority": {
-      "low": "Low",
-      "medium": "Medium",
-      "high": "High",
-      "critical": "Critical"
+      "low": "ዝቅተኛ",
+      "medium": "መካከለኛ",
+      "high": "ከፍተኛ",
+      "critical": "አስቸኳይ"
     }
   },
   "eventsPage": {
-    "title": "Events",
-    "newEvent": "New Event",
-    "noEvents": "No events yet. Create your first one to get started.",
-    "guests": "guests",
+    "title": "ዝግጅቶች",
+    "newEvent": "አዲስ ዝግጅት",
+    "noEvents": "እስካሁን ምንም ዝግጅት የለም። የመጀመሪያውን ይፍጠሩ።",
+    "guests": "እንግዶች",
     "status": {
-      "planning": "Planning",
-      "confirmed": "Confirmed",
-      "in-progress": "In Progress",
-      "completed": "Completed",
-      "cancelled": "Cancelled"
+      "planning": "በዕቅድ ላይ",
+      "confirmed": "ተረጋግጧል",
+      "in-progress": "በሂደት ላይ",
+      "completed": "ተጠናቋል",
+      "cancelled": "ተሰርዟል"
     },
     "type": {
-      "conference": "Conference",
-      "wedding": "Wedding",
-      "corporate": "Corporate",
-      "graduation": "Graduation",
-      "religious": "Religious",
-      "memorial": "Memorial"
+      "conference": "ኮንፈረንስ",
+      "wedding": "ሠርግ",
+      "corporate": "ኮርፖሬት",
+      "graduation": "ምረቃ",
+      "religious": "ሃይማኖታዊ",
+      "memorial": "መታሰቢያ"
     }
   },
   "eventForm": {
-    "createTitle": "Create New Event",
-    "name": "Event Name",
-    "nameAm": "Event Name (Amharic)",
-    "eventType": "Event Type",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "guestCount": "Expected Guests",
-    "create": "Create Event",
-    "cancel": "Cancel",
-    "editTitle": "Edit Event",
-    "status": "Status",
-    "save": "Save Changes"
+    "createTitle": "አዲስ ዝግጅት ይፍጠሩ",
+    "name": "የዝግጅት ስም",
+    "nameAm": "የዝግጅት ስም (አማርኛ)",
+    "eventType": "የዝግጅት አይነት",
+    "startDate": "መጀመሪያ ቀን",
+    "endDate": "መጨረሻ ቀን",
+    "guestCount": "የሚጠበቁ እንግዶች",
+    "create": "ዝግጅት ፍጠር",
+    "cancel": "ሰርዝ",
+    "editTitle": "ዝግጅት አርትዕ",
+    "status": "ሁኔታ",
+    "save": "ለውጦችን አስቀምጥ"
   },
   "eventDetail": {
-    "back": "Back to Events",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "guestCount": "Guests",
-    "notSet": "Not set"
+    "back": "ወደ ዝግጅቶች ተመለስ",
+    "startDate": "መጀመሪያ ቀን",
+    "endDate": "መጨረሻ ቀን",
+    "guestCount": "እንግዶች",
+    "notSet": "አልተቀመጠም"
   },
   "eventTabs": {
-    "overview": "Overview",
-    "timeline": "Timeline",
-    "budget": "Budget",
-    "vendors": "Vendors",
-    "tasks": "Tasks",
-    "approvals": "Approvals"
+    "overview": "አጠቃላይ እይታ",
+    "timeline": "የጊዜ ሰሌዳ",
+    "budget": "በጀት",
+    "vendors": "አቅራቢዎች",
+    "tasks": "ተግባራት",
+    "approvals": "ማጽደቆች"
   },
   "timeline": {
-    "add": "Add Item",
-    "empty": "No timeline items yet.",
-    "title": "Title",
-    "startTime": "Start Time",
-    "endTime": "End Time",
-    "save": "Save"
+    "add": "ንጥል ጨምር",
+    "empty": "እስካሁን የጊዜ ሰሌዳ ንጥል የለም።",
+    "title": "ርዕስ",
+    "startTime": "መጀመሪያ ሰዓት",
+    "endTime": "መጨረሻ ሰዓት",
+    "save": "አስቀምጥ"
   },
   "budget": {
-    "add": "Add Item",
-    "empty": "No budget items yet.",
-    "category": "Category",
-    "name": "Name",
-    "estimated": "Estimated",
-    "actual": "Actual",
-    "totalEstimated": "Total Estimated",
-    "totalActual": "Total Actual",
-    "totalVat": "VAT (15%)",
-    "save": "Save"
+    "add": "ንጥል ጨምር",
+    "empty": "እስካሁን የበጀት ንጥል የለም።",
+    "category": "ምድብ",
+    "name": "ስም",
+    "estimated": "የተገመተ",
+    "actual": "ትክክለኛ",
+    "totalEstimated": "ጠቅላላ የተገመተ",
+    "totalActual": "ጠቅላላ ትክክለኛ",
+    "totalVat": "ተ.እ.ታ (15%)",
+    "save": "አስቀምጥ"
   },
  "vendors": {
-    "add": "Add Vendor",
-    "empty": "No vendors booked yet.",
-    "name": "Vendor Name",
-    "amount": "Contract Amount (ETB)",
-    "paymentStatus": "Payment Status",
-    "save": "Save",
+    "add": "አቅራቢ ጨምር",
+    "empty": "እስካሁን አቅራቢ አልተያዘም።",
+    "name": "የአቅራቢ ስም",
+    "amount": "የኮንትራት መጠን (ብር)",
+    "paymentStatus": "የክፍያ ሁኔታ",
+    "save": "አስቀምጥ",
     "status": {
-        "unpaid": "Unpaid",
-        "partial": "Partially Paid",
-        "paid": "Paid"
+        "unpaid": "አልተከፈለም",
+        "partial": "በከፊል ተከፍሏል",
+        "paid": "ተከፍሏል"
     },
-    "newVendor": "New Vendor",
-    "manageVendors": "Manage Vendors",
-    "createTitle": "New Vendor",
-    "category": "Category",
-    "categoryNone": "No category",
-    "phone": "Phone",
-    "email": "Email",
-    "tin": "TIN Number",
-    "notes": "Notes",
-    "cancel": "Cancel",
-    "createError": "Could not create vendor.",
-    "booked": "Booked Vendors",
-    "invalidEmail": "Please enter a valid email address.",
-    "editTitle": "Edit Vendor",
-    "updateError": "Could not update vendor.",
-    "confirmDelete": "Delete this vendor? This cannot be undone."
-    },
+    "newVendor": "አዲስ አቅራቢ",
+    "manageVendors": "አቅራቢዎችን አስተዳድር",
+    "createTitle": "አዲስ አቅራቢ",
+    "category": "ምድብ",
+    "categoryNone": "ያለ ምድብ",
+    "phone": "ስልክ",
+    "email": "ኢሜይል",
+    "tin": "የግብር መለያ ቁጥር",
+    "notes": "ማስታወሻ",
+    "cancel": "ይቅር",
+    "createError": "አቅራቢውን መፍጠር አልተቻለም።",
+    "booked": "የተያዙ አቅራቢዎች",
+    "invalidEmail": "እባክዎ ትክክለኛ ኢሜይል ያስገቡ።",
+    "editTitle": "አቅራቢ አርትዕ",
+    "updateError": "አቅራቢውን ማዘመን አልተቻለም።",
+    "confirmDelete": "ይህን አቅራቢ ይሰርዙ? ይህ መመለስ አይቻልም።"
+ },
 
   "tasks": {
-    "add": "Add Task",
-    "empty": "No tasks yet.",
-    "title": "Title",
-    "priority": "Priority",
-    "save": "Save",
-    "checkpoints": "checkpoints done"
+    "add": "ተግባር ጨምር",
+    "empty": "እስካሁን ተግባር የለም።",
+    "title": "ርዕስ",
+    "priority": "ቅድሚያ",
+    "save": "አስቀምጥ",
+    "checkpoints": "ተጠናቀዋል"
   },
-
   "portal": {
-    "myEvents": "My Events",
-    "noEvents": "No events yet.",
-    "timeline": "Schedule",
-    "budget": "Budget Summary",
-    "totalEstimated": "Total Estimated",
-    "totalActual": "Total Actual",
+    "myEvents": "የእኔ ዝግጅቶች",
+    "noEvents": "እስካሁን ምንም ዝግጅት የለም።",
+    "timeline": "መርሃ ግብር",
+    "budget": "የበጀት ማጠቃለያ",
+    "totalEstimated": "ጠቅላላ የተገመተ",
+    "totalActual": "ጠቅላላ እውነተኛ",
     "approvals": {
-      "title": "Approvals",
-      "empty": "No approval requests yet.",
-      "comment": "Add a comment (optional)",
-      "approve": "Approve",
-      "requestChanges": "Request Changes",
+      "title": "ማጽደቆች",
+      "empty": "እስካሁን የማጽደቅ ጥያቄ የለም።",
+      "comment": "አስተያየት ያክሉ (አማራጭ)",
+      "approve": "አጽድቅ",
+      "requestChanges": "ለውጥ ጠይቅ",
       "status": {
-        "pending": "Pending",
-        "approved": "Approved",
-        "changes_requested": "Changes Requested"
+        "pending": "በመጠባበቅ ላይ",
+        "approved": "ጸድቋል",
+        "changes_requested": "ለውጥ ተጠይቋል"
       }
     }
   },
-
   "approvals": {
-    "empty": "No approval requests yet.",
-    "itemType": "Item type (e.g. budget, vendor, timeline)",
-    "formTitle": "Title",
-    "description": "Description (optional)",
-    "save": "Send Request",
-    "add": "New Approval Request",
+    "empty": "እስካሁን የማጽደቅ ጥያቄ የለም።",
+    "itemType": "የንጥል አይነት (ለምሳሌ: በጀት፣ አቅራቢ፣ መርሃ ግብር)",
+    "formTitle": "ርዕስ",
+    "description": "መግለጫ (አማራጭ)",
+    "save": "ጥያቄ ላክ",
+    "add": "አዲስ የማጽደቅ ጥያቄ",
     "status": {
-      "pending": "Pending",
-      "approved": "Approved",
-      "changes_requested": "Changes Requested"
+      "pending": "በመጠባበቅ ላይ",
+      "approved": "ጸድቋል",
+      "changes_requested": "ለውጥ ተጠይቋል"
     }
   },
-
- "inviteClient": {
-    "title": "Invite Client",
-    "name": "Client Name",
-    "email": "Client Email",
-    "send": "Send Invite",
-    "done": "Done",
-    "copy": "Copy credentials",
-    "copied": "Copied",
-    "tempPassword": "Temporary Password",
-    "existingClient": "Linked an existing client account — no new password generated.",
-    "error": "Could not invite client.",
-    "emailSent": "An email with these credentials has been sent to the client.",
-    "emailFailed": "Could not send the email — share these credentials with the client manually.",
-    "invalidEmail": "Please enter a valid email address."
+  "inviteClient": {
+    "title": "ደንበኛ ጋብዝ",
+    "name": "የደንበኛ ስም",
+    "email": "የደንበኛ ኢሜይል",
+    "send": "ግብዣ ላክ",
+    "done": "ተጠናቋል",
+    "copy": "የመግቢያ መረጃ ቅዳ",
+    "copied": "ተቀድቷል",
+    "tempPassword": "ጊዜያዊ የይለፍ ቃል",
+    "existingClient": "ነባር የደንበኛ አካውንት ተያይዟል — አዲስ የይለፍ ቃል አልተፈጠረም።",
+    "error": "ደንበኛውን መጋበዝ አልተቻለም።",
+    "emailSent": "ከእነዚህ መረጃዎች ጋር ኢሜይል ለደንበኛው ተልኳል።",
+    "emailFailed": "ኢሜይል መላክ አልተቻለም — እባክዎ መረጃውን በራስዎ ለደንበኛው ያጋሩ።",
+    "invalidEmail": "እባክዎ ትክክለኛ ኢሜይል ያስገቡ።"
  },
 
   "vendorsPage": {
-    "title": "Vendors",
-    "addNew": "Add New",
-    "totalVendors": "Total Vendors",
-    "categoriesInUse": "Categories",
-    "totalBookings": "Total Bookings",
-    "mostPopular": "Most Popular",
-    "allVendors": "All Vendors",
-    "bookings": "bookings",
-    "empty": "No vendors yet. Add your first one to get started."
- },
+    "title": "አቅራቢዎች",
+    "addNew": "አዲስ ጨምር",
+    "totalVendors": "ጠቅላላ አቅራቢዎች",
+    "categoriesInUse": "ምድቦች",
+    "totalBookings": "ጠቅላላ ማስያዣዎች",
+    "mostPopular": "በጣም ተወዳጅ",
+    "allVendors": "ሁሉም አቅራቢዎች",
+    "bookings": "ማስያዣዎች",
+    "empty": "እስካሁን አቅራቢ የለም። የመጀመሪያውን ይጨምሩ።"
+   },
 
- "setPassword": {
-    "title": "Set Your Password",
-    "subtitle": "Choose a new password to secure your account.",
-    "newPassword": "New Password",
-    "confirmPassword": "Confirm Password",
-    "save": "Save Password",
-    "tooShort": "Password must be at least 8 characters.",
-    "mismatch": "Passwords do not match."
-  },
+   "setPassword": {
+        "title": "የይለፍ ቃልዎን ያዘጋጁ",
+        "subtitle": "አካውንትዎን ለማስጠበቅ አዲስ የይለፍ ቃል ይምረጡ።",
+        "newPassword": "አዲስ የይለፍ ቃል",
+        "confirmPassword": "የይለፍ ቃል ያረጋግጡ",
+        "save": "የይለፍ ቃል አስቀምጥ",
+        "tooShort": "የይለፍ ቃል ቢያንስ 8 ቁምፊዎች ሊኖረው ይገባል።",
+        "mismatch": "የይለፍ ቃላት አይመሳሰሉም።"
+    },
 
   "staffPage": {
-    "title": "Staff",
-    "addNew": "Add New",
-    "addTitle": "Add Staff Member",
-    "editTitle": "Edit Staff Member",
-    "name": "Name",
-    "email": "Email",
-    "jobTitle": "Job Title",
-    "role": "Role",
-    "roleStaff": "Staff",
-    "roleAdmin": "Admin",
-    "invalidEmail": "Please enter a valid email address.",
-    "saveError": "Could not save staff member.",
-    "created": "Staff member added. Share these credentials with them.",
-    "empty": "No staff members yet. Add your first one to get started.",
-    "adminOnly": "Only admins can manage staff.",
-    "confirmDelete": "Remove this staff member? This cannot be undone."
+    "title": "ሰራተኞች",
+    "addNew": "አዲስ ጨምር",
+    "addTitle": "ሰራተኛ ጨምር",
+    "editTitle": "ሰራተኛ አርትዕ",
+    "name": "ስም",
+    "email": "ኢሜይል",
+    "jobTitle": "የስራ ድርሻ",
+    "role": "ሚና",
+    "roleStaff": "ሰራተኛ",
+    "roleAdmin": "አስተዳዳሪ",
+    "invalidEmail": "እባክዎ ትክክለኛ ኢሜይል ያስገቡ።",
+    "saveError": "ሰራተኛውን ማስቀመጥ አልተቻለም።",
+    "created": "ሰራተኛ ተጨምሯል። የመግቢያ መረጃውን ለእሱ/ለእሷ ያጋሩ።",
+    "empty": "እስካሁን ሰራተኛ የለም። የመጀመሪያውን ይጨምሩ።",
+    "adminOnly": "አስተዳዳሪዎች ብቻ ሰራተኞችን ማስተዳደር ይችላሉ።",
+    "confirmDelete": "ይህን ሰራተኛ ያስወግዱ? ይህ መመለስ አይቻልም።"
   },
 
   "rating": {
-    "title": "Rate Your Experience",
-    "prompt": "How was your experience working with us on this event?",
-    "commentPlaceholder": "Add a comment (optional)",
-    "submit": "Submit Rating",
-    "thanks": "Thanks for your feedback!",
-    "clientRating": "Client Rating",
-    "notRatedYet": "The client hasn't rated this event yet."
+    "title": "ተሞክሮዎን ይገምግሙ",
+    "prompt": "በዚህ ዝግጅት ላይ ከእኛ ጋር የነበረዎት ተሞክሮ ምን ይመስል ነበር?",
+    "commentPlaceholder": "አስተያየት ያክሉ (አማራጭ)",
+    "submit": "ግምገማ አስገባ",
+    "thanks": "ለአስተያየትዎ እናመስግናለን!",
+    "clientRating": "የደንበኛ ግምገማ",
+    "notRatedYet": "ደንበኛው ይህን ዝግጅት እስካሁን አልገመገመም።"
+  },
+
+  "overview": {
+    "viewAll": "ሁሉንም ይዩ",
+    "more": "ተጨማሪ",
+    "tasksDone": "ተጠናቅቋል",
+    "approvalsHint": "ከዚህ ዝግጅት የሚጠበቁ የማጽደቅ ጥያቄዎች",
+    "allClear": "ምንም የሚጠበቅ ማጽደቅ የለም።"
   }
 
 }

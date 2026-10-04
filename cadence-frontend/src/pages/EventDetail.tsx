@@ -11,6 +11,7 @@ import BudgetTab from '../components/events/BudgetTab';
 import VendorsTab from '../components/events/VendorsTab';
 import TasksTab from '../components/events/TasksTab';
 import ApprovalsTab from '../components/events/ApprovalsTab';
+import OverviewTab from '../components/events/OverviewTab';
 import InviteClientModal from '../components/events/InviteClientModal';
 
 export default function EventDetail() {
@@ -134,6 +135,7 @@ export default function EventDetail() {
         ))}
       </div>
 
+      {activeTab === 'overview' && <OverviewTab eventId={id!} onNavigate={setActiveTab} />}
       {activeTab === 'timeline' && <TimelineTab eventId={id!} />}
       {activeTab === 'budget' && <BudgetTab eventId={id!} />}
       {activeTab === 'vendors' && <VendorsTab eventId={id!} />}
