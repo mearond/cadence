@@ -21,6 +21,7 @@ import {
 } from '../controllers/taskController.js';
 import { getApprovals, createApprovalRequest, deleteApprovalRequest } from '../controllers/approvalController.js';
 import { inviteClientToEvent } from '../controllers/clientInviteController.js';
+import { getEventClients, removeEventClient } from '../controllers/eventClientController.js';
 import { getEventRating } from '../controllers/ratingController.js';
 
 const router = express.Router();
@@ -57,6 +58,8 @@ router.post('/:eventId/approvals', createApprovalRequest);
 router.delete('/:eventId/approvals/:id', deleteApprovalRequest);
 
 router.post('/:eventId/invite-client', inviteClientToEvent);
+router.get('/:eventId/clients', getEventClients);
+router.delete('/:eventId/clients/:clientId', removeEventClient);
 
 router.get('/:eventId/rating', getEventRating);
 

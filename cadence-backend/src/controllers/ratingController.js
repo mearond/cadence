@@ -19,7 +19,7 @@ export async function getEventRating(req, res) {
 export async function getMyEventRating(req, res) {
   const { eventId } = req.params;
   try {
-    const access = await pool.query('SELECT id FROM events WHERE id = $1 AND client_id = $2', [eventId, req.user.userId]);
+    const access = await pool.query('SELECT event_id FROM event_clients WHERE event_id = $1 AND client_id = $2', [eventId, req.user.userId]);
     if (access.rows.length === 0) return res.status(403).json({ error: 'You do not have access to this event.' });
 
     const result = await pool.query('SELECT * FROM event_ratings WHERE event_id = $1', [eventId]);
@@ -40,7 +40,12 @@ export async function submitEventRating(req, res) {
   }
 
   try {
-    const access = await pool.query('SELECT id, status FROM events WHERE id = $1 AND client_id = $2', [eventId, req.user.userId]);
+    const access = await pool.query(
+      `SELECT e.id, e.status FROM events e
+       JOIN event_clients ec ON ec.event_id = e.id
+       WHERE e.id = $1 AND ec.client_id = $2`,
+      [eventId, req.user.userId]
+    );
     if (access.rows.length === 0) return res.status(403).json({ error: 'You do not have access to this event.' });
     if (access.rows[0].status !== 'completed') {
       return res.status(400).json({ error: 'You can only rate an event after it has ended.' });

@@ -80,7 +80,11 @@ export async function deleteApprovalRequest(req, res) {
 export async function getMyEvents(req, res) {
   try {
     const result = await pool.query(
-      'SELECT id, name, name_am, event_type, status, start_date FROM events WHERE client_id = $1 ORDER BY start_date DESC',
+      `SELECT e.id, e.name, e.name_am, e.event_type, e.status, e.start_date
+       FROM events e
+       JOIN event_clients ec ON ec.event_id = e.id
+       WHERE ec.client_id = $1
+       ORDER BY e.start_date DESC`,
       [req.user.userId]
     );
     res.json(result.rows);

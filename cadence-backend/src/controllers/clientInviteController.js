@@ -53,7 +53,13 @@ export async function inviteClientToEvent(req, res) {
       clientUser = created.rows[0];
     }
 
-    await pool.query('UPDATE events SET client_id = $1 WHERE id = $2', [clientUser.id, eventId]);
+    const link = await pool.query(
+      `INSERT INTO event_clients (event_id, client_id) VALUES ($1, $2)
+       ON CONFLICT (event_id, client_id) DO NOTHING
+       RETURNING event_id`,
+      [eventId, clientUser.id]
+    );
+    const alreadyLinked = link.rows.length === 0;
 
     let emailSent = false;
     if (temporaryPassword) {
@@ -74,7 +80,9 @@ export async function inviteClientToEvent(req, res) {
     }
 
     res.status(200).json({
-      message: temporaryPassword
+      message: alreadyLinked
+        ? 'This client is already linked to this event.'
+        : temporaryPassword
         ? 'Client account created and linked to this event.'
         : 'Existing client linked to this event.',
       client: { id: clientUser.id, name: clientUser.name || name, email: clientUser.email || email },

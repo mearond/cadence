@@ -237,6 +237,21 @@ export async function fetchEventRating(eventId: string): Promise<EventRating | n
   return response.data;
 }
 
+export interface EventClient {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export async function fetchEventClients(eventId: string): Promise<EventClient[]> {
+  const response = await api.get(`/events/${eventId}/clients`);
+  return response.data;
+}
+
+export async function removeEventClient(eventId: string, clientId: number): Promise<void> {
+  await api.delete(`/events/${eventId}/clients/${clientId}`);
+}
+
 export async function updateEvent(
   id: number,
   data: Partial<{

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, CalendarDays, Users, UserPlus, Pencil } from 'lucide-react';
+import { ArrowLeft, CalendarDays, Users, Pencil } from 'lucide-react';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import DateDisplay from '../components/shared/DateDisplay';
 import RatingStars from '../components/shared/RatingStars';
@@ -12,6 +12,7 @@ import VendorsTab from '../components/events/VendorsTab';
 import TasksTab from '../components/events/TasksTab';
 import ApprovalsTab from '../components/events/ApprovalsTab';
 import OverviewTab from '../components/events/OverviewTab';
+import ClientsCard from '../components/events/ClientsCard';
 import InviteClientModal from '../components/events/InviteClientModal';
 
 export default function EventDetail() {
@@ -23,6 +24,7 @@ export default function EventDetail() {
   const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'budget' | 'vendors' | 'tasks' | 'approvals'>('overview');
   const [showInvite, setShowInvite] = useState(false);
   const [rating, setRating] = useState<EventRating | null>(null);
+  const [clientsRefreshKey, setClientsRefreshKey] = useState(0);
 
   useEffect(() => {
     if (!id) return;
@@ -68,10 +70,6 @@ export default function EventDetail() {
           >
             <Pencil size={14} />
             {t('eventForm.editTitle')}
-          </button>
-          <button onClick={() => setShowInvite(true)} className="flex items-center gap-1.5 text-sm font-semibold text-teal-deep hover:text-teal-dark">
-            <UserPlus size={15} />
-            {t('inviteClient.title')}
           </button>
         </div>
       </div>
@@ -121,6 +119,8 @@ export default function EventDetail() {
         </div>
       )}
 
+      <ClientsCard key={clientsRefreshKey} eventId={id!} onAddClick={() => setShowInvite(true)} />
+
       <div className="flex gap-1 mt-6 mb-5 border-b border-sage/30 overflow-x-auto">
         {(['overview', 'timeline', 'budget', 'vendors', 'tasks', 'approvals'] as const).map((tab) => (
           <button
@@ -142,7 +142,15 @@ export default function EventDetail() {
       {activeTab === 'tasks' && <TasksTab eventId={id!} />}
       {activeTab === 'approvals' && <ApprovalsTab eventId={id!} />}
 
-      {showInvite && <InviteClientModal eventId={id!} onClose={() => setShowInvite(false)} />}
+      {showInvite && (
+        <InviteClientModal
+          eventId={id!}
+          onClose={() => {
+            setShowInvite(false);
+            setClientsRefreshKey((k) => k + 1);
+          }}
+        />
+      )}
     </DashboardLayout>
   );
 }

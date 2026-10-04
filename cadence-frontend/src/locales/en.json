@@ -256,5 +256,14 @@
     "tasksDone": "done",
     "approvalsHint": "Pending approval requests from this event",
     "allClear": "All caught up — no pending approvals."
+  },
+
+    "clients": {
+    "title": "Clients",
+    "addNew": "Add Client",
+    "empty": "No clients linked to this event yet.",
+    "remove": "Remove",
+    "confirmRemove": "Remove this client from this event? They will keep their account but lose access to this event.",
+    "removeError": "Could not remove this client."
   }
 }
