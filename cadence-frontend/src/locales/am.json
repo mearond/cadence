@@ -6,6 +6,7 @@
     "dashboard": "ዳሽቦርድ",
     "events": "ዝግጅቶች",
     "vendors": "አቅራቢዎች",
+    "staff": "ሰራተኞች",
     "logout": "ውጣ"
   },
   "auth": {
@@ -25,7 +26,18 @@
   "dashboard": {
     "welcomeBack": "እንኳን ደህና መጡ",
     "orgId": "ድርጅት",
-    "role": "ሚና"
+    "role": "ሚና",
+    "calendar": "ካላንደር",
+    "upcomingEvents": "መጪ ዝግጅቶች",
+    "noUpcoming": "መጪ ዝግጅት የለም።",
+    "pendingTasks": "ያልተጠናቀቁ ተግባራት",
+    "noPendingTasks": "ያልተጠናቀቀ ተግባር የለም።",
+    "priority": {
+      "low": "ዝቅተኛ",
+      "medium": "መካከለኛ",
+      "high": "ከፍተኛ",
+      "critical": "አስቸኳይ"
+    }
   },
   "eventsPage": {
     "title": "ዝግጅቶች",
@@ -121,7 +133,10 @@
     "cancel": "ይቅር",
     "createError": "አቅራቢውን መፍጠር አልተቻለም።",
     "booked": "የተያዙ አቅራቢዎች",
-    "invalidEmail": "እባክዎ ትክክለኛ ኢሜይል ያስገቡ።"
+    "invalidEmail": "እባክዎ ትክክለኛ ኢሜይል ያስገቡ።",
+    "editTitle": "አቅራቢ አርትዕ",
+    "updateError": "አቅራቢውን ማዘመን አልተቻለም።",
+    "confirmDelete": "ይህን አቅራቢ ይሰርዙ? ይህ መመለስ አይቻልም።"
  },
 
   "tasks": {
@@ -201,6 +216,35 @@
         "save": "የይለፍ ቃል አስቀምጥ",
         "tooShort": "የይለፍ ቃል ቢያንስ 8 ቁምፊዎች ሊኖረው ይገባል።",
         "mismatch": "የይለፍ ቃላት አይመሳሰሉም።"
-    }
+    },
+
+  "staffPage": {
+    "title": "ሰራተኞች",
+    "addNew": "አዲስ ጨምር",
+    "addTitle": "ሰራተኛ ጨምር",
+    "editTitle": "ሰራተኛ አርትዕ",
+    "name": "ስም",
+    "email": "ኢሜይል",
+    "jobTitle": "የስራ ድርሻ",
+    "role": "ሚና",
+    "roleStaff": "ሰራተኛ",
+    "roleAdmin": "አስተዳዳሪ",
+    "invalidEmail": "እባክዎ ትክክለኛ ኢሜይል ያስገቡ።",
+    "saveError": "ሰራተኛውን ማስቀመጥ አልተቻለም።",
+    "created": "ሰራተኛ ተጨምሯል። የመግቢያ መረጃውን ለእሱ/ለእሷ ያጋሩ።",
+    "empty": "እስካሁን ሰራተኛ የለም። የመጀመሪያውን ይጨምሩ።",
+    "adminOnly": "አስተዳዳሪዎች ብቻ ሰራተኞችን ማስተዳደር ይችላሉ።",
+    "confirmDelete": "ይህን ሰራተኛ ያስወግዱ? ይህ መመለስ አይቻልም።"
+  },
+
+  "rating": {
+    "title": "ተሞክሮዎን ይገምግሙ",
+    "prompt": "በዚህ ዝግጅት ላይ ከእኛ ጋር የነበረዎት ተሞክሮ ምን ይመስል ነበር?",
+    "commentPlaceholder": "አስተያየት ያክሉ (አማራጭ)",
+    "submit": "ግምገማ አስገባ",
+    "thanks": "ለአስተያየትዎ እናመስግናለን!",
+    "clientRating": "የደንበኛ ግምገማ",
+    "notRatedYet": "ደንበኛው ይህን ዝግጅት እስካሁን አልገመገመም።"
+  }
 
 }

@@ -2,6 +2,12 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  toEthiopian,
+  ethiopianToGregorian,
+  daysInEthiopianMonth,
+  ETHIOPIAN_MONTHS_AM,
+} from '../../lib/ethiopianCalendar';
 
 interface CalendarEvent {
   id: number;
@@ -23,16 +29,43 @@ function toDateKey(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+function toEthKey(year: number, month: number, day: number): string {
+  return `eth-${year}-${month}-${day}`;
+}
+
+function addLocalDays(d: Date, days: number): Date {
+  const copy = new Date(d);
+  copy.setDate(copy.getDate() + days);
+  return copy;
+}
+
+// Converts a UTC-anchored Date (from ethiopianToGregorian) into the equivalent
+// local-midnight Date, so grid math stays consistent with the rest of the component.
+function utcToLocalCalendarDate(d: Date): Date {
+  return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+}
+
+interface CalendarCell {
+  key: string;
+  gregDate: Date;
+  ethDay: number;
+  inMonth: boolean;
+  dayEvents: CalendarEvent[];
+  isToday: boolean;
+}
+
 export default function EventCalendar({ events }: { events: CalendarEvent[] }) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const isAmharic = i18n.language === 'am';
+
   const [cursor, setCursor] = useState(() => {
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), 1);
   });
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
 
-  const eventsByDay = useMemo(() => {
+  const eventsByGregDay = useMemo(() => {
     const map = new Map<string, CalendarEvent[]>();
     for (const ev of events) {
       if (!ev.start_date) continue;
@@ -44,62 +77,126 @@ export default function EventCalendar({ events }: { events: CalendarEvent[] }) {
     return map;
   }, [events]);
 
-  const monthLabel = cursor.toLocaleDateString(i18n.language === 'am' ? 'am-ET' : 'en-US', {
-    month: 'long',
-    year: 'numeric',
-  });
+  const eventsByEthDay = useMemo(() => {
+    const map = new Map<string, CalendarEvent[]>();
+    for (const ev of events) {
+      if (!ev.start_date) continue;
+      const e = toEthiopian(ev.start_date);
+      const key = toEthKey(e.year, e.month, e.day);
+      const list = map.get(key) ?? [];
+      list.push(ev);
+      map.set(key, list);
+    }
+    return map;
+  }, [events]);
+
+  // Which Ethiopian year/month the cursor currently falls in (only meaningful in Amharic mode).
+  const cursorEth = useMemo(() => toEthiopian(toDateKey(cursor)), [cursor]);
+  const todayKey = toDateKey(new Date());
+  const todayEth = useMemo(() => toEthiopian(todayKey), [todayKey]);
+
+  const monthLabel = isAmharic
+    ? `${ETHIOPIAN_MONTHS_AM[cursorEth.month - 1]} ${cursorEth.year}`
+    : cursor.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
   const weekDayLabels = useMemo(() => {
     const base = new Date(2024, 0, 7); // a Sunday
     return Array.from({ length: 7 }, (_, i) => {
       const d = new Date(base);
       d.setDate(base.getDate() + i);
-      return d.toLocaleDateString(i18n.language === 'am' ? 'am-ET' : 'en-US', { weekday: 'short' });
+      return d.toLocaleDateString(isAmharic ? 'am-ET' : 'en-US', { weekday: 'short' });
     });
-  }, [i18n.language]);
+  }, [isAmharic]);
 
-  const cells = useMemo(() => {
-    const year = cursor.getFullYear();
-    const month = cursor.getMonth();
-    const firstOfMonth = new Date(year, month, 1);
-    const startOffset = firstOfMonth.getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const cells = useMemo<CalendarCell[]>(() => {
+    let gridStart: Date;
+    let gridEnd: Date;
 
-    const result: { date: Date; inMonth: boolean }[] = [];
-    for (let i = 0; i < startOffset; i++) {
-      const date = new Date(year, month, 1 - (startOffset - i));
-      result.push({ date, inMonth: false });
+    if (isAmharic) {
+      const daysInMonth = daysInEthiopianMonth(cursorEth.year, cursorEth.month);
+      const localStart = utcToLocalCalendarDate(ethiopianToGregorian(cursorEth.year, cursorEth.month, 1));
+      const localEnd = addLocalDays(localStart, daysInMonth - 1);
+      gridStart = addLocalDays(localStart, -localStart.getDay());
+      gridEnd = addLocalDays(localEnd, 6 - localEnd.getDay());
+    } else {
+      const year = cursor.getFullYear();
+      const month = cursor.getMonth();
+      const firstOfMonth = new Date(year, month, 1);
+      const lastOfMonth = new Date(year, month + 1, 0);
+      gridStart = addLocalDays(firstOfMonth, -firstOfMonth.getDay());
+      gridEnd = addLocalDays(lastOfMonth, 6 - lastOfMonth.getDay());
     }
-    for (let day = 1; day <= daysInMonth; day++) {
-      result.push({ date: new Date(year, month, day), inMonth: true });
-    }
-    while (result.length % 7 !== 0) {
-      const last = result[result.length - 1].date;
-      const date = new Date(last.getFullYear(), last.getMonth(), last.getDate() + 1);
-      result.push({ date, inMonth: false });
+
+    const result: CalendarCell[] = [];
+    let date = gridStart;
+    while (date <= gridEnd) {
+      const gregKey = toDateKey(date);
+      const eth = toEthiopian(gregKey);
+      const inMonth = isAmharic
+        ? eth.year === cursorEth.year && eth.month === cursorEth.month
+        : date.getMonth() === cursor.getMonth() && date.getFullYear() === cursor.getFullYear();
+      const ethKey = toEthKey(eth.year, eth.month, eth.day);
+      const dayEvents = isAmharic ? eventsByEthDay.get(ethKey) ?? [] : eventsByGregDay.get(gregKey) ?? [];
+      const isToday = isAmharic
+        ? eth.year === todayEth.year && eth.month === todayEth.month && eth.day === todayEth.day
+        : gregKey === todayKey;
+
+      result.push({
+        key: isAmharic ? ethKey : gregKey,
+        gregDate: date,
+        ethDay: eth.day,
+        inMonth,
+        dayEvents,
+        isToday,
+      });
+      date = addLocalDays(date, 1);
     }
     return result;
-  }, [cursor]);
+  }, [isAmharic, cursor, cursorEth, eventsByGregDay, eventsByEthDay, todayEth, todayKey]);
 
-  const todayKey = toDateKey(new Date());
-  const selectedEvents = selectedKey ? eventsByDay.get(selectedKey) ?? [] : [];
+  const goToPreviousMonth = () => {
+    if (isAmharic) {
+      let m = cursorEth.month - 1;
+      let y = cursorEth.year;
+      if (m < 1) {
+        m = 13;
+        y -= 1;
+      }
+      setCursor(utcToLocalCalendarDate(ethiopianToGregorian(y, m, 1)));
+    } else {
+      setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1));
+    }
+    setSelectedKey(null);
+  };
+
+  const goToNextMonth = () => {
+    if (isAmharic) {
+      let m = cursorEth.month + 1;
+      let y = cursorEth.year;
+      if (m > 13) {
+        m = 1;
+        y += 1;
+      }
+      setCursor(utcToLocalCalendarDate(ethiopianToGregorian(y, m, 1)));
+    } else {
+      setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1));
+    }
+    setSelectedKey(null);
+  };
+
+  const selectedCell = selectedKey ? cells.find((c) => c.key === selectedKey) : null;
+  const selectedEvents = selectedCell?.dayEvents ?? [];
 
   return (
     <div className="bg-white rounded-2xl border border-sage/30 p-6">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-semibold text-teal-dark/60 uppercase tracking-wide">{t('dashboard.calendar')}</h2>
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() - 1, 1))}
-            className="p-1.5 rounded-full hover:bg-sage-light text-teal-dark/60"
-          >
+          <button onClick={goToPreviousMonth} className="p-1.5 rounded-full hover:bg-sage-light text-teal-dark/60">
             <ChevronLeft size={15} />
           </button>
           <p className="text-sm font-semibold text-teal-dark w-32 text-center capitalize">{monthLabel}</p>
-          <button
-            onClick={() => setCursor(new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1))}
-            className="p-1.5 rounded-full hover:bg-sage-light text-teal-dark/60"
-          >
+          <button onClick={goToNextMonth} className="p-1.5 rounded-full hover:bg-sage-light text-teal-dark/60">
             <ChevronRight size={15} />
           </button>
         </div>
@@ -114,24 +211,34 @@ export default function EventCalendar({ events }: { events: CalendarEvent[] }) {
       </div>
 
       <div className="grid grid-cols-7 gap-1">
-        {cells.map(({ date, inMonth }) => {
-          const key = toDateKey(date);
-          const dayEvents = eventsByDay.get(key) ?? [];
-          const isToday = key === todayKey;
-          const isSelected = key === selectedKey;
+        {cells.map((cell) => {
+          const isSelected = cell.key === selectedKey;
+          const bigLabel = isAmharic ? cell.ethDay : cell.gregDate.getDate();
+          const smallLabel = isAmharic ? cell.gregDate.getDate() : cell.ethDay;
 
           return (
             <button
-              key={key}
-              onClick={() => setSelectedKey(dayEvents.length > 0 ? key : null)}
-              className={`aspect-square rounded-xl flex flex-col items-center justify-center gap-1 text-xs transition-colors ${
-                !inMonth ? 'text-teal-dark/20' : 'text-teal-dark'
-              } ${isSelected ? 'bg-teal-deep text-white' : isToday ? 'bg-gold-light/40' : dayEvents.length > 0 ? 'hover:bg-sage-light' : ''}`}
+              key={cell.key}
+              onClick={() => setSelectedKey(cell.dayEvents.length > 0 ? cell.key : null)}
+              className={`aspect-square rounded-xl flex flex-col items-center justify-center gap-0.5 text-xs transition-colors ${
+                !cell.inMonth ? 'text-teal-dark/20' : 'text-teal-dark'
+              } ${
+                isSelected
+                  ? 'bg-teal-deep text-white'
+                  : cell.isToday
+                  ? 'bg-gold-light/40'
+                  : cell.dayEvents.length > 0
+                  ? 'hover:bg-sage-light'
+                  : ''
+              }`}
             >
-              <span className={isToday && !isSelected ? 'font-bold' : ''}>{date.getDate()}</span>
-              {dayEvents.length > 0 && (
+              <span className={cell.isToday && !isSelected ? 'font-bold' : ''}>{bigLabel}</span>
+              <span className={`text-[9px] leading-none ${isSelected ? 'text-white/70' : 'text-teal-dark/35'}`}>
+                {smallLabel}
+              </span>
+              {cell.dayEvents.length > 0 && (
                 <span className="flex items-center gap-0.5">
-                  {dayEvents.slice(0, 3).map((ev) => (
+                  {cell.dayEvents.slice(0, 3).map((ev) => (
                     <span
                       key={ev.id}
                       className={`w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : dotColors[ev.status] || 'bg-gold'}`}

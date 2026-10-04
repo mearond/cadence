@@ -6,6 +6,7 @@
     "dashboard": "Dashboard",
     "events": "Events",
     "vendors": "Vendors",
+    "staff": "Staff",
     "logout": "Logout"
   },
   "auth": {
@@ -25,7 +26,18 @@
   "dashboard": {
     "welcomeBack": "Welcome back",
     "orgId": "Organization",
-    "role": "Role"
+    "role": "Role",
+    "calendar": "Calendar",
+    "upcomingEvents": "Upcoming Events",
+    "noUpcoming": "No upcoming events.",
+    "pendingTasks": "Pending Tasks",
+    "noPendingTasks": "No pending tasks.",
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "critical": "Critical"
+    }
   },
   "eventsPage": {
     "title": "Events",
@@ -121,7 +133,10 @@
     "cancel": "Cancel",
     "createError": "Could not create vendor.",
     "booked": "Booked Vendors",
-    "invalidEmail": "Please enter a valid email address."
+    "invalidEmail": "Please enter a valid email address.",
+    "editTitle": "Edit Vendor",
+    "updateError": "Could not update vendor.",
+    "confirmDelete": "Delete this vendor? This cannot be undone."
     },
 
   "tasks": {
@@ -204,7 +219,35 @@
     "save": "Save Password",
     "tooShort": "Password must be at least 8 characters.",
     "mismatch": "Passwords do not match."
-  }
+  },
 
+  "staffPage": {
+    "title": "Staff",
+    "addNew": "Add New",
+    "addTitle": "Add Staff Member",
+    "editTitle": "Edit Staff Member",
+    "name": "Name",
+    "email": "Email",
+    "jobTitle": "Job Title",
+    "role": "Role",
+    "roleStaff": "Staff",
+    "roleAdmin": "Admin",
+    "invalidEmail": "Please enter a valid email address.",
+    "saveError": "Could not save staff member.",
+    "created": "Staff member added. Share these credentials with them.",
+    "empty": "No staff members yet. Add your first one to get started.",
+    "adminOnly": "Only admins can manage staff.",
+    "confirmDelete": "Remove this staff member? This cannot be undone."
+  },
+
+  "rating": {
+    "title": "Rate Your Experience",
+    "prompt": "How was your experience working with us on this event?",
+    "commentPlaceholder": "Add a comment (optional)",
+    "submit": "Submit Rating",
+    "thanks": "Thanks for your feedback!",
+    "clientRating": "Client Rating",
+    "notRatedYet": "The client hasn't rated this event yet."
+  }
 
 }
