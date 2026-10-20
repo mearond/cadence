@@ -34,8 +34,12 @@ export default function Events() {
   const handleDelete = async (e: React.MouseEvent, eventId: number) => {
     e.stopPropagation();
     if (!confirm('Delete this event? This cannot be undone.')) return;
-    await deleteEvent(eventId);
-    setEvents((prev) => prev.filter((ev) => ev.id !== eventId));
+    try {
+      await deleteEvent(eventId);
+      setEvents((prev) => prev.filter((ev) => ev.id !== eventId));
+    } catch {
+      setError('Could not delete the event. Please try again.');
+    }
   };
 
   return (
@@ -67,13 +71,22 @@ export default function Events() {
         {events.map((event, i) => {
           const displayName = i18n.language === 'am' && event.name_am ? event.name_am : event.name;
           return (
-            <motion.button
+            // A div, not a button: the card contains the delete button, and a button inside a button is invalid HTML.
+            <motion.div
               key={event.id}
+              role="button"
+              tabIndex={0}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: i * 0.05 }}
               onClick={() => navigate(`/events/${event.id}`)}
-              className="text-left bg-white rounded-2xl border border-sage/30 p-5 pb-4 hover:shadow-md hover:border-gold/40 transition-all relative group"
+              onKeyDown={(e) => {
+                if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
+                  e.preventDefault();
+                  navigate(`/events/${event.id}`);
+                }
+              }}
+              className="cursor-pointer text-left bg-white rounded-2xl border border-sage/30 p-5 pb-4 hover:shadow-md hover:border-gold/40 transition-all relative group"
             >
               <div className="flex items-center justify-between mb-3">
                 <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-full ${statusColors[event.status] || ''}`}>
@@ -90,7 +103,7 @@ export default function Events() {
                   <CalendarDays size={12} className="mt-0.5 shrink-0" />
                   <span>
                     <DateDisplay iso={event.start_date} />
-                    {event.guest_count && (
+                    {event.guest_count != null && event.guest_count > 0 && (
                       <span className="flex items-center gap-1 mt-0.5">
                         <Users size={12} />
                         {event.guest_count} {t('eventsPage.guests')}
@@ -107,7 +120,7 @@ export default function Events() {
                 </button>
                 )}
               </div>
-            </motion.button>
+            </motion.div>
           );
         })}
       </div>

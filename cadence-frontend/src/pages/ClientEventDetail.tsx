@@ -35,7 +35,10 @@ export default function ClientEventDetail() {
 
   const load = () => {
     if (!id) return;
-    fetchMyEventDetail(id).then(setData).finally(() => setLoading(false));
+    fetchMyEventDetail(id)
+      .then(setData)
+      .catch(() => setData(null))
+      .finally(() => setLoading(false));
   };
 
   useEffect(load, [id]);
@@ -61,15 +64,27 @@ export default function ClientEventDetail() {
   const handleRespond = async (approvalId: number, status: 'approved' | 'changes_requested') => {
     if (!id) return;
     setSubmitting(approvalId);
-    await respondToApproval(id, approvalId, status, commentDrafts[approvalId]);
-    setSubmitting(null);
-    load();
+    try {
+      await respondToApproval(id, approvalId, status, commentDrafts[approvalId]);
+      load();
+    } finally {
+      // Re-enable the buttons even if the request failed (the error banner shows why).
+      setSubmitting(null);
+    }
   };
 
-  if (loading || !data) {
+  if (loading) {
     return (
       <ClientLayout>
         <p className="text-sm text-teal-dark/50">...</p>
+      </ClientLayout>
+    );
+  }
+
+  if (!data) {
+    return (
+      <ClientLayout>
+        <p className="text-sm text-red-600">This event isn't available. It may have been removed, or you no longer have access.</p>
       </ClientLayout>
     );
   }

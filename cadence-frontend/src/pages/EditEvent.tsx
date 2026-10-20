@@ -19,6 +19,7 @@ export default function EditEvent() {
   const [guestCount, setGuestCount] = useState('');
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -30,8 +31,9 @@ export default function EditEvent() {
       setStartDate(event.start_date?.slice(0, 10) || '');
       setEndDate(event.end_date?.slice(0, 10) || '');
       setGuestCount(event.guest_count != null ? String(event.guest_count) : '');
-      setLoading(false);
-    });
+    })
+      .catch(() => setNotFound(true))
+      .finally(() => setLoading(false));
   }, [id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -74,6 +76,14 @@ export default function EditEvent() {
     return (
       <DashboardLayout>
         <p className="text-sm text-teal-dark/50">...</p>
+      </DashboardLayout>
+    );
+  }
+
+  if (notFound) {
+    return (
+      <DashboardLayout>
+        <p className="text-sm text-red-600">Event not found.</p>
       </DashboardLayout>
     );
   }

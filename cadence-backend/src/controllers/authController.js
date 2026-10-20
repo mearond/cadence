@@ -103,3 +103,21 @@ export async function setPassword(req, res) {
     return res.status(500).json({ error: 'Could not update password. Please try again.' });
   }
 }
+// Returns the signed-in user as stored now, so the app can pick up role changes
+// (e.g. the admin -> owner rename) without the person logging out and back in.
+export async function getMe(req, res) {
+  try {
+    const result = await pool.query(
+      'SELECT id, org_id, name, email, role, preferred_language, must_change_password FROM users WHERE id = $1',
+      [req.user.userId]
+    );
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: 'Account no longer exists.' });
+    }
+    const { must_change_password, ...rest } = result.rows[0];
+    return res.json({ user: { ...rest, mustChangePassword: must_change_password } });
+  } catch (err) {
+    console.error('Get me error:', err);
+    return res.status(500).json({ error: 'Could not load your account.' });
+  }
+}

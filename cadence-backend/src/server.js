@@ -41,6 +41,18 @@ app.get('/api/protected-test', requireAuth, (req, res) => {
   res.json({ message: 'You are authenticated!', user: req.user });
 });
 
+app.use('/api', (req, res) => {
+  res.status(404).json({ error: 'Not found.' });
+});
+
+// Anything thrown outside a controller's own try/catch lands here, so the
+// frontend always gets JSON with an `error` field instead of an HTML error page.
+app.use((err, req, res, next) => {
+  console.error(err);
+  if (res.headersSent) return next(err);
+  res.status(err.status || 500).json({ error: 'Something went wrong. Please try again.' });
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

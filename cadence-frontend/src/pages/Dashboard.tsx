@@ -30,9 +30,13 @@ export default function Dashboard() {
   const user = useAuthStore((s) => s.user);
   const [data, setData] = useState<DashboardSummary | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
-    fetchDashboardSummary().then(setData).finally(() => setLoading(false));
+    fetchDashboardSummary()
+      .then(setData)
+      .catch(() => setLoadError(true))
+      .finally(() => setLoading(false));
   }, []);
 
   const statusOrder = ['planning', 'confirmed', 'in-progress', 'completed', 'cancelled'];
@@ -54,6 +58,7 @@ export default function Dashboard() {
       </motion.div>
 
       {loading && <p className="text-sm text-teal-dark/50">...</p>}
+      {loadError && <p className="text-sm text-red-600">Could not load the dashboard. Please refresh the page.</p>}
 
       {!loading && data && (
         <>

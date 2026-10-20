@@ -42,3 +42,16 @@ export function requirePermission(permission) {
     next();
   };
 }
+
+// Route ids are integer primary keys. Without this check, a URL like /events/abc
+// reaches Postgres and comes back as a 500 instead of a 404.
+export function requireNumericParams(router, names) {
+  for (const name of names) {
+    router.param(name, (req, res, next, value) => {
+      if (!/^\d+$/.test(value)) {
+        return res.status(404).json({ error: 'Not found.' });
+      }
+      next();
+    });
+  }
+}

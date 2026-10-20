@@ -1,8 +1,9 @@
 import express from 'express';
-import { requireAuth, requirePermission as allow } from '../middleware/authMiddleware.js';
+import { requireAuth, requirePermission as allow, requireNumericParams } from '../middleware/authMiddleware.js';
 import { getStaff, createStaff, updateStaff, deleteStaff } from '../controllers/staffController.js';
 
 const router = express.Router();
+requireNumericParams(router, ['id']);
 
 router.use(requireAuth);
 

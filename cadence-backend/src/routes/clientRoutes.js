@@ -1,9 +1,10 @@
 import express from 'express';
-import { requireAuth } from '../middleware/authMiddleware.js';
+import { requireAuth, requireNumericParams } from '../middleware/authMiddleware.js';
 import { getMyEventAsClient, getMyEvents, respondToApproval } from '../controllers/approvalController.js';
 import { getMyEventRating, submitEventRating } from '../controllers/ratingController.js';
 
 const router = express.Router();
+requireNumericParams(router, ['eventId', 'id']);
 
 router.use(requireAuth);
 

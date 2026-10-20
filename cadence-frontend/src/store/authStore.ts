@@ -18,6 +18,7 @@ interface AuthStore {
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signup: (orgName: string, name: string, email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   changePassword: (newPassword: string) => Promise<{ success: boolean; error?: string }>;
+  refreshUser: () => Promise<void>;
   logout: () => void;
 }
 
@@ -30,7 +31,17 @@ function getErrorMessage(err: unknown, fallback: string): string {
 
 const storedToken = localStorage.getItem('cadence_token');
 const storedUserJson = localStorage.getItem('cadence_user');
-const storedUser = storedUserJson ? JSON.parse(storedUserJson) : null;
+function readStoredUser(): User | null {
+  if (!storedUserJson) return null;
+  try {
+    return JSON.parse(storedUserJson);
+  } catch {
+    // Corrupt value (e.g. edited by hand): treat as signed out rather than crash on load.
+    localStorage.removeItem('cadence_user');
+    return null;
+  }
+}
+const storedUser = readStoredUser();
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
   user: storedUser,
@@ -69,6 +80,20 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       return { success: true };
     } catch (err) {
       return { success: false, error: getErrorMessage(err, 'Could not update your password. Please try again.') };
+    }
+  },
+
+  // The saved user can go stale: a role renamed by a migration, or changed by the owner.
+  // Fetch the current record so permission checks in the UI match what the API enforces.
+  refreshUser: async () => {
+    if (!get().token) return;
+    try {
+      const response = await api.get('/auth/me');
+      const user = response.data.user;
+      localStorage.setItem('cadence_user', JSON.stringify(user));
+      set({ user });
+    } catch {
+      // 401s are handled by the api interceptor (signs out); anything else keeps the saved user.
     }
   },
 

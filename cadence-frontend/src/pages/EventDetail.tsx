@@ -44,6 +44,7 @@ export default function EventDetail() {
     if (!id) return;
     fetchEventById(id)
       .then(setEvent)
+      .catch(() => setEvent(null))
       .finally(() => setLoading(false));
   }, [id]);
 

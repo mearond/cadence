@@ -52,3 +52,8 @@ export function useCan() {
   const role = useAuthStore((s) => s.user?.role);
   return (permission: Permission) => can(role, permission);
 }
+
+// Where each kind of user lands after login, and when they open a page that isn't theirs.
+export function homePathFor(role: string | undefined): string {
+  return role === 'client' ? '/portal' : '/dashboard';
+}

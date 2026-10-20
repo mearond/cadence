@@ -13,13 +13,14 @@ export default function ClientPortal() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchMyEvents().then((data) => {
-      setEvents(data);
-      setLoading(false);
-      if (data.length === 1) {
-        navigate(`/portal/events/${data[0].id}`, { replace: true });
-      }
-    });
+    fetchMyEvents()
+      .then((data) => {
+        setEvents(data);
+        if (data.length === 1) {
+          navigate(`/portal/events/${data[0].id}`, { replace: true });
+        }
+      })
+      .finally(() => setLoading(false));
   }, [navigate]);
 
   if (loading || events.length === 1) {

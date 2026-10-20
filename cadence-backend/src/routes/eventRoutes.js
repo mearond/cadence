@@ -1,5 +1,5 @@
 import express from 'express';
-import { requireAuth, requirePermission as allow } from '../middleware/authMiddleware.js';
+import { requireAuth, requirePermission as allow, requireNumericParams } from '../middleware/authMiddleware.js';
 import { getEvents, getEventById, createEvent, updateEvent, deleteEvent } from '../controllers/eventController.js';
 import { bookVendorForEvent, getEventVendors, updateEventVendor } from '../controllers/vendorController.js';
 import {
@@ -25,6 +25,7 @@ import { getEventClients, removeEventClient } from '../controllers/eventClientCo
 import { getEventRating } from '../controllers/ratingController.js';
 
 const router = express.Router();
+requireNumericParams(router, ['id', 'eventId', 'taskId', 'checkpointId', 'clientId']);
 
 router.use(requireAuth);
 
