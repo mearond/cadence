@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, Trash2 } from 'lucide-react';
 import { fetchApprovals, createApprovalRequest, deleteApprovalRequest, type ApprovalRequest } from '../../lib/events';
+import { useCan } from '../../lib/permissions';
 
 const statusColors: Record<string, string> = {
   pending: 'bg-gold-light/40 text-[#8a6a1f]',
@@ -11,6 +12,7 @@ const statusColors: Record<string, string> = {
 
 export default function ApprovalsTab({ eventId }: { eventId: string }) {
   const { t } = useTranslation();
+  const canManage = useCan()('approvals:manage');
   const [approvals, setApprovals] = useState<ApprovalRequest[]>([]);
   const [adding, setAdding] = useState(false);
   const [itemType, setItemType] = useState('');
@@ -59,7 +61,7 @@ export default function ApprovalsTab({ eventId }: { eventId: string }) {
                 <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${statusColors[a.status]}`}>
                   {t(`approvals.status.${a.status}`)}
                 </span>
-                {a.status === 'pending' && (
+                {canManage && a.status === 'pending' && (
                   <button onClick={() => handleDelete(a.id)} className="text-teal-dark/30 hover:text-terracotta p-1">
                     <Trash2 size={13} />
                   </button>
@@ -72,7 +74,7 @@ export default function ApprovalsTab({ eventId }: { eventId: string }) {
         ))}
       </div>
 
-      {adding ? (
+      {!canManage ? null : adding ? (
         <div className="space-y-2 pt-3 border-t border-sage/20">
           <input
             placeholder={t('approvals.itemType')}

@@ -2,7 +2,16 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, Copy, Check } from 'lucide-react';
 import { createStaff, updateStaff, type StaffMember } from '../../lib/staff';
+import { ASSIGNABLE_ROLES } from '../../lib/permissions';
 import { isValidEmail } from '../../lib/validation';
+
+type AssignableRole = (typeof ASSIGNABLE_ROLES)[number];
+
+const ROLE_LABEL_KEYS: Record<AssignableRole, string> = {
+  manager: 'staffPage.roleManager',
+  coordinator: 'staffPage.roleCoordinator',
+  staff: 'staffPage.roleStaff',
+};
 
 export default function StaffFormModal({
   staff,
@@ -15,10 +24,13 @@ export default function StaffFormModal({
 }) {
   const { t } = useTranslation();
   const isEdit = !!staff;
+  const isOwner = staff?.role === 'owner';
   const [name, setName] = useState(staff?.name ?? '');
   const [email, setEmail] = useState(staff?.email ?? '');
   const [title, setTitle] = useState(staff?.title ?? '');
-  const [role, setRole] = useState<'admin' | 'staff'>((staff?.role as 'admin' | 'staff') ?? 'staff');
+  const [role, setRole] = useState<AssignableRole>(
+    staff && staff.role !== 'owner' ? staff.role : 'staff'
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [result, setResult] = useState<{ email: string; temporaryPassword: string; emailSent: boolean } | null>(null);
@@ -37,7 +49,12 @@ export default function StaffFormModal({
     setError('');
     try {
       if (isEdit && staff) {
-        await updateStaff(staff.id, { name: name.trim(), title: title.trim() || undefined, role });
+        await updateStaff(staff.id, {
+          name: name.trim(),
+          title: title.trim() || undefined,
+          // The owner's role can't be changed, so don't send one.
+          ...(isOwner ? {} : { role }),
+        });
         onSaved();
         onClose();
       } else {
@@ -64,7 +81,7 @@ export default function StaffFormModal({
       <div className="bg-white rounded-2xl w-full max-w-sm">
         <div className="flex items-center justify-between px-6 py-4 border-b border-sage/30">
           <h2 className="text-lg font-bold text-teal-dark">{isEdit ? t('staffPage.editTitle') : t('staffPage.addTitle')}</h2>
-          <button onClick={onClose} className="p-1 rounded-lg hover:bg-sage-light text-teal-dark/50">
+          <button onClick={onClose} className="p-1 rounded-lg hover:bg-sage-light text-teal-dark/50" aria-label={t('vendors.cancel')}>
             <X size={18} />
           </button>
         </div>
@@ -94,26 +111,35 @@ export default function StaffFormModal({
         ) : (
           <form onSubmit={handleSubmit} className="px-6 py-4 space-y-3">
             <div>
-              <label className="block text-xs font-medium text-teal-dark/60 mb-1">{t('staffPage.name')}</label>
-              <input value={name} onChange={(e) => setName(e.target.value)} required className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm" />
+              <label htmlFor="staff-name" className="block text-xs font-medium text-teal-dark/60 mb-1">{t('staffPage.name')}</label>
+              <input id="staff-name" value={name} onChange={(e) => setName(e.target.value)} required className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm" />
             </div>
             {!isEdit && (
               <div>
-                <label className="block text-xs font-medium text-teal-dark/60 mb-1">{t('staffPage.email')}</label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm" />
+                <label htmlFor="staff-email" className="block text-xs font-medium text-teal-dark/60 mb-1">{t('staffPage.email')}</label>
+                <input id="staff-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm" />
               </div>
             )}
             <div>
-              <label className="block text-xs font-medium text-teal-dark/60 mb-1">{t('staffPage.jobTitle')}</label>
-              <input value={title} onChange={(e) => setTitle(e.target.value)} className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm" />
+              <label htmlFor="staff-title" className="block text-xs font-medium text-teal-dark/60 mb-1">{t('staffPage.jobTitle')}</label>
+              <input id="staff-title" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm" />
             </div>
-            <div>
-              <label className="block text-xs font-medium text-teal-dark/60 mb-1">{t('staffPage.role')}</label>
-              <select value={role} onChange={(e) => setRole(e.target.value as 'admin' | 'staff')} className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm">
-                <option value="staff">{t('staffPage.roleStaff')}</option>
-                <option value="admin">{t('staffPage.roleAdmin')}</option>
-              </select>
-            </div>
+            {!isOwner && (
+              <div>
+                <label htmlFor="staff-role" className="block text-xs font-medium text-teal-dark/60 mb-1">{t('staffPage.role')}</label>
+                <select
+                  id="staff-role"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value as AssignableRole)}
+                  className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm"
+                >
+                  {ASSIGNABLE_ROLES.map((r) => (
+                    <option key={r} value={r}>{t(ROLE_LABEL_KEYS[r])}</option>
+                  ))}
+                </select>
+                <p className="text-[11px] text-teal-dark/50 mt-1">{t(`staffPage.roleHint.${role}`)}</p>
+              </div>
+            )}
 
             {error && <p className="text-xs text-red-600">{error}</p>}
 

@@ -149,3 +149,44 @@ export async function getEventVendors(req, res) {
     res.status(500).json({ error: 'Could not fetch event vendors.' });
   }
 }
+const PAYMENT_STATUSES = ['unpaid', 'partial', 'paid'];
+
+export async function updateEventVendor(req, res) {
+  const { eventId, id } = req.params;
+  const { contractAmountEtb, paymentStatus, paymentMethod, notes } = req.body;
+
+  if (paymentStatus !== undefined && !PAYMENT_STATUSES.includes(paymentStatus)) {
+    return res.status(400).json({ error: `paymentStatus must be one of: ${PAYMENT_STATUSES.join(', ')}.` });
+  }
+  if (contractAmountEtb !== undefined && contractAmountEtb !== null && Number(contractAmountEtb) < 0) {
+    return res.status(400).json({ error: 'Contract amount cannot be negative.' });
+  }
+
+  try {
+    const eventCheck = await pool.query(
+      'SELECT id FROM events WHERE id = $1 AND org_id = $2',
+      [eventId, req.user.orgId]
+    );
+    if (eventCheck.rows.length === 0) {
+      return res.status(404).json({ error: 'Event not found.' });
+    }
+
+    const result = await pool.query(
+      `UPDATE event_vendors SET
+        contract_amount_etb = COALESCE($1, contract_amount_etb),
+        payment_status = COALESCE($2, payment_status),
+        payment_method = COALESCE($3, payment_method),
+        notes = COALESCE($4, notes)
+       WHERE id = $5 AND event_id = $6
+       RETURNING *`,
+      [contractAmountEtb ?? null, paymentStatus ?? null, paymentMethod ?? null, notes ?? null, id, eventId]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Booking not found.' });
+    }
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Could not update booking.' });
+  }
+}

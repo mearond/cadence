@@ -5,11 +5,17 @@ export interface Event {
   name: string;
   name_am: string | null;
   event_type: string;
-  status: string;
+  status: string; // shown status, derived from the dates
+  manual_status?: 'planning' | 'confirmed' | 'cancelled'; // what was set by hand
   start_date: string;
-  end_date: string | null;
+  end_date: string;
   guest_count: number | null;
 }
+
+export const EVENT_TYPES = ['conference', 'wedding', 'corporate', 'graduation', 'religious', 'memorial', 'other'];
+export const MANUAL_STATUSES = ['planning', 'confirmed', 'cancelled'] as const;
+export const PAYMENT_STATUSES = ['unpaid', 'partial', 'paid'] as const;
+export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
 
 export async function fetchEvents(): Promise<Event[]> {
   const response = await api.get('/events');
@@ -21,7 +27,7 @@ export async function createEvent(data: {
   nameAm?: string;
   eventType: string;
   startDate: string;
-  endDate?: string;
+  endDate: string;
   guestCount?: number;
 }) {
   const response = await api.post('/events', data);
@@ -66,8 +72,16 @@ export async function fetchAllVendors(): Promise<Vendor[]> {
   const response = await api.get('/vendors');
   return response.data;
 }
-export async function bookVendor(eventId: string, data: { vendorId: number; contractAmountEtb: number; paymentStatus: string }) {
+export async function bookVendor(eventId: string, data: { vendorId: number; contractAmountEtb: number; paymentStatus: PaymentStatus }) {
   const response = await api.post(`/events/${eventId}/vendors`, data);
+  return response.data;
+}
+export async function updateEventVendor(
+  eventId: string,
+  bookingId: number,
+  data: Partial<{ contractAmountEtb: number; paymentStatus: PaymentStatus; paymentMethod: string; notes: string }>
+) {
+  const response = await api.put(`/events/${eventId}/vendors/${bookingId}`, data);
   return response.data;
 }
 export interface VendorCategory {

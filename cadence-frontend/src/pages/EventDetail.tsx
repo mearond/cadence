@@ -14,14 +14,28 @@ import ApprovalsTab from '../components/events/ApprovalsTab';
 import OverviewTab from '../components/events/OverviewTab';
 import ClientsCard from '../components/events/ClientsCard';
 import InviteClientModal from '../components/events/InviteClientModal';
+import { useCan, type Permission } from '../lib/permissions';
+
+type Tab = 'overview' | 'timeline' | 'budget' | 'vendors' | 'tasks' | 'approvals';
+
+const TAB_PERMISSIONS: Record<Tab, Permission> = {
+  overview: 'events:view',
+  timeline: 'timeline:view',
+  budget: 'budget:view',
+  vendors: 'vendors:view',
+  tasks: 'tasks:view',
+  approvals: 'approvals:view',
+};
 
 export default function EventDetail() {
   const { id } = useParams();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const can = useCan();
+  const visibleTabs = (Object.keys(TAB_PERMISSIONS) as Tab[]).filter((tab) => can(TAB_PERMISSIONS[tab]));
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'budget' | 'vendors' | 'tasks' | 'approvals'>('overview');
+  const [activeTab, setActiveTab] = useState<Tab>('overview');
   const [showInvite, setShowInvite] = useState(false);
   const [rating, setRating] = useState<EventRating | null>(null);
   const [clientsRefreshKey, setClientsRefreshKey] = useState(0);
@@ -64,6 +78,7 @@ export default function EventDetail() {
           {t('eventDetail.back')}
         </button>
         <div className="flex items-center gap-4">
+          {can('events:edit') && (
           <button
             onClick={() => navigate(`/events/${id}/edit`)}
             className="flex items-center gap-1.5 text-sm font-semibold text-teal-deep hover:text-teal-dark"
@@ -71,6 +86,7 @@ export default function EventDetail() {
             <Pencil size={14} />
             {t('eventForm.editTitle')}
           </button>
+          )}
         </div>
       </div>
 
@@ -119,10 +135,12 @@ export default function EventDetail() {
         </div>
       )}
 
-      <ClientsCard key={clientsRefreshKey} eventId={id!} onAddClick={() => setShowInvite(true)} />
+      {can('clients:view') && (
+        <ClientsCard key={clientsRefreshKey} eventId={id!} onAddClick={() => setShowInvite(true)} />
+      )}
 
       <div className="flex gap-1 mt-6 mb-5 border-b border-sage/30 overflow-x-auto">
-        {(['overview', 'timeline', 'budget', 'vendors', 'tasks', 'approvals'] as const).map((tab) => (
+        {visibleTabs.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -137,10 +155,10 @@ export default function EventDetail() {
 
       {activeTab === 'overview' && <OverviewTab eventId={id!} onNavigate={setActiveTab} />}
       {activeTab === 'timeline' && <TimelineTab eventId={id!} />}
-      {activeTab === 'budget' && <BudgetTab eventId={id!} />}
-      {activeTab === 'vendors' && <VendorsTab eventId={id!} />}
+      {activeTab === 'budget' && can('budget:view') && <BudgetTab eventId={id!} />}
+      {activeTab === 'vendors' && can('vendors:view') && <VendorsTab eventId={id!} />}
       {activeTab === 'tasks' && <TasksTab eventId={id!} />}
-      {activeTab === 'approvals' && <ApprovalsTab eventId={id!} />}
+      {activeTab === 'approvals' && can('approvals:view') && <ApprovalsTab eventId={id!} />}
 
       {showInvite && (
         <InviteClientModal

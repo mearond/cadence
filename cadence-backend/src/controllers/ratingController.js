@@ -1,4 +1,5 @@
 import { pool } from '../config/db.js';
+import { effectiveStatusSql } from '../lib/eventStatus.js';
 
 // Staff/admin: view a rating
 export async function getEventRating(req, res) {
@@ -41,7 +42,7 @@ export async function submitEventRating(req, res) {
 
   try {
     const access = await pool.query(
-      `SELECT e.id, e.status FROM events e
+      `SELECT e.id, ${effectiveStatusSql('e')} AS status FROM events e
        JOIN event_clients ec ON ec.event_id = e.id
        WHERE e.id = $1 AND ec.client_id = $2`,
       [eventId, req.user.userId]

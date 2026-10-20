@@ -1,14 +1,14 @@
 import express from 'express';
-import { requireAuth } from '../middleware/authMiddleware.js';
+import { requireAuth, requirePermission as allow } from '../middleware/authMiddleware.js';
 import { getStaff, createStaff, updateStaff, deleteStaff } from '../controllers/staffController.js';
 
 const router = express.Router();
 
 router.use(requireAuth);
 
-router.get('/', getStaff);
-router.post('/', createStaff);
-router.put('/:id', updateStaff);
-router.delete('/:id', deleteStaff);
+router.get('/', allow('staff:view'), getStaff);
+router.post('/', allow('staff:manage'), createStaff);
+router.put('/:id', allow('staff:manage'), updateStaff);
+router.delete('/:id', allow('staff:manage'), deleteStaff);
 
 export default router;

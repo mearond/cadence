@@ -25,7 +25,7 @@ export async function signup(req, res) {
 
     await pool.query(
       `INSERT INTO users (org_id, name, email, password_hash, role)
-       VALUES ($1, $2, $3, $4, 'admin')`,
+       VALUES ($1, $2, $3, $4, 'owner')`,
       [orgId, name, email, passwordHash]
     );
 

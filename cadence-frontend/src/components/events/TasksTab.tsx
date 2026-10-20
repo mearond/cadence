@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, CheckCircle2, Circle, Pencil, Trash2 } from 'lucide-react';
 import { fetchTasks, addTask, updateTask, deleteTask } from '../../lib/events';
+import { useCan } from '../../lib/permissions';
 
 interface Task {
   id: number;
@@ -16,6 +17,9 @@ const PRIORITIES = ['low', 'medium', 'high', 'critical'];
 
 export default function TasksTab({ eventId }: { eventId: string }) {
   const { t } = useTranslation();
+  const can = useCan();
+  const canManage = can('tasks:manage');
+  const canDelete = can('tasks:delete');
   const [tasks, setTasks] = useState<Task[]>([]);
   const [formMode, setFormMode] = useState<'none' | 'add' | number>('none');
   const [title, setTitle] = useState('');
@@ -86,14 +90,20 @@ export default function TasksTab({ eventId }: { eventId: string }) {
                   {task.checkpoint_done}/{task.checkpoint_count} {t('tasks.checkpoints')}
                 </span>
               )}
-              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button onClick={() => startEdit(task)} className="text-teal-dark/40 hover:text-teal-deep p-1">
-                  <Pencil size={13} />
-                </button>
-                <button onClick={() => handleDelete(task.id)} className="text-teal-dark/40 hover:text-terracotta p-1">
-                  <Trash2 size={13} />
-                </button>
-              </div>
+              {(canManage || canDelete) && (
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {canManage && (
+                    <button onClick={() => startEdit(task)} className="text-teal-dark/40 hover:text-teal-deep p-1">
+                      <Pencil size={13} />
+                    </button>
+                  )}
+                  {canDelete && (
+                    <button onClick={() => handleDelete(task.id)} className="text-teal-dark/40 hover:text-terracotta p-1">
+                      <Trash2 size={13} />
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           )
         )}
@@ -101,7 +111,7 @@ export default function TasksTab({ eventId }: { eventId: string }) {
 
       {formMode === 'add' ? (
         <TaskForm t={t} title={title} setTitle={setTitle} priority={priority} setPriority={setPriority} onSave={handleSave} onCancel={resetForm} />
-      ) : formMode === 'none' ? (
+      ) : formMode === 'none' && canManage ? (
         <button onClick={startAdd} className="flex items-center gap-1.5 text-sm text-gold font-semibold">
           <Plus size={15} />
           {t('tasks.add')}

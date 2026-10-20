@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UserPlus, X } from 'lucide-react';
 import { fetchEventClients, removeEventClient, type EventClient } from '../../lib/events';
+import { useCan } from '../../lib/permissions';
 
 export default function ClientsCard({ eventId, onAddClick }: { eventId: string; onAddClick: () => void }) {
   const { t } = useTranslation();
+  const canManage = useCan()('clients:manage');
   const [clients, setClients] = useState<EventClient[]>([]);
   const [loading, setLoading] = useState(true);
   const [removingId, setRemovingId] = useState<number | null>(null);
@@ -38,10 +40,12 @@ export default function ClientsCard({ eventId, onAddClick }: { eventId: string; 
     <div className="bg-white rounded-2xl border border-sage/30 p-5 mt-4">
       <div className="flex items-center justify-between mb-3">
         <p className="text-xs font-semibold text-teal-dark/50 uppercase">{t('clients.title')}</p>
-        <button onClick={onAddClick} className="flex items-center gap-1.5 text-xs font-semibold text-teal-deep hover:text-teal-dark">
-          <UserPlus size={13} />
-          {t('clients.addNew')}
-        </button>
+        {canManage && (
+          <button onClick={onAddClick} className="flex items-center gap-1.5 text-xs font-semibold text-teal-deep hover:text-teal-dark">
+            <UserPlus size={13} />
+            {t('clients.addNew')}
+          </button>
+        )}
       </div>
 
       {loading ? (
@@ -56,6 +60,7 @@ export default function ClientsCard({ eventId, onAddClick }: { eventId: string; 
                 <p className="text-sm font-medium text-teal-dark truncate">{client.name}</p>
                 <p className="text-xs text-teal-dark/50 truncate">{client.email}</p>
               </div>
+              {canManage && (
               <button
                 onClick={() => handleRemove(client.id)}
                 disabled={removingId === client.id}
@@ -64,6 +69,7 @@ export default function ClientsCard({ eventId, onAddClick }: { eventId: string; 
               >
                 <X size={14} />
               </button>
+              )}
             </div>
           ))}
         </div>

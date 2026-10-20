@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, Clock, Pencil, Trash2 } from 'lucide-react';
 import { fetchTimeline, addTimelineItem, updateTimelineItem, deleteTimelineItem } from '../../lib/events';
+import { useCan } from '../../lib/permissions';
 
 interface TimelineItem {
   id: number;
@@ -12,6 +13,7 @@ interface TimelineItem {
 
 export default function TimelineTab({ eventId }: { eventId: string }) {
   const { t } = useTranslation();
+  const canManage = useCan()('timeline:manage');
   const [items, setItems] = useState<TimelineItem[]>([]);
   const [formMode, setFormMode] = useState<'none' | 'add' | number>('none');
   const [title, setTitle] = useState('');
@@ -89,6 +91,7 @@ export default function TimelineTab({ eventId }: { eventId: string }) {
               </div>
               <Clock size={14} className="text-teal-deep/40 shrink-0" />
               <p className="flex-1 text-sm text-teal-dark">{item.title}</p>
+              {canManage && (
               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button onClick={() => startEdit(item)} className="text-teal-dark/40 hover:text-teal-deep p-1">
                   <Pencil size={13} />
@@ -97,6 +100,7 @@ export default function TimelineTab({ eventId }: { eventId: string }) {
                   <Trash2 size={13} />
                 </button>
               </div>
+              )}
             </div>
           )
         )}
@@ -114,7 +118,7 @@ export default function TimelineTab({ eventId }: { eventId: string }) {
           onSave={handleSave}
           onCancel={resetForm}
         />
-      ) : formMode === 'none' ? (
+      ) : formMode === 'none' && canManage ? (
         <button onClick={startAdd} className="flex items-center gap-1.5 text-sm text-gold font-semibold">
           <Plus size={15} />
           {t('timeline.add')}

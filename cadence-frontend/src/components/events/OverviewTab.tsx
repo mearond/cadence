@@ -9,6 +9,7 @@ import {
   fetchApprovals,
   type ApprovalRequest,
 } from '../../lib/events';
+import { useCan } from '../../lib/permissions';
 
 interface TimelineItem {
   id: number;
@@ -74,6 +75,11 @@ function CardHeader({ icon, title, onViewAll, t }: { icon: React.ReactNode; titl
 
 export default function OverviewTab({ eventId, onNavigate }: { eventId: string; onNavigate: (tab: Tab) => void }) {
   const { t } = useTranslation();
+  const can = useCan();
+  // Only load (and show) the sections this role is allowed to see.
+  const showBudget = can('budget:view');
+  const showVendors = can('vendors:view');
+  const showApprovals = can('approvals:view');
   const [loading, setLoading] = useState(true);
   const [timeline, setTimeline] = useState<TimelineItem[]>([]);
   const [budget, setBudget] = useState<BudgetSummary | null>(null);
@@ -85,10 +91,10 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
     setLoading(true);
     Promise.all([
       fetchTimeline(eventId),
-      fetchBudgetSummary(eventId),
-      fetchEventVendors(eventId),
+      showBudget ? fetchBudgetSummary(eventId) : Promise.resolve(null),
+      showVendors ? fetchEventVendors(eventId) : Promise.resolve([]),
       fetchTasks(eventId),
-      fetchApprovals(eventId),
+      showApprovals ? fetchApprovals(eventId) : Promise.resolve([]),
     ])
       .then(([t, b, v, ta, ap]) => {
         setTimeline(t);
@@ -98,7 +104,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
         setApprovals(ap);
       })
       .finally(() => setLoading(false));
-  }, [eventId]);
+  }, [eventId, showBudget, showVendors, showApprovals]);
 
   if (loading) {
     return <p className="text-sm text-teal-dark/50">...</p>;
@@ -134,6 +140,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
         )}
       </div>
 
+      {showBudget && (
       <div className="bg-white rounded-2xl border border-sage/30 p-5">
         <CardHeader icon={<Wallet size={15} className="text-teal-deep/60" />} title={t('eventTabs.budget')} onViewAll={() => onNavigate('budget')} t={t} />
         {budget ? (
@@ -155,7 +162,9 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
           <p className="text-sm text-teal-dark/40">{t('budget.empty')}</p>
         )}
       </div>
+      )}
 
+      {showVendors && (
       <div className="bg-white rounded-2xl border border-sage/30 p-5">
         <CardHeader icon={<Building2 size={15} className="text-teal-deep/60" />} title={t('eventTabs.vendors')} onViewAll={() => onNavigate('vendors')} t={t} />
         {vendors.length === 0 ? (
@@ -176,6 +185,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
           </div>
         )}
       </div>
+      )}
 
       <div className="bg-white rounded-2xl border border-sage/30 p-5">
         <CardHeader icon={<ListChecks size={15} className="text-teal-deep/60" />} title={t('eventTabs.tasks')} onViewAll={() => onNavigate('tasks')} t={t} />
@@ -204,6 +214,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
         )}
       </div>
 
+      {showApprovals && (
       <div className="bg-white rounded-2xl border border-sage/30 p-5 sm:col-span-2 lg:col-span-1">
         <CardHeader icon={<Stamp size={15} className="text-teal-deep/60" />} title={t('eventTabs.approvals')} onViewAll={() => onNavigate('approvals')} t={t} />
         <p className="text-[11px] text-teal-dark/40 mb-2 -mt-1">{t('overview.approvalsHint')}</p>
@@ -224,6 +235,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
           </div>
         )}
       </div>
+      )}
     </div>
   );
 }

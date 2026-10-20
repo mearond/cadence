@@ -2,9 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/layout/DashboardLayout';
-import { createEvent } from '../lib/events';
-
-const EVENT_TYPES = ['conference', 'wedding', 'corporate', 'graduation', 'religious', 'memorial'];
+import { createEvent, EVENT_TYPES } from '../lib/events';
 
 export default function NewEvent() {
   const { t } = useTranslation();
@@ -23,7 +21,11 @@ export default function NewEvent() {
     e.preventDefault();
     setError('');
 
-    if (endDate && startDate && endDate < startDate) {
+    if (!startDate || !endDate) {
+        setError(t('eventForm.datesRequired'));
+        return;
+    }
+    if (endDate < startDate) {
         setError('End date cannot be before the start date.');
         return;
     }
@@ -39,7 +41,7 @@ export default function NewEvent() {
         nameAm: nameAm || undefined,
         eventType,
         startDate,
-        endDate: endDate || undefined,
+        endDate,
         guestCount: guestCount ? Number(guestCount) : undefined,
       });
       navigate(`/events/${event.id}`);
@@ -96,7 +98,11 @@ export default function NewEvent() {
               <input
                 type="date"
                 value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+                onChange={(e) => {
+                  setStartDate(e.target.value);
+                  // Default a single-day event; still editable.
+                  if (!endDate || endDate < e.target.value) setEndDate(e.target.value);
+                }}
                 className="w-full border border-sage/40 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40"
                 required
               />
@@ -109,6 +115,7 @@ export default function NewEvent() {
                 min={startDate || undefined}
                 onChange={(e) => setEndDate(e.target.value)}
                 className="w-full border border-sage/40 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-gold/40"
+                required
               />
             </div>
           </div>

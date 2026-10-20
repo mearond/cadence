@@ -5,9 +5,11 @@ import { motion } from 'framer-motion';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import VendorFormModal from '../components/events/VendorFormModal';
 import { fetchAllVendors, deleteVendor, type Vendor } from '../lib/events';
+import { useCan } from '../lib/permissions';
 
 export default function Vendors() {
   const { t, i18n } = useTranslation();
+  const canManage = useCan()('vendors:manage');
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalTarget, setModalTarget] = useState<'new' | Vendor | null>(null);
@@ -45,6 +47,7 @@ export default function Vendors() {
     <DashboardLayout>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-teal-dark">{t('vendorsPage.title')}</h1>
+        {canManage && (
         <button
           onClick={() => setModalTarget('new')}
           className="flex items-center gap-2 bg-gold text-white px-4 py-2.5 rounded-full text-sm font-semibold hover:bg-gold/90 transition-colors shadow-sm"
@@ -52,6 +55,7 @@ export default function Vendors() {
           <Plus size={16} />
           {t('vendorsPage.addNew')}
         </button>
+        )}
       </div>
 
       {loading && <p className="text-sm text-teal-dark/50">...</p>}
@@ -136,6 +140,7 @@ export default function Vendors() {
                             {v.booking_count} {t('vendorsPage.bookings')}
                           </span>
                         )}
+                        {canManage && (
                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button onClick={() => setModalTarget(v)} className="text-teal-dark/40 hover:text-teal-deep p-1">
                             <Pencil size={13} />
@@ -144,6 +149,7 @@ export default function Vendors() {
                             <Trash2 size={13} />
                           </button>
                         </div>
+                        )}
                       </div>
                     </div>
                     {categoryName && <p className="text-xs text-teal-dark/50 mb-3">{categoryName}</p>}

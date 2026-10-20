@@ -1,5 +1,5 @@
 import express from 'express';
-import { requireAuth } from '../middleware/authMiddleware.js';
+import { requireAuth, requirePermission as allow } from '../middleware/authMiddleware.js';
 import {
   getVendorCategories,
   getVendors,
@@ -12,10 +12,10 @@ const router = express.Router();
 
 router.use(requireAuth);
 
-router.get('/categories', getVendorCategories);
-router.get('/', getVendors);
-router.post('/', createVendor);
-router.put('/:id', updateVendor);
-router.delete('/:id', deleteVendor);
+router.get('/categories', allow('vendors:view'), getVendorCategories);
+router.get('/', allow('vendors:view'), getVendors);
+router.post('/', allow('vendors:manage'), createVendor);
+router.put('/:id', allow('vendors:manage'), updateVendor);
+router.delete('/:id', allow('vendors:manage'), deleteVendor);
 
 export default router;

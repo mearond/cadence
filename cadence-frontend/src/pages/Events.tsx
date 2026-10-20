@@ -6,6 +6,7 @@ import { Plus, CalendarDays, Users, Trash2 } from 'lucide-react';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import DateDisplay from '../components/shared/DateDisplay';
 import { fetchEvents, deleteEvent, type Event } from '../lib/events';
+import { useCan } from '../lib/permissions';
 
 const statusColors: Record<string, string> = {
   planning: 'bg-gold-light/40 text-[#8a6a1f]',
@@ -18,6 +19,7 @@ const statusColors: Record<string, string> = {
 export default function Events() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const can = useCan();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -40,6 +42,7 @@ export default function Events() {
     <DashboardLayout>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-teal-dark">{t('eventsPage.title')}</h1>
+        {can('events:create') && (
         <button
           onClick={() => navigate('/events/new')}
           className="flex items-center gap-2 bg-gold text-white px-4 py-2.5 rounded-full text-sm font-semibold hover:bg-gold/90 transition-colors shadow-sm"
@@ -47,6 +50,7 @@ export default function Events() {
           <Plus size={16} />
           {t('eventsPage.newEvent')}
         </button>
+        )}
       </div>
 
       {loading && <p className="text-sm text-teal-dark/50">...</p>}
@@ -94,12 +98,14 @@ export default function Events() {
                     )}
                   </span>
                 </span>
+                {can('events:delete') && (
                 <button
                   onClick={(e) => handleDelete(e, event.id)}
                   className="opacity-0 group-hover:opacity-100 text-teal-dark/30 hover:text-terracotta transition-all p-1 -mb-1 -mr-1"
                 >
                   <Trash2 size={14} />
                 </button>
+                )}
               </div>
             </motion.button>
           );

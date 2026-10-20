@@ -1,4 +1,5 @@
 import { pool } from '../config/db.js';
+import { can } from '../lib/permissions.js';
 
 async function verifyEventOwnership(eventId, orgId) {
   const result = await pool.query('SELECT id FROM events WHERE id = $1 AND org_id = $2', [eventId, orgId]);
@@ -55,6 +56,12 @@ export async function createTask(req, res) {
 export async function updateTask(req, res) {
   const { eventId, id } = req.params;
   const { title, description, status, priority, assignedTo, dueDate } = req.body;
+
+  // Event staff may only change a task's status; editing anything else needs tasks:manage.
+  const editsOtherFields = [title, description, priority, assignedTo, dueDate].some((v) => v !== undefined);
+  if (editsOtherFields && !can(req.user.role, 'tasks:manage')) {
+    return res.status(403).json({ error: 'You can only update the status of a task.' });
+  }
 
   const owns = await verifyEventOwnership(eventId, req.user.orgId);
   if (!owns) return res.status(404).json({ error: 'Event not found.' });

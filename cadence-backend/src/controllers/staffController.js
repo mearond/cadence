@@ -2,15 +2,18 @@ import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import { pool } from '../config/db.js';
 import { sendStaffInviteEmail } from '../lib/mailer.js';
+import { STAFF_ROLES, ASSIGNABLE_ROLES } from '../lib/permissions.js';
+
+const ROLE_ERROR = `role must be one of: ${ASSIGNABLE_ROLES.join(', ')}.`;
 
 export async function getStaff(req, res) {
   try {
     const result = await pool.query(
       `SELECT id, name, email, role, title, preferred_language
        FROM users
-       WHERE org_id = $1 AND role IN ('admin', 'staff')
-       ORDER BY name`,
-      [req.user.orgId]
+       WHERE org_id = $1 AND role = ANY($2)
+       ORDER BY CASE role WHEN 'owner' THEN 0 WHEN 'manager' THEN 1 WHEN 'coordinator' THEN 2 ELSE 3 END, name`,
+      [req.user.orgId, STAFF_ROLES]
     );
     res.json(result.rows);
   } catch (err) {
@@ -20,13 +23,14 @@ export async function getStaff(req, res) {
 }
 
 export async function createStaff(req, res) {
-  const { name, email, title, role } = req.body;
+  const { name, email, title, role = 'staff' } = req.body;
 
   if (!name || !email) {
     return res.status(400).json({ error: 'Name and email are required.' });
   }
-
-  const finalRole = role === 'admin' ? 'admin' : 'staff';
+  if (!ASSIGNABLE_ROLES.includes(role)) {
+    return res.status(400).json({ error: ROLE_ERROR });
+  }
 
   try {
     const existing = await pool.query('SELECT id FROM users WHERE email = $1', [email]);
@@ -41,7 +45,7 @@ export async function createStaff(req, res) {
       `INSERT INTO users (org_id, name, email, password_hash, role, title, must_change_password)
        VALUES ($1, $2, $3, $4, $5, $6, TRUE)
        RETURNING id, name, email, role, title, preferred_language`,
-      [req.user.orgId, name, email, passwordHash, finalRole, title || null]
+      [req.user.orgId, name, email, passwordHash, role, title || null]
     );
     const staff = created.rows[0];
 
@@ -73,23 +77,32 @@ export async function updateStaff(req, res) {
   const { id } = req.params;
   const { name, title, role } = req.body;
 
-  if (role && !['admin', 'staff'].includes(role)) {
-    return res.status(400).json({ error: "role must be 'admin' or 'staff'." });
+  if (role !== undefined && !ASSIGNABLE_ROLES.includes(role)) {
+    return res.status(400).json({ error: ROLE_ERROR });
   }
 
   try {
+    const target = await pool.query(
+      'SELECT role FROM users WHERE id = $1 AND org_id = $2 AND role = ANY($3)',
+      [id, req.user.orgId, STAFF_ROLES]
+    );
+    if (target.rows.length === 0) {
+      return res.status(404).json({ error: 'Staff member not found.' });
+    }
+    // The owner's role is fixed; there is always exactly one owner per agency.
+    if (role !== undefined && target.rows[0].role === 'owner' && role !== 'owner') {
+      return res.status(400).json({ error: "The owner's role cannot be changed." });
+    }
+
     const result = await pool.query(
       `UPDATE users SET
         name = COALESCE($1, name),
         title = COALESCE($2, title),
-        role = COALESCE($3, role)
-       WHERE id = $4 AND org_id = $5 AND role IN ('admin', 'staff')
+        role = CASE WHEN role = 'owner' THEN role ELSE COALESCE($3, role) END
+       WHERE id = $4 AND org_id = $5
        RETURNING id, name, email, role, title, preferred_language`,
       [name, title, role, id, req.user.orgId]
     );
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Staff member not found.' });
-    }
     res.json(result.rows[0]);
   } catch (err) {
     console.error(err);
@@ -106,8 +119,8 @@ export async function deleteStaff(req, res) {
 
   try {
     const result = await pool.query(
-      `DELETE FROM users WHERE id = $1 AND org_id = $2 AND role IN ('admin', 'staff') RETURNING id`,
-      [id, req.user.orgId]
+      `DELETE FROM users WHERE id = $1 AND org_id = $2 AND role = ANY($3) RETURNING id`,
+      [id, req.user.orgId, ASSIGNABLE_ROLES]
     );
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Staff member not found.' });

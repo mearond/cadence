@@ -1,4 +1,5 @@
 import { pool } from '../config/db.js';
+import { effectiveStatusSql } from '../lib/eventStatus.js';
 
 async function verifyEventOwnership(eventId, orgId) {
   const result = await pool.query('SELECT id FROM events WHERE id = $1 AND org_id = $2', [eventId, orgId]);
@@ -6,8 +7,9 @@ async function verifyEventOwnership(eventId, orgId) {
 }
 
 async function verifyClientAccess(eventId, userId) {
+  // events.client_id was replaced by the event_clients table in migration 010.
   const result = await pool.query(
-    'SELECT id FROM events WHERE id = $1 AND client_id = $2',
+    'SELECT event_id FROM event_clients WHERE event_id = $1 AND client_id = $2',
     [eventId, userId]
   );
   return result.rows.length > 0;
@@ -80,7 +82,7 @@ export async function deleteApprovalRequest(req, res) {
 export async function getMyEvents(req, res) {
   try {
     const result = await pool.query(
-      `SELECT e.id, e.name, e.name_am, e.event_type, e.status, e.start_date
+      `SELECT e.id, e.name, e.name_am, e.event_type, ${effectiveStatusSql('e')} AS status, e.start_date
        FROM events e
        JOIN event_clients ec ON ec.event_id = e.id
        WHERE ec.client_id = $1
@@ -101,7 +103,7 @@ export async function getMyEventAsClient(req, res) {
 
   try {
     const eventResult = await pool.query(
-      `SELECT e.id, e.name, e.name_am, e.event_type, e.status, e.start_date, e.end_date, e.guest_count,
+      `SELECT e.id, e.name, e.name_am, e.event_type, ${effectiveStatusSql('e')} AS status, e.start_date, e.end_date, e.guest_count,
               v.name AS venue_name, v.address AS venue_address
        FROM events e
        LEFT JOIN venues v ON e.venue_id = v.id

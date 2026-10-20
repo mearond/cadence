@@ -57,7 +57,8 @@
       "corporate": "Corporate",
       "graduation": "Graduation",
       "religious": "Religious",
-      "memorial": "Memorial"
+      "memorial": "Memorial",
+      "other": "Other"
     }
   },
   "eventForm": {
@@ -72,6 +73,8 @@
     "cancel": "Cancel",
     "editTitle": "Edit Event",
     "status": "Status",
+    "statusHint": "In Progress and Completed are set automatically from the event dates.",
+    "datesRequired": "Start and end dates are required.",
     "save": "Save Changes"
   },
   "eventDetail": {
@@ -115,9 +118,10 @@
     "name": "Vendor Name",
     "amount": "Contract Amount (ETB)",
     "paymentStatus": "Payment Status",
+    "updateError": "Could not update the payment status.",
     "save": "Save",
     "status": {
-      "unpaid": "Unpaid",
+      "unpaid": "Not Paid",
       "partial": "Partially Paid",
       "paid": "Paid"
     },
@@ -230,13 +234,20 @@
     "email": "Email",
     "jobTitle": "Job Title",
     "role": "Role",
-    "roleStaff": "Staff",
-    "roleAdmin": "Admin",
+    "roleOwner": "Owner",
+    "roleManager": "Event Manager",
+    "roleCoordinator": "Coordinator",
+    "roleStaff": "Event Staff",
+    "roleHint": {
+      "manager": "Creates and edits events, manages tasks, vendors, budgets and client approvals.",
+      "coordinator": "Works under the event manager: updates tasks, checklists and schedules.",
+      "staff": "Sees events and tasks, and marks tasks as done."
+    },
     "invalidEmail": "Please enter a valid email address.",
     "saveError": "Could not save staff member.",
     "created": "Staff member added. Share these credentials with them.",
     "empty": "No staff members yet. Add your first one to get started.",
-    "adminOnly": "Only admins can manage staff.",
+    "noAccess": "You don't have access to the staff list.",
     "confirmDelete": "Remove this staff member? This cannot be undone."
   },
 

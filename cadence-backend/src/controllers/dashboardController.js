@@ -1,19 +1,26 @@
 import { pool } from '../config/db.js';
+import { effectiveStatusSql } from '../lib/eventStatus.js';
+
+// Org events with the derived status, reused by the queries below.
+const ORG_EVENTS = `
+  SELECT e.id, e.name, e.name_am, e.event_type, e.start_date, e.end_date, e.guest_count,
+         ${effectiveStatusSql('e')} AS status
+  FROM events e
+  WHERE e.org_id = $1`;
 
 export async function getDashboardSummary(req, res) {
   const orgId = req.user.orgId;
   try {
     const upcomingResult = await pool.query(
-      `SELECT id, name, name_am, event_type, status, start_date, end_date, guest_count
-       FROM events
-       WHERE org_id = $1 AND status NOT IN ('completed', 'cancelled')
-       ORDER BY start_date ASC NULLS LAST
+      `SELECT * FROM (${ORG_EVENTS}) ev
+       WHERE ev.status NOT IN ('completed', 'cancelled')
+       ORDER BY ev.start_date ASC NULLS LAST
        LIMIT 6`,
       [orgId]
     );
 
     const statusCountsResult = await pool.query(
-      `SELECT status, COUNT(*)::int AS count FROM events WHERE org_id = $1 GROUP BY status`,
+      `SELECT status, COUNT(*)::int AS count FROM (${ORG_EVENTS}) ev GROUP BY status`,
       [orgId]
     );
 
@@ -30,7 +37,7 @@ export async function getDashboardSummary(req, res) {
     );
 
     const allEventsResult = await pool.query(
-      `SELECT id, name, name_am, start_date, status FROM events WHERE org_id = $1`,
+      `SELECT id, name, name_am, start_date, status FROM (${ORG_EVENTS}) ev`,
       [orgId]
     );
 

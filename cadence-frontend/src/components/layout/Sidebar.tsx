@@ -2,14 +2,14 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LayoutGrid, CalendarDays, Building2, Users, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useUIStore } from '../../store/uiStore';
-import { useAuthStore } from '../../store/authStore';
+import { useCan } from '../../lib/permissions';
 
 export default function Sidebar() {
   const { t } = useTranslation();
   const location = useLocation();
   const collapsed = useUIStore((s) => s.sidebarCollapsed);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
-  const role = useAuthStore((s) => s.user?.role);
+  const can = useCan();
 
   const navItems = [
     { label: t('nav.dashboard'), icon: LayoutGrid, path: '/dashboard' },
@@ -17,8 +17,8 @@ export default function Sidebar() {
   ];
 
   const operationsItems = [
-    { label: t('nav.vendors'), icon: Building2, path: '/vendors' },
-    ...(role === 'admin' ? [{ label: t('nav.staff'), icon: Users, path: '/staff' }] : []),
+    ...(can('vendors:view') ? [{ label: t('nav.vendors'), icon: Building2, path: '/vendors' }] : []),
+    ...(can('staff:view') ? [{ label: t('nav.staff'), icon: Users, path: '/staff' }] : []),
   ];
 
   const renderLink = ({ label, icon: Icon, path }: { label: string; icon: typeof LayoutGrid; path: string }) => {
@@ -63,10 +63,12 @@ export default function Sidebar() {
       <nav className="flex-1 px-4 space-y-1">
         {navItems.map(renderLink)}
 
-        <div className="pt-5 mt-5 border-t border-sage/40">
-          {!collapsed && <p className="text-[11px] text-teal-dark/40 tracking-wide px-4 mb-2">EVENT OPERATIONS</p>}
-          <div className="space-y-1">{operationsItems.map(renderLink)}</div>
-        </div>
+        {operationsItems.length > 0 && (
+          <div className="pt-5 mt-5 border-t border-sage/40">
+            {!collapsed && <p className="text-[11px] text-teal-dark/40 tracking-wide px-4 mb-2">EVENT OPERATIONS</p>}
+            <div className="space-y-1">{operationsItems.map(renderLink)}</div>
+          </div>
+        )}
       </nav>
     </aside>
   );
