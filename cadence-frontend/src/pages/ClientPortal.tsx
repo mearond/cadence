@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CalendarDays } from 'lucide-react';
 import ClientLayout from '../components/layout/ClientLayout';
+import DateBlock from '../components/shared/DateBlock';
 import DateDisplay from '../components/shared/DateDisplay';
 import { fetchMyEvents, type ClientEventSummary } from '../lib/client';
 
@@ -26,14 +27,14 @@ export default function ClientPortal() {
   if (loading || events.length === 1) {
     return (
       <ClientLayout>
-        <p className="text-sm text-teal-dark/50">...</p>
+        <div className="skeleton h-24" />
       </ClientLayout>
     );
   }
 
   return (
     <ClientLayout>
-      <h1 className="text-xl font-bold text-teal-dark mb-5">{t('portal.myEvents')}</h1>
+      <h1 className="font-display text-4xl font-semibold text-teal-dark mb-7">{t('portal.myEvents')}</h1>
 
       {events.length === 0 && <p className="text-sm text-teal-dark/50">{t('portal.noEvents')}</p>}
 
@@ -44,13 +45,16 @@ export default function ClientPortal() {
             <button
               key={event.id}
               onClick={() => navigate(`/portal/events/${event.id}`)}
-              className="w-full text-left bg-white rounded-2xl border border-sage/30 p-5 hover:border-gold/40 hover:shadow-md transition-all"
+              className="w-full text-left card-interactive p-5 flex items-center gap-4"
             >
-              <h3 className="font-semibold text-teal-dark mb-1">{displayName}</h3>
+              <DateBlock iso={event.start_date} />
+              <div className="min-w-0">
+              <h3 className="font-display text-lg font-semibold text-teal-dark mb-1">{displayName}</h3>
               <span className="flex items-start gap-1 text-xs text-teal-dark/50">
                 <CalendarDays size={12} className="mt-0.5 shrink-0" />
                 <DateDisplay iso={event.start_date} />
               </span>
+              </div>
             </button>
           );
         })}

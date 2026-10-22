@@ -7,7 +7,10 @@
     "events": "ዝግጅቶች",
     "vendors": "አቅራቢዎች",
     "staff": "ሰራተኞች",
-    "logout": "ውጣ"
+    "logout": "ውጣ",
+    "operations": "የዝግጅት ስራዎች",
+    "collapse": "ሰብስብ",
+    "menu": "ምናሌ ክፈት"
   },
   "auth": {
     "signIn": "ግባ",
@@ -21,7 +24,11 @@
     "noAccount": "አካውንት የለዎትም?",
     "signInLink": "ግባ",
     "signUpLink": "ተመዝገብ",
-    "invalidEmail": "እባክዎ ትክክለኛ ኢሜይል ያስገቡ።"
+    "invalidEmail": "እባክዎ ትክክለኛ ኢሜይል ያስገቡ።",
+    "loginTitle": "ይግቡ",
+    "loginSubtitle": "ቡድንዎ ካቆመበት ይቀጥሉ።",
+    "signupTitle": "ኤጀንሲዎን ያዘጋጁ",
+    "signupSubtitle": "እርስዎ ባለቤት ይሆናሉ፤ ቡድንዎን በኋላ ማከል ይችላሉ።"
   },
   "dashboard": {
     "welcomeBack": "እንኳን ደህና መጡ",
@@ -37,7 +44,14 @@
       "medium": "መካከለኛ",
       "high": "ከፍተኛ",
       "critical": "አስቸኳይ"
-    }
+    },
+    "greeting": "እንኳን ደህና መጡ፣ {{name}}",
+    "upcomingCount_one": "የሚመጣ ዝግጅት",
+    "upcomingCount_other": "የሚመጡ ዝግጅቶች",
+    "pipeline": "ዝግጅቶች በሁኔታ",
+    "totalEvents_one": "{{count}} ዝግጅት",
+    "totalEvents_other": "{{count}} ዝግጅቶች",
+    "loadError": "ዳሽቦርዱ አልተጫነም። እንደገና ለመሞከር ገጹን ያድሱ።"
   },
   "eventsPage": {
     "title": "ዝግጅቶች",
@@ -59,7 +73,10 @@
       "religious": "ሃይማኖታዊ",
       "memorial": "መታሰቢያ",
       "other": "ሌላ"
-    }
+    },
+    "all": "ሁሉም",
+    "emptyTitle": "እስካሁን ዝግጅት የለም",
+    "delete": "ዝግጅቱን ሰርዝ"
   },
   "eventForm": {
     "createTitle": "አዲስ ዝግጅት ይፍጠሩ",
@@ -82,7 +99,11 @@
     "startDate": "መጀመሪያ ቀን",
     "endDate": "መጨረሻ ቀን",
     "guestCount": "እንግዶች",
-    "notSet": "አልተቀመጠም"
+    "notSet": "አልተቀመጠም",
+    "dates": "ቀናት",
+    "until": "እስከ",
+    "notFound": "ይህ ዝግጅት አይገኝም",
+    "notFoundHint": "ተሰርዞ ሊሆን ይችላል፣ ወይም ሊንኩ ትክክል አይደለም።"
   },
   "eventTabs": {
     "overview": "አጠቃላይ እይታ",
@@ -110,7 +131,11 @@
     "totalEstimated": "ጠቅላላ የተገመተ",
     "totalActual": "ጠቅላላ ትክክለኛ",
     "totalVat": "ተ.እ.ታ (15%)",
-    "save": "አስቀምጥ"
+    "save": "አስቀምጥ",
+    "overBy": "ከግምቱ በ{{amount}} በልጧል",
+    "percentUsed": "ከግምቱ {{percent}}% ወጪ ሆኗል",
+    "noEstimate": "ወጪን ለመከታተል የግምት መጠኖችን ያስገቡ።",
+    "of": "ከ"
   },
   "vendors": {
     "add": "አቅራቢ ጨምር",
@@ -118,7 +143,7 @@
     "name": "የአቅራቢ ስም",
     "amount": "የኮንትራት መጠን (ብር)",
     "paymentStatus": "የክፍያ ሁኔታ",
-    "updateError": "የክፍያ ሁኔታውን ማዘመን አልተቻለም።",
+    "updateError": "አቅራቢውን ማዘመን አልተቻለም።",
     "save": "አስቀምጥ",
     "status": {
       "unpaid": "አልተከፈለም",
@@ -139,17 +164,18 @@
     "booked": "የተያዙ አቅራቢዎች",
     "invalidEmail": "እባክዎ ትክክለኛ ኢሜይል ያስገቡ።",
     "editTitle": "አቅራቢ አርትዕ",
-    "updateError": "አቅራቢውን ማዘመን አልተቻለም።",
     "confirmDelete": "ይህን አቅራቢ ይሰርዙ? ይህ መመለስ አይቻልም።"
   },
-
   "tasks": {
     "add": "ተግባር ጨምር",
     "empty": "እስካሁን ተግባር የለም።",
     "title": "ርዕስ",
     "priority": "ቅድሚያ",
     "save": "አስቀምጥ",
-    "checkpoints": "ተጠናቀዋል"
+    "checkpoints": "ተጠናቀዋል",
+    "progress": "ከ{{total}} {{done}} ተጠናቋል",
+    "markDone": "እንደተጠናቀቀ ምልክት አድርግ",
+    "markPending": "እንዳልተጠናቀቀ ምልክት አድርግ"
   },
   "portal": {
     "myEvents": "የእኔ ዝግጅቶች",
@@ -169,7 +195,12 @@
         "approved": "ጸድቋል",
         "changes_requested": "ለውጥ ተጠይቋል"
       }
-    }
+    },
+    "noAccess": "ተሰርዞ ሊሆን ይችላል፣ ወይም ፈቃድዎ ተቀይሯል። አዘጋጅዎን ያነጋግሩ።",
+    "happeningNow": "አሁን በመካሄድ ላይ",
+    "today": "ዛሬ ነው",
+    "daysToGo_one": "ቀን ቀረው",
+    "daysToGo_other": "ቀናት ቀሩ"
   },
   "approvals": {
     "empty": "እስካሁን የማጽደቅ ጥያቄ የለም።",
@@ -199,7 +230,6 @@
     "emailFailed": "ኢሜይል መላክ አልተቻለም — እባክዎ መረጃውን በራስዎ ለደንበኛው ያጋሩ።",
     "invalidEmail": "እባክዎ ትክክለኛ ኢሜይል ያስገቡ።"
   },
-
   "vendorsPage": {
     "title": "አቅራቢዎች",
     "addNew": "አዲስ ጨምር",
@@ -209,9 +239,10 @@
     "mostPopular": "በጣም ተወዳጅ",
     "allVendors": "ሁሉም አቅራቢዎች",
     "bookings": "ማስያዣዎች",
-    "empty": "እስካሁን አቅራቢ የለም። የመጀመሪያውን ይጨምሩ።"
+    "empty": "እስካሁን አቅራቢ የለም። የመጀመሪያውን ይጨምሩ።",
+    "subtitle_one": "በማውጫዎ ውስጥ {{count}} አቅራቢ",
+    "subtitle_other": "በማውጫዎ ውስጥ {{count}} አቅራቢዎች"
   },
-
   "setPassword": {
     "title": "የይለፍ ቃልዎን ያዘጋጁ",
     "subtitle": "አካውንትዎን ለማስጠበቅ አዲስ የይለፍ ቃል ይምረጡ።",
@@ -221,7 +252,6 @@
     "tooShort": "የይለፍ ቃል ቢያንስ 8 ቁምፊዎች ሊኖረው ይገባል።",
     "mismatch": "የይለፍ ቃላት አይመሳሰሉም።"
   },
-
   "staffPage": {
     "title": "ሰራተኞች",
     "addNew": "አዲስ ጨምር",
@@ -245,9 +275,10 @@
     "created": "ሰራተኛ ተጨምሯል። የመግቢያ መረጃውን ለእሱ/ለእሷ ያጋሩ።",
     "empty": "እስካሁን ሰራተኛ የለም። የመጀመሪያውን ይጨምሩ።",
     "noAccess": "የሰራተኞችን ዝርዝር ለማየት ፈቃድ የለዎትም።",
-    "confirmDelete": "ይህን ሰራተኛ ያስወግዱ? ይህ መመለስ አይቻልም።"
+    "confirmDelete": "ይህን ሰራተኛ ያስወግዱ? ይህ መመለስ አይቻልም።",
+    "subtitle_one": "በቡድንዎ ውስጥ {{count}} ሰው",
+    "subtitle_other": "በቡድንዎ ውስጥ {{count}} ሰዎች"
   },
-
   "rating": {
     "title": "ተሞክሮዎን ይገምግሙ",
     "prompt": "በዚህ ዝግጅት ላይ ከእኛ ጋር የነበረዎት ተሞክሮ ምን ይመስል ነበር?",
@@ -257,7 +288,6 @@
     "clientRating": "የደንበኛ ግምገማ",
     "notRatedYet": "ደንበኛው ይህን ዝግጅት እስካሁን አልገመገመም።"
   },
-
   "overview": {
     "viewAll": "ሁሉንም ይዩ",
     "more": "ተጨማሪ",
@@ -265,13 +295,16 @@
     "approvalsHint": "ከዚህ ዝግጅት የሚጠበቁ የማጽደቅ ጥያቄዎች",
     "allClear": "ምንም የሚጠበቅ ማጽደቅ የለም።"
   },
-
-    "clients": {
+  "clients": {
     "title": "ደንበኞች",
     "addNew": "ደንበኛ ጨምር",
     "empty": "እስካሁን ለዚህ ዝግጅት ደንበኛ አልተያያዘም።",
     "remove": "አስወግድ",
     "confirmRemove": "ይህን ደንበኛ ከዚህ ዝግጅት ያስወግዱ? አካውንቱ ይቆያል፣ ነገር ግን ወደዚህ ዝግጅት መድረስ አይችሉም።",
     "removeError": "ደንበኛውን ማስወገድ አልተቻለም።"
+  },
+  "authPanel": {
+    "headline": "እያንዳንዱ ሰርግ፣ ጉባኤ እና ስነ ስርዓት በአንድ ቦታ።",
+    "body": "የጊዜ ሰሌዳ፣ በብር የሚያዝ በጀት፣ አቅራቢዎች እና የደንበኛ ማጽደቂያዎች — ከቡድንዎ እና ከደንበኞችዎ ጋር።"
   }
 }

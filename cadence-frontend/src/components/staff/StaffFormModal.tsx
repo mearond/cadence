@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import Modal from '../shared/Modal';
 import { useTranslation } from 'react-i18next';
-import { X, Copy, Check } from 'lucide-react';
+import { Copy, Check } from 'lucide-react';
 import { createStaff, updateStaff, type StaffMember } from '../../lib/staff';
 import { ASSIGNABLE_ROLES } from '../../lib/permissions';
 import { isValidEmail } from '../../lib/validation';
@@ -77,17 +78,10 @@ export default function StaffFormModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-sm">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-sage/30">
-          <h2 className="text-lg font-bold text-teal-dark">{isEdit ? t('staffPage.editTitle') : t('staffPage.addTitle')}</h2>
-          <button onClick={onClose} className="p-1 rounded-lg hover:bg-sage-light text-teal-dark/50" aria-label={t('vendors.cancel')}>
-            <X size={18} />
-          </button>
-        </div>
+    <Modal title={isEdit ? t('staffPage.editTitle') : t('staffPage.addTitle')} onClose={onClose} width="sm">
 
         {result ? (
-          <div className="px-6 py-5 space-y-3">
+          <div className="px-6 pt-2 pb-6 space-y-3">
             <p className="text-sm text-teal-dark">{t('staffPage.created')}</p>
             <div className="bg-sage-light/40 rounded-lg p-3 text-sm space-y-1">
               <p>
@@ -104,34 +98,34 @@ export default function StaffFormModal({
               {copied ? <Check size={13} /> : <Copy size={13} />}
               {copied ? t('inviteClient.copied') : t('inviteClient.copy')}
             </button>
-            <button onClick={onClose} className="w-full bg-gold text-white text-sm font-semibold px-4 py-2 rounded-full mt-2">
+            <button onClick={onClose} className="w-full btn-primary mt-2">
               {t('inviteClient.done')}
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="px-6 py-4 space-y-3">
+          <form onSubmit={handleSubmit} className="px-6 pt-2 pb-6 space-y-4">
             <div>
-              <label htmlFor="staff-name" className="block text-xs font-medium text-teal-dark/60 mb-1">{t('staffPage.name')}</label>
-              <input id="staff-name" value={name} onChange={(e) => setName(e.target.value)} required className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm" />
+              <label htmlFor="staff-name" className="field-label">{t('staffPage.name')}</label>
+              <input id="staff-name" value={name} onChange={(e) => setName(e.target.value)} required className="input-sm" />
             </div>
             {!isEdit && (
               <div>
-                <label htmlFor="staff-email" className="block text-xs font-medium text-teal-dark/60 mb-1">{t('staffPage.email')}</label>
-                <input id="staff-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm" />
+                <label htmlFor="staff-email" className="field-label">{t('staffPage.email')}</label>
+                <input id="staff-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="input-sm" />
               </div>
             )}
             <div>
-              <label htmlFor="staff-title" className="block text-xs font-medium text-teal-dark/60 mb-1">{t('staffPage.jobTitle')}</label>
-              <input id="staff-title" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm" />
+              <label htmlFor="staff-title" className="field-label">{t('staffPage.jobTitle')}</label>
+              <input id="staff-title" value={title} onChange={(e) => setTitle(e.target.value)} className="input-sm" />
             </div>
             {!isOwner && (
               <div>
-                <label htmlFor="staff-role" className="block text-xs font-medium text-teal-dark/60 mb-1">{t('staffPage.role')}</label>
+                <label htmlFor="staff-role" className="field-label">{t('staffPage.role')}</label>
                 <select
                   id="staff-role"
                   value={role}
                   onChange={(e) => setRole(e.target.value as AssignableRole)}
-                  className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm"
+                  className="input-sm"
                 >
                   {ASSIGNABLE_ROLES.map((r) => (
                     <option key={r} value={r}>{t(ROLE_LABEL_KEYS[r])}</option>
@@ -141,19 +135,18 @@ export default function StaffFormModal({
               </div>
             )}
 
-            {error && <p className="text-xs text-red-600">{error}</p>}
+            {error && <p role="alert" className="text-sm text-terracotta bg-terracotta-light/70 rounded-xl px-3.5 py-2.5">{error}</p>}
 
             <div className="flex justify-end gap-3 pt-2">
-              <button type="button" onClick={onClose} className="px-4 py-2 rounded-full text-sm font-medium text-teal-dark/60 hover:bg-sage-light">
+              <button type="button" onClick={onClose} className="btn-ghost">
                 {t('vendors.cancel')}
               </button>
-              <button type="submit" disabled={saving} className="px-4 py-2 rounded-full text-sm font-semibold bg-gold text-white hover:bg-gold/90 disabled:opacity-50">
+              <button type="submit" disabled={saving} className="btn-primary">
                 {saving ? '...' : t('vendors.save')}
               </button>
             </div>
           </form>
         )}
-      </div>
-    </div>
+    </Modal>
   );
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import Modal from '../shared/Modal';
 import { useTranslation } from 'react-i18next';
-import { X, Copy, Check } from 'lucide-react';
+import { Copy, Check } from 'lucide-react';
 import { inviteClient } from '../../lib/events';
 import { isValidEmail } from '../../lib/validation';
 
@@ -42,17 +43,10 @@ export default function InviteClientModal({ eventId, onClose }: { eventId: strin
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-sm">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-sage/30">
-          <h2 className="text-lg font-bold text-teal-dark">{t('inviteClient.title')}</h2>
-          <button onClick={onClose} className="p-1 rounded-lg hover:bg-sage-light text-teal-dark/50">
-            <X size={18} />
-          </button>
-        </div>
+    <Modal title={t('inviteClient.title')} onClose={onClose} width="sm">
 
         {result ? (
-          <div className="px-6 py-5 space-y-3">
+          <div className="px-6 pt-2 pb-6 space-y-3">
             <p className="text-sm text-teal-dark">{result.message}</p>
             <div className="bg-sage-light/40 rounded-lg p-3 text-sm space-y-1">
               <p>
@@ -77,32 +71,31 @@ export default function InviteClientModal({ eventId, onClose }: { eventId: strin
                 </button>
               </>
             )}
-            <button onClick={onClose} className="w-full bg-gold text-white text-sm font-semibold px-4 py-2 rounded-full mt-2">
+            <button onClick={onClose} className="w-full btn-primary mt-2">
               {t('inviteClient.done')}
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="px-6 py-4 space-y-3">
+          <form onSubmit={handleSubmit} className="px-6 pt-2 pb-6 space-y-4">
             <div>
-              <label className="block text-xs font-medium text-teal-dark/60 mb-1">{t('inviteClient.name')}</label>
-              <input value={name} onChange={(e) => setName(e.target.value)} required className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm" />
+              <label className="field-label">{t('inviteClient.name')}</label>
+              <input value={name} onChange={(e) => setName(e.target.value)} required className="input-sm" />
             </div>
             <div>
-              <label className="block text-xs font-medium text-teal-dark/60 mb-1">{t('inviteClient.email')}</label>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm" />
+              <label className="field-label">{t('inviteClient.email')}</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="input-sm" />
             </div>
-            {error && <p className="text-xs text-red-600">{error}</p>}
+            {error && <p role="alert" className="text-sm text-terracotta bg-terracotta-light/70 rounded-xl px-3.5 py-2.5">{error}</p>}
             <div className="flex justify-end gap-3 pt-2">
-              <button type="button" onClick={onClose} className="px-4 py-2 rounded-full text-sm font-medium text-teal-dark/60 hover:bg-sage-light">
+              <button type="button" onClick={onClose} className="btn-ghost">
                 {t('vendors.cancel')}
               </button>
-              <button type="submit" disabled={saving} className="px-4 py-2 rounded-full text-sm font-semibold bg-gold text-white hover:bg-gold/90 disabled:opacity-50">
+              <button type="submit" disabled={saving} className="btn-primary">
                 {saving ? '...' : t('inviteClient.send')}
               </button>
             </div>
           </form>
         )}
-      </div>
-    </div>
+    </Modal>
   );
 }

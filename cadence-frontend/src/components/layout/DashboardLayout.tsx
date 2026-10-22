@@ -1,15 +1,16 @@
 import type { ReactNode } from 'react';
-import Sidebar from './Sidebar';
-import Topbar from './Topbar';
+import { motion } from 'framer-motion';
 
+// Page body inside StaffShell. Each page fades up once when it opens.
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex h-screen bg-cream">
-      <Sidebar />
-      <div className="flex-1 flex flex-col overflow-y-auto">
-        <Topbar />
-        <main className="flex-1 p-8 bg-gradient-to-b from-teal-deep/[0.04] to-transparent">{children}</main>
-      </div>
-    </div>
+    <motion.main
+      className="flex-1 w-full max-w-[1320px] mx-auto px-4 sm:px-6 md:px-10 py-6 md:py-9"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.main>
   );
 }

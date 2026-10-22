@@ -13,9 +13,9 @@ import {
 import { useCan } from '../../lib/permissions';
 
 const statusColors: Record<PaymentStatus, string> = {
-  unpaid: 'bg-red-100 text-red-600',
-  partial: 'bg-gold-light/40 text-[#8a6a1f]',
-  paid: 'bg-sage-light text-teal-dark',
+  unpaid: 'bg-terracotta-light text-terracotta',
+  partial: 'bg-gold-light/45 text-[#7a5a14]',
+  paid: 'bg-sage-light text-teal-deep',
 };
 
 export default function VendorsTab({ eventId }: { eventId: string }) {
@@ -64,9 +64,9 @@ export default function VendorsTab({ eventId }: { eventId: string }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-sage/30 p-6">
+    <div className="card p-6">
       <div className="flex items-center justify-between mb-4">
-        <p className="text-xs font-semibold text-teal-dark/40 uppercase tracking-wide">{t('vendors.booked')}</p>
+        <p className="section-title">{t('vendors.booked')}</p>
         {canManage && (
           <button
             onClick={() => navigate('/vendors')}
@@ -79,11 +79,11 @@ export default function VendorsTab({ eventId }: { eventId: string }) {
       </div>
 
       {booked.length === 0 && !adding && <p className="text-sm text-teal-dark/50 mb-4">{t('vendors.empty')}</p>}
-      {error && <p className="text-xs text-red-600 mb-2">{error}</p>}
+      {error && <p role="alert" className="text-sm text-terracotta bg-terracotta-light/70 rounded-xl px-3.5 py-2.5 mb-3">{error}</p>}
 
       <div className="space-y-2 mb-4">
         {booked.map((v) => (
-          <div key={v.id} className="flex items-center justify-between gap-3 py-2 border-b border-sage/20 last:border-0 text-sm">
+          <div key={v.id} className="flex items-center justify-between gap-3 py-2 border-b border-teal-dark/[0.06] last:border-0 text-sm">
             <p className="text-teal-dark font-medium truncate">{v.vendor_name}</p>
             <div className="flex items-center gap-3 shrink-0">
               <span className="text-teal-dark/60">{Number(v.contract_amount_etb).toLocaleString()} ETB</span>
@@ -110,21 +110,21 @@ export default function VendorsTab({ eventId }: { eventId: string }) {
       </div>
 
       {!canManage ? null : adding ? (
-        <div className="grid grid-cols-2 gap-2 pt-3 border-t border-sage/20">
-          <select value={vendorId} onChange={(e) => setVendorId(e.target.value)} className="border border-sage/40 rounded-lg px-2.5 py-2 text-sm">
+        <div className="grid grid-cols-2 gap-2 pt-3 border-t border-teal-dark/[0.07]">
+          <select value={vendorId} onChange={(e) => setVendorId(e.target.value)} className="bg-white border border-teal-dark/15 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:border-teal-deep focus:ring-4 focus:ring-teal-deep/10">
             <option value="">{t('vendors.name')}</option>
             {allVendors.map((v) => <option key={v.id} value={v.id}>{v.name}</option>)}
           </select>
-          <input type="number" min={0} placeholder={t('vendors.amount')} value={amount} onChange={(e) => setAmount(e.target.value)} className="border border-sage/40 rounded-lg px-2.5 py-2 text-sm" />
-          <select value={status} onChange={(e) => setStatus(e.target.value as PaymentStatus)} className="border border-sage/40 rounded-lg px-2.5 py-2 text-sm col-span-2">
+          <input type="number" min={0} placeholder={t('vendors.amount')} value={amount} onChange={(e) => setAmount(e.target.value)} className="bg-white border border-teal-dark/15 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:border-teal-deep focus:ring-4 focus:ring-teal-deep/10" />
+          <select value={status} onChange={(e) => setStatus(e.target.value as PaymentStatus)} className="bg-white border border-teal-dark/15 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:border-teal-deep focus:ring-4 focus:ring-teal-deep/10 col-span-2">
             {PAYMENT_STATUSES.map((s) => (
               <option key={s} value={s}>{t(`vendors.status.${s}`)}</option>
             ))}
           </select>
-          <button onClick={handleAdd} className="col-span-2 bg-gold text-white text-sm font-semibold px-4 py-2 rounded-full">{t('vendors.save')}</button>
+          <button onClick={handleAdd} className="col-span-2 btn-gold">{t('vendors.save')}</button>
         </div>
       ) : (
-        <button onClick={() => setAdding(true)} className="flex items-center gap-1.5 text-sm text-gold font-semibold">
+        <button onClick={() => setAdding(true)} className="btn-ghost text-teal-deep -ml-3">
           <Plus size={15} />{t('vendors.add')}
         </button>
       )}

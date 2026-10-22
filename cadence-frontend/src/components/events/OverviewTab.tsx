@@ -39,22 +39,22 @@ interface Task {
 }
 
 const priorityColors: Record<string, string> = {
-  critical: 'bg-red-100 text-red-600',
-  high: 'bg-terracotta/15 text-terracotta',
-  medium: 'bg-gold-light/40 text-[#8a6a1f]',
-  low: 'bg-sage-light text-teal-dark',
+  critical: 'bg-terracotta-light text-terracotta',
+  high: 'bg-gold-light/60 text-[#8a4a12]',
+  medium: 'bg-gold-light/45 text-[#7a5a14]',
+  low: 'bg-sage-light text-teal-deep',
 };
 
 const approvalStatusColors: Record<string, string> = {
-  pending: 'bg-gold-light/40 text-[#8a6a1f]',
-  approved: 'bg-sage-light text-teal-dark',
-  changes_requested: 'bg-red-100 text-red-600',
+  pending: 'bg-gold-light/45 text-[#7a5a14]',
+  approved: 'bg-sage-light text-teal-deep',
+  changes_requested: 'bg-terracotta-light text-terracotta',
 };
 
 const vendorStatusColors: Record<string, string> = {
-  unpaid: 'bg-red-100 text-red-600',
-  partial: 'bg-gold-light/40 text-[#8a6a1f]',
-  paid: 'bg-sage-light text-teal-dark',
+  unpaid: 'bg-terracotta-light text-terracotta',
+  partial: 'bg-gold-light/45 text-[#7a5a14]',
+  paid: 'bg-sage-light text-teal-deep',
 };
 
 type Tab = 'timeline' | 'budget' | 'vendors' | 'tasks' | 'approvals';
@@ -107,7 +107,13 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
   }, [eventId, showBudget, showVendors, showApprovals]);
 
   if (loading) {
-    return <p className="text-sm text-teal-dark/50">...</p>;
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="skeleton h-36" />
+        ))}
+      </div>
+    );
   }
 
   const fmt = (n: string) => `${Number(n).toLocaleString()} ETB`;
@@ -123,7 +129,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div className="bg-white rounded-2xl border border-sage/30 p-5">
+      <div className="card p-5">
         <CardHeader icon={<Clock size={15} className="text-teal-deep/60" />} title={t('eventTabs.timeline')} onViewAll={() => onNavigate('timeline')} t={t} />
         {timeline.length === 0 ? (
           <p className="text-sm text-teal-dark/40">{t('timeline.empty')}</p>
@@ -141,7 +147,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
       </div>
 
       {showBudget && (
-      <div className="bg-white rounded-2xl border border-sage/30 p-5">
+      <div className="card p-5">
         <CardHeader icon={<Wallet size={15} className="text-teal-deep/60" />} title={t('eventTabs.budget')} onViewAll={() => onNavigate('budget')} t={t} />
         {budget ? (
           <div className="space-y-1.5 text-sm">
@@ -165,7 +171,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
       )}
 
       {showVendors && (
-      <div className="bg-white rounded-2xl border border-sage/30 p-5">
+      <div className="card p-5">
         <CardHeader icon={<Building2 size={15} className="text-teal-deep/60" />} title={t('eventTabs.vendors')} onViewAll={() => onNavigate('vendors')} t={t} />
         {vendors.length === 0 ? (
           <p className="text-sm text-teal-dark/40">{t('vendors.empty')}</p>
@@ -187,7 +193,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
       </div>
       )}
 
-      <div className="bg-white rounded-2xl border border-sage/30 p-5">
+      <div className="card p-5">
         <CardHeader icon={<ListChecks size={15} className="text-teal-deep/60" />} title={t('eventTabs.tasks')} onViewAll={() => onNavigate('tasks')} t={t} />
         {tasks.length === 0 ? (
           <p className="text-sm text-teal-dark/40">{t('tasks.empty')}</p>
@@ -205,7 +211,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
             {nextTasks.map((task) => (
               <div key={task.id} className="flex items-center justify-between gap-2 text-sm">
                 <span className="text-teal-dark truncate">{task.title}</span>
-                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${priorityColors[task.priority] || ''}`}>
+                <span className={`chip shrink-0 ${priorityColors[task.priority] || ''}`}>
                   {t(`dashboard.priority.${task.priority}`)}
                 </span>
               </div>
@@ -215,7 +221,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
       </div>
 
       {showApprovals && (
-      <div className="bg-white rounded-2xl border border-sage/30 p-5 sm:col-span-2 lg:col-span-1">
+      <div className="card p-5 sm:col-span-2 lg:col-span-1">
         <CardHeader icon={<Stamp size={15} className="text-teal-deep/60" />} title={t('eventTabs.approvals')} onViewAll={() => onNavigate('approvals')} t={t} />
         <p className="text-[11px] text-teal-dark/40 mb-2 -mt-1">{t('overview.approvalsHint')}</p>
         {approvals.length === 0 ? (
@@ -227,7 +233,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
             {pendingApprovals.slice(0, 3).map((a) => (
               <div key={a.id} className="flex items-center justify-between gap-2 text-sm">
                 <span className="text-teal-dark truncate">{a.title}</span>
-                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${approvalStatusColors[a.status]}`}>
+                <span className={`chip shrink-0 ${approvalStatusColors[a.status]}`}>
                   {t(`approvals.status.${a.status}`)}
                 </span>
               </div>

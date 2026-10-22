@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Clock, Pencil, Trash2 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { fetchTimeline, addTimelineItem, updateTimelineItem, deleteTimelineItem } from '../../lib/events';
 import { useCan } from '../../lib/permissions';
 
@@ -65,11 +66,11 @@ export default function TimelineTab({ eventId }: { eventId: string }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-sage/30 p-6">
+    <div className="card p-6">
       {items.length === 0 && formMode === 'none' && <p className="text-sm text-teal-dark/50 mb-4">{t('timeline.empty')}</p>}
 
-      <div className="space-y-1 mb-4">
-        {items.map((item) =>
+      <ol className="relative mb-5">
+        {items.map((item, i) =>
           formMode === item.id ? (
             <TimelineForm
               key={item.id}
@@ -84,27 +85,34 @@ export default function TimelineTab({ eventId }: { eventId: string }) {
               onCancel={resetForm}
             />
           ) : (
-            <div key={item.id} className="flex items-center gap-3 py-2 border-b border-sage/20 last:border-0 group">
-              <div className="w-28 shrink-0 text-xs font-semibold text-gold">
-                {item.start_time?.slice(0, 5)}
-                {item.end_time && <span className="text-teal-dark/40 font-normal"> – {item.end_time.slice(0, 5)}</span>}
+            <motion.li
+              key={item.id}
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3, delay: Math.min(i, 10) * 0.04 }}
+              className="relative flex items-start gap-4 pb-6 last:pb-0 group"
+            >
+              {i < items.length - 1 && <span className="absolute left-[71px] sm:left-[87px] top-5 bottom-0 w-px bg-teal-dark/12" />}
+              <div className="w-14 sm:w-[72px] shrink-0 text-right pt-0.5">
+                <p className="font-display text-[15px] font-semibold text-teal-dark tabular-nums">{item.start_time?.slice(0, 5)}</p>
+                {item.end_time && <p className="text-xs text-teal-dark/45 tabular-nums">{item.end_time.slice(0, 5)}</p>}
               </div>
-              <Clock size={14} className="text-teal-deep/40 shrink-0" />
-              <p className="flex-1 text-sm text-teal-dark">{item.title}</p>
+              <span className="relative z-10 mt-1.5 w-3.5 h-3.5 rounded-full bg-gold ring-4 ring-gold-light/40 shrink-0" />
+              <p className="flex-1 text-[15px] text-teal-dark pt-0.5">{item.title}</p>
               {canManage && (
-              <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button onClick={() => startEdit(item)} className="text-teal-dark/40 hover:text-teal-deep p-1">
+              <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                <button onClick={() => startEdit(item)} className="icon-btn w-7 h-7">
                   <Pencil size={13} />
                 </button>
-                <button onClick={() => handleDelete(item.id)} className="text-teal-dark/40 hover:text-terracotta p-1">
+                <button onClick={() => handleDelete(item.id)} className="icon-btn-danger w-7 h-7">
                   <Trash2 size={13} />
                 </button>
               </div>
               )}
-            </div>
+            </motion.li>
           )
         )}
-      </div>
+      </ol>
 
       {formMode === 'add' ? (
         <TimelineForm
@@ -119,7 +127,7 @@ export default function TimelineTab({ eventId }: { eventId: string }) {
           onCancel={resetForm}
         />
       ) : formMode === 'none' && canManage ? (
-        <button onClick={startAdd} className="flex items-center gap-1.5 text-sm text-gold font-semibold">
+        <button onClick={startAdd} className="btn-ghost text-teal-deep -ml-3">
           <Plus size={15} />
           {t('timeline.add')}
         </button>
@@ -150,20 +158,20 @@ function TimelineForm({
   onCancel: () => void;
 }) {
   return (
-    <div className="flex gap-2 items-end pt-3 pb-2 border-t border-sage/20">
+    <div className="flex gap-2 items-end pt-3 pb-2 border-t border-teal-dark/[0.07]">
       <div className="flex-1">
-        <label className="block text-xs text-teal-dark/50 mb-1">{t('timeline.title')}</label>
-        <input value={title} onChange={(e) => setTitle(e.target.value)} className="w-full border border-sage/40 rounded-lg px-2.5 py-2 text-sm" />
+        <label className="field-label">{t('timeline.title')}</label>
+        <input value={title} onChange={(e) => setTitle(e.target.value)} className="input-sm" />
       </div>
       <div>
-        <label className="block text-xs text-teal-dark/50 mb-1">{t('timeline.startTime')}</label>
-        <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} className="border border-sage/40 rounded-lg px-2.5 py-2 text-sm" />
+        <label className="field-label">{t('timeline.startTime')}</label>
+        <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} className="bg-white border border-teal-dark/15 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:border-teal-deep focus:ring-4 focus:ring-teal-deep/10" />
       </div>
       <div>
-        <label className="block text-xs text-teal-dark/50 mb-1">{t('timeline.endTime')}</label>
-        <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} className="border border-sage/40 rounded-lg px-2.5 py-2 text-sm" />
+        <label className="field-label">{t('timeline.endTime')}</label>
+        <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} className="bg-white border border-teal-dark/15 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:border-teal-deep focus:ring-4 focus:ring-teal-deep/10" />
       </div>
-      <button onClick={onSave} className="bg-gold text-white text-sm font-semibold px-4 py-2 rounded-full">
+      <button onClick={onSave} className="btn-gold">
         {t('timeline.save')}
       </button>
       <button onClick={onCancel} className="text-sm text-teal-dark/50 px-2 py-2">

@@ -5,9 +5,9 @@ import { fetchApprovals, createApprovalRequest, deleteApprovalRequest, type Appr
 import { useCan } from '../../lib/permissions';
 
 const statusColors: Record<string, string> = {
-  pending: 'bg-gold-light/40 text-[#8a6a1f]',
-  approved: 'bg-sage-light text-teal-dark',
-  changes_requested: 'bg-red-100 text-red-600',
+  pending: 'bg-gold-light/45 text-[#7a5a14]',
+  approved: 'bg-sage-light text-teal-deep',
+  changes_requested: 'bg-terracotta-light text-terracotta',
 };
 
 export default function ApprovalsTab({ eventId }: { eventId: string }) {
@@ -46,16 +46,16 @@ export default function ApprovalsTab({ eventId }: { eventId: string }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-sage/30 p-6">
+    <div className="card p-6">
       {approvals.length === 0 && !adding && <p className="text-sm text-teal-dark/50 mb-4">{t('approvals.empty')}</p>}
 
       <div className="space-y-3 mb-4">
         {approvals.map((a) => (
-          <div key={a.id} className="border border-sage/20 rounded-xl p-4">
+          <div key={a.id} className="rounded-2xl border border-teal-dark/[0.08] p-4">
             <div className="flex items-center justify-between mb-1">
               <div>
                 <p className="font-semibold text-teal-dark text-sm">{a.title}</p>
-                <p className="text-[11px] text-teal-dark/40 uppercase">{a.item_type}</p>
+                <p className="text-[13px] text-teal-dark/50 capitalize">{a.item_type}</p>
               </div>
               <div className="flex items-center gap-2">
                 <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${statusColors[a.status]}`}>
@@ -75,32 +75,32 @@ export default function ApprovalsTab({ eventId }: { eventId: string }) {
       </div>
 
       {!canManage ? null : adding ? (
-        <div className="space-y-2 pt-3 border-t border-sage/20">
+        <div className="space-y-2 pt-3 border-t border-teal-dark/[0.07]">
           <input
             placeholder={t('approvals.itemType')}
             value={itemType}
             onChange={(e) => setItemType(e.target.value)}
-            className="w-full border border-sage/40 rounded-lg px-2.5 py-2 text-sm"
+            className="input-sm"
           />
           <input
             placeholder={t('approvals.formTitle')}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full border border-sage/40 rounded-lg px-2.5 py-2 text-sm"
+            className="input-sm"
           />
           <textarea
             placeholder={t('approvals.description')}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={2}
-            className="w-full border border-sage/40 rounded-lg px-2.5 py-2 text-sm resize-none"
+            className="input-sm resize-none"
           />
-          <button onClick={handleAdd} className="bg-gold text-white text-sm font-semibold px-4 py-2 rounded-full">
+          <button onClick={handleAdd} className="btn-gold">
             {t('approvals.save')}
           </button>
         </div>
       ) : (
-        <button onClick={() => setAdding(true)} className="flex items-center gap-1.5 text-sm text-gold font-semibold">
+        <button onClick={() => setAdding(true)} className="btn-ghost text-teal-deep -ml-3">
           <Plus size={15} />
           {t('approvals.add')}
         </button>

@@ -1,13 +1,218 @@
 @import "tailwindcss";
 
+/*
+  Cadence design tokens.
+  Teal and gold are the brand; the page sits on a pale sage "mist" rather than cream.
+  The existing token names are kept so every bg-teal-deep / text-teal-dark / bg-cream
+  class in the app picks up the new values.
+*/
 @theme {
-  --color-teal-deep: #0D5C5C;
-  --color-teal-dark: #0A4747;
-  --color-gold: #C9973F;
-  --color-gold-light: #E8C57E;
-  --color-sage: #A8C5A0;
-  --color-sage-light: #E8F0E3;
-  --color-cream: #FAF8F3;
-  --color-terracotta: #C4623A;
-  --color-terracotta-light: #F3E0D6;
+  --color-teal-deep: #135f5a;   /* primary: buttons, active states */
+  --color-teal-dark: #0e3735;   /* ink: text, sidebar */
+  --color-teal-ink: #0a2826;    /* deepest surface (sidebar, login panel) */
+  --color-gold: #c4902d;        /* accent: highlights, the tilet band */
+  --color-gold-light: #ecca83;
+  --color-sage: #93b88f;
+  --color-sage-light: #e2ebde;
+  --color-cream: #eef1ec;       /* page background ("mist") */
+  --color-paper: #fbfcfa;       /* card surface */
+  --color-terracotta: #b4512c;  /* danger, critical priority */
+  --color-terracotta-light: #f4e1d8;
+
+  --font-display: "Bricolage Grotesque Variable", "Noto Sans Ethiopic", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Figtree Variable", "Noto Sans Ethiopic", ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-cream text-teal-dark font-sans;
+    font-feature-settings: "ss01", "cv11";
+  }
+  h1, h2, h3 {
+    @apply font-display;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--color-gold-light) 70%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  input, select, textarea, button {
+    font: inherit;
+  }
+}
+
+/* Reusable building blocks. Declared with @utility so they compose with @apply and variants. */
+@utility card {
+  background-color: var(--color-paper);
+  border-radius: 1rem;
+  border: 1px solid rgb(14 55 53 / 0.07);
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.8) inset,
+    0 1px 2px rgb(14 55 53 / 0.04),
+    0 8px 24px -12px rgb(14 55 53 / 0.12);
+}
+@utility card-interactive {
+  @apply card cursor-pointer;
+  transition:
+    transform 0.35s var(--ease-out-soft),
+    box-shadow 0.35s var(--ease-out-soft),
+    border-color 0.35s var(--ease-out-soft);
+  &:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in oklab, var(--color-gold) 45%, transparent);
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 0.8) inset,
+      0 2px 4px rgb(14 55 53 / 0.05),
+      0 18px 36px -16px rgb(14 55 53 / 0.28);
+  }
+}
+@utility section-title {
+  @apply font-display text-[15px] font-semibold text-teal-dark flex items-center gap-2;
+}
+@utility field-label {
+  @apply block text-[13px] font-medium text-teal-dark/70 mb-1.5;
+}
+@utility input {
+  @apply w-full bg-white border border-teal-dark/15 rounded-xl px-3.5 py-2.5 text-sm text-teal-dark placeholder:text-teal-dark/35;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  &:hover {
+    border-color: rgb(14 55 53 / 0.3);
+  }
+  &:focus {
+    outline: none;
+    border-color: var(--color-teal-deep);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-teal-deep) 14%, transparent);
+  }
+}
+@utility input-sm {
+  @apply input px-3 py-2 rounded-lg;
+}
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full text-sm font-semibold px-5 py-2.5 select-none cursor-pointer;
+  transition:
+    transform 0.15s var(--ease-out-soft),
+    background-color 0.2s,
+    box-shadow 0.2s,
+    color 0.2s;
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+@utility btn-primary {
+  @apply btn bg-teal-deep text-white;
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.15) inset, 0 6px 16px -8px rgb(19 95 90 / 0.7);
+  &:hover:not(:disabled) {
+    background-color: var(--color-teal-dark);
+  }
+}
+@utility btn-gold {
+  @apply btn text-teal-ink;
+  background: linear-gradient(180deg, #d6a544, var(--color-gold));
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.35) inset, 0 6px 16px -8px rgb(196 144 45 / 0.9);
+  &:hover:not(:disabled) {
+    background: linear-gradient(180deg, #ddb056, #b8852a);
+  }
+}
+@utility btn-ghost {
+  @apply btn px-3 py-2 text-teal-dark/70;
+  &:hover:not(:disabled) {
+    color: var(--color-teal-dark);
+    background-color: rgb(14 55 53 / 0.06);
+  }
+}
+@utility icon-btn {
+  @apply inline-flex items-center justify-center w-8 h-8 rounded-full text-teal-dark/45 cursor-pointer;
+  transition: background-color 0.2s, color 0.2s, transform 0.15s;
+  &:hover {
+    color: var(--color-teal-dark);
+    background-color: rgb(14 55 53 / 0.07);
+  }
+  &:active {
+    transform: scale(0.92);
+  }
+}
+@utility icon-btn-danger {
+  @apply icon-btn;
+  &:hover {
+    color: var(--color-terracotta);
+    background-color: var(--color-terracotta-light);
+  }
+}
+@utility chip {
+  @apply inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap;
+  &::before {
+    content: "";
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 9999px;
+    background: currentColor;
+    opacity: 0.7;
+  }
+}
+
+/* The tilet band: woven border motif drawn by <Tilet />. */
+.tilet-weave {
+  animation: tilet-weave 1.4s var(--ease-out-soft) both;
+}
+@keyframes tilet-weave {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+.tilet-weave-y {
+  animation: tilet-weave-y 1.6s var(--ease-out-soft) both;
+}
+@keyframes tilet-weave-y {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Loading shimmer for placeholders */
+.skeleton {
+  @apply rounded-xl bg-teal-dark/[0.06] relative overflow-hidden;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.6), transparent);
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

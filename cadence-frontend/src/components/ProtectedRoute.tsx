@@ -74,8 +74,8 @@ export function HomeRedirect() {
 function UnknownRole({ role, onLogout }: { role: string; onLogout: () => void }) {
   return (
     <div className="min-h-screen bg-cream flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-2xl border border-sage/30 p-6">
-        <h1 className="text-lg font-bold text-teal-dark mb-2">Your account needs updating</h1>
+      <div className="w-full max-w-md card p-6">
+        <h1 className="font-display text-xl font-semibold text-teal-dark mb-2">Your account needs updating</h1>
         <p className="text-sm text-teal-dark/70 mb-3">
           This account has the role <strong>"{role}"</strong>, which Cadence no longer uses. The database
           migrations that convert old roles (admin becomes owner) probably haven't been run yet.

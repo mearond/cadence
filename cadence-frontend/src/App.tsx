@@ -13,6 +13,7 @@ import SetPassword from './pages/SetPassword';
 import Vendors from './pages/Vendors';
 import Staff from './pages/Staff';
 import ErrorToast from './components/shared/ErrorToast';
+import StaffShell from './components/layout/StaffShell';
 
 function App() {
   return (
@@ -23,13 +24,15 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        <Route path="/dashboard" element={<ProtectedRoute permission="dashboard:view"><Dashboard /></ProtectedRoute>} />
-        <Route path="/events" element={<ProtectedRoute permission="events:view"><Events /></ProtectedRoute>} />
-        <Route path="/events/new" element={<ProtectedRoute permission="events:create"><NewEvent /></ProtectedRoute>} />
-        <Route path="/events/:id" element={<ProtectedRoute permission="events:view"><EventDetail /></ProtectedRoute>} />
-        <Route path="/events/:id/edit" element={<ProtectedRoute permission="events:edit"><EditEvent /></ProtectedRoute>} />
-        <Route path="/vendors" element={<ProtectedRoute permission="vendors:view"><Vendors /></ProtectedRoute>} />
-        <Route path="/staff" element={<ProtectedRoute permission="staff:view"><Staff /></ProtectedRoute>} />
+        <Route element={<ProtectedRoute><StaffShell /></ProtectedRoute>}>
+          <Route path="/dashboard" element={<ProtectedRoute permission="dashboard:view"><Dashboard /></ProtectedRoute>} />
+          <Route path="/events" element={<ProtectedRoute permission="events:view"><Events /></ProtectedRoute>} />
+          <Route path="/events/new" element={<ProtectedRoute permission="events:create"><NewEvent /></ProtectedRoute>} />
+          <Route path="/events/:id" element={<ProtectedRoute permission="events:view"><EventDetail /></ProtectedRoute>} />
+          <Route path="/events/:id/edit" element={<ProtectedRoute permission="events:edit"><EditEvent /></ProtectedRoute>} />
+          <Route path="/vendors" element={<ProtectedRoute permission="vendors:view"><Vendors /></ProtectedRoute>} />
+          <Route path="/staff" element={<ProtectedRoute permission="staff:view"><Staff /></ProtectedRoute>} />
+        </Route>
 
         <Route path="/set-password" element={<ProtectedRoute audience="any"><SetPassword /></ProtectedRoute>} />
 

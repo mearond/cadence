@@ -2,6 +2,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, Building2, Star, Tag, Phone, Mail, Pencil, Trash2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import PageHeader from '../components/shared/PageHeader';
+import CountUp from '../components/shared/CountUp';
+import Tilet from '../components/shared/Tilet';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import VendorFormModal from '../components/events/VendorFormModal';
 import { fetchAllVendors, deleteVendor, type Vendor } from '../lib/events';
@@ -45,50 +48,44 @@ export default function Vendors() {
 
   return (
     <DashboardLayout>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-teal-dark">{t('vendorsPage.title')}</h1>
-        {canManage && (
-        <button
-          onClick={() => setModalTarget('new')}
-          className="flex items-center gap-2 bg-gold text-white px-4 py-2.5 rounded-full text-sm font-semibold hover:bg-gold/90 transition-colors shadow-sm"
-        >
-          <Plus size={16} />
-          {t('vendorsPage.addNew')}
-        </button>
-        )}
-      </div>
+      <PageHeader
+        title={t('vendorsPage.title')}
+        subtitle={!loading && t('vendorsPage.subtitle', { count: vendors.length })}
+        action={
+          canManage && (
+            <button onClick={() => setModalTarget('new')} className="btn-gold">
+              <Plus size={16} />
+              {t('vendorsPage.addNew')}
+            </button>
+          )
+        }
+      />
 
-      {loading && <p className="text-sm text-teal-dark/50">...</p>}
+      {loading && <div className="skeleton h-24 mb-8" />}
 
       {!loading && (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-            <div className="bg-white rounded-2xl border border-sage/30 p-5">
-              <p className="text-xs font-semibold text-teal-dark/50 uppercase mb-2 flex items-center gap-1.5">
-                <Building2 size={13} />
-                {t('vendorsPage.totalVendors')}
-              </p>
-              <p className="text-2xl font-bold text-teal-dark">{vendors.length}</p>
-            </div>
-            <div className="bg-white rounded-2xl border border-sage/30 p-5">
-              <p className="text-xs font-semibold text-teal-dark/50 uppercase mb-2 flex items-center gap-1.5">
-                <Tag size={13} />
-                {t('vendorsPage.categoriesInUse')}
-              </p>
-              <p className="text-2xl font-bold text-teal-dark">{categoriesInUse}</p>
-            </div>
-            <div className="bg-white rounded-2xl border border-sage/30 p-5">
-              <p className="text-xs font-semibold text-teal-dark/50 uppercase mb-2 flex items-center gap-1.5">
-                <Star size={13} />
-                {t('vendorsPage.totalBookings')}
-              </p>
-              <p className="text-2xl font-bold text-teal-dark">{totalBookings}</p>
-            </div>
-          </div>
+          <dl className="card grid grid-cols-3 divide-x divide-teal-dark/[0.07] mb-8">
+            {[
+              { icon: Building2, label: t('vendorsPage.totalVendors'), value: vendors.length },
+              { icon: Tag, label: t('vendorsPage.categoriesInUse'), value: categoriesInUse },
+              { icon: Star, label: t('vendorsPage.totalBookings'), value: totalBookings },
+            ].map(({ icon: Icon, label, value }) => (
+              <div key={label} className="px-4 sm:px-6 py-5">
+                <dt className="flex items-center gap-1.5 text-[13px] text-teal-dark/55">
+                  <Icon size={14} className="shrink-0" />
+                  <span className="truncate">{label}</span>
+                </dt>
+                <dd className="font-display text-3xl font-semibold text-teal-dark mt-1">
+                  <CountUp value={value} />
+                </dd>
+              </div>
+            ))}
+          </dl>
 
           {mostPopular.length > 0 && (
-            <div className="mb-6">
-              <p className="text-xs font-semibold text-teal-dark/40 uppercase tracking-wide mb-3">{t('vendorsPage.mostPopular')}</p>
+            <div className="mb-10">
+              <h2 className="section-title text-lg mb-4">{t('vendorsPage.mostPopular')}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {mostPopular.map((v, i) => {
                   const categoryName = i18n.language === 'am' ? v.category_name_am : v.category_name_en;
@@ -98,12 +95,15 @@ export default function Vendors() {
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: i * 0.05 }}
-                      className="bg-teal-deep rounded-2xl p-5 text-white"
+                      className="relative overflow-hidden rounded-2xl bg-teal-deep text-white p-5 pt-6 shadow-[0_18px_40px_-22px_rgb(10_40_38/0.9)]"
                     >
-                      <Star size={14} className="text-gold mb-2" fill="currentColor" />
-                      <h3 className="font-semibold mb-1">{v.name}</h3>
+                      <div className="absolute inset-x-0 top-0"><Tilet size={6} tone="gold" /></div>
+                      <div className="flex items-start justify-between gap-3">
+                        <h3 className="font-display text-lg font-semibold leading-snug mb-1">{v.name}</h3>
+                        <span className="font-display text-sm font-semibold text-gold-light shrink-0">{i + 1}</span>
+                      </div>
                       {categoryName && <p className="text-xs text-white/60 mb-2">{categoryName}</p>}
-                      <p className="text-xs text-white/70">
+                      <p className="text-sm text-gold-light/90">
                         {v.booking_count} {t('vendorsPage.bookings')}
                       </p>
                     </motion.div>
@@ -113,11 +113,11 @@ export default function Vendors() {
             </div>
           )}
 
-          <p className="text-xs font-semibold text-teal-dark/40 uppercase tracking-wide mb-3">{t('vendorsPage.allVendors')}</p>
+          <h2 className="section-title text-lg mb-4">{t('vendorsPage.allVendors')}</h2>
 
           {vendors.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-sage/30 p-10 text-center">
-              <Building2 size={28} className="mx-auto text-teal-deep/30 mb-3" />
+            <div className="card p-12 text-center">
+              <div className="grid place-items-center w-14 h-14 rounded-2xl bg-sage-light text-teal-deep mx-auto mb-4"><Building2 size={26} /></div>
               <p className="text-sm text-teal-dark/50">{t('vendorsPage.empty')}</p>
             </div>
           ) : (
@@ -130,30 +130,30 @@ export default function Vendors() {
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.25, delay: i * 0.03 }}
-                    className="bg-white rounded-2xl border border-sage/30 p-5 group relative"
+                    className="card-interactive cursor-default p-5 group relative"
                   >
                     <div className="flex items-center justify-between mb-2 gap-2">
-                      <h3 className="font-semibold text-teal-dark truncate">{v.name}</h3>
+                      <h3 className="font-display text-[17px] font-semibold text-teal-dark truncate">{v.name}</h3>
                       <div className="flex items-center gap-2 shrink-0">
                         {(v.booking_count ?? 0) > 0 && (
-                          <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-sage-light text-teal-dark">
+                          <span className="chip bg-sage-light text-teal-deep">
                             {v.booking_count} {t('vendorsPage.bookings')}
                           </span>
                         )}
                         {canManage && (
-                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <button onClick={() => setModalTarget(v)} className="text-teal-dark/40 hover:text-teal-deep p-1">
+                        <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                          <button onClick={() => setModalTarget(v)} className="icon-btn w-7 h-7">
                             <Pencil size={13} />
                           </button>
-                          <button onClick={(e) => handleDelete(e, v)} className="text-teal-dark/40 hover:text-terracotta p-1">
+                          <button onClick={(e) => handleDelete(e, v)} className="icon-btn-danger w-7 h-7">
                             <Trash2 size={13} />
                           </button>
                         </div>
                         )}
                       </div>
                     </div>
-                    {categoryName && <p className="text-xs text-teal-dark/50 mb-3">{categoryName}</p>}
-                    <div className="space-y-1 text-xs text-teal-dark/60">
+                    {categoryName && <p className="text-[13px] text-teal-dark/55 mb-4">{categoryName}</p>}
+                    <div className="space-y-1.5 text-[13px] text-teal-dark/65">
                       {v.phone && (
                         <p className="flex items-center gap-1.5">
                           <Phone size={11} />

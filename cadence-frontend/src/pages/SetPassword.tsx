@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import AuthShell from '../components/layout/AuthShell';
 import { useAuthStore } from '../store/authStore';
 
 export default function SetPassword() {
@@ -40,46 +41,44 @@ export default function SetPassword() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-sm bg-white rounded-xl shadow-lg p-6">
-        <h1 className="text-xl font-bold text-slate-900 mb-1">{t('setPassword.title')}</h1>
-        <p className="text-sm text-slate-500 mb-5">{t('setPassword.subtitle')}</p>
+    <AuthShell title={t('setPassword.title')} subtitle={t('setPassword.subtitle')}>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-1">{t('setPassword.newPassword')}</label>
+            <label className="field-label">{t('setPassword.newPassword')}</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"
+              className="input py-3"
               required
               minLength={8}
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-1">{t('setPassword.confirmPassword')}</label>
+            <label className="field-label">{t('setPassword.confirmPassword')}</label>
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"
+              className="input py-3"
               required
               minLength={8}
             />
           </div>
 
-          {error && <p className="text-xs text-red-600">{error}</p>}
+          {error && (
+            <p role="alert" className="text-sm text-terracotta bg-terracotta-light/70 rounded-xl px-3.5 py-2.5">{error}</p>
+          )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white font-medium py-2.5 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="btn-primary w-full py-3 text-[15px] mt-2"
           >
             {loading ? '...' : t('setPassword.save')}
           </button>
         </form>
-      </div>
-    </div>
+    </AuthShell>
   );
 }

@@ -37,11 +37,11 @@ export default function ClientsCard({ eventId, onAddClick }: { eventId: string; 
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-sage/30 p-5 mt-4">
+    <div className="card p-5 mt-5">
       <div className="flex items-center justify-between mb-3">
-        <p className="text-xs font-semibold text-teal-dark/50 uppercase">{t('clients.title')}</p>
+        <p className="section-title">{t('clients.title')}</p>
         {canManage && (
-          <button onClick={onAddClick} className="flex items-center gap-1.5 text-xs font-semibold text-teal-deep hover:text-teal-dark">
+          <button onClick={onAddClick} className="btn-ghost text-teal-deep">
             <UserPlus size={13} />
             {t('clients.addNew')}
           </button>
@@ -49,13 +49,14 @@ export default function ClientsCard({ eventId, onAddClick }: { eventId: string; 
       </div>
 
       {loading ? (
-        <p className="text-sm text-teal-dark/40">...</p>
+        <div className="skeleton h-12 w-64" />
       ) : clients.length === 0 ? (
         <p className="text-sm text-teal-dark/40">{t('clients.empty')}</p>
       ) : (
-        <div className="space-y-2">
+        <div className="flex flex-wrap gap-2">
           {clients.map((client) => (
-            <div key={client.id} className="flex items-center justify-between gap-2 bg-sage-light/40 rounded-lg px-3 py-2">
+            <div key={client.id} className="flex items-center gap-3 bg-sage-light/60 rounded-full pl-1.5 pr-2 py-1.5">
+              <span className="grid place-items-center w-8 h-8 rounded-full bg-teal-deep text-gold-light text-xs font-semibold shrink-0">{client.name.slice(0, 1).toUpperCase()}</span>
               <div className="min-w-0">
                 <p className="text-sm font-medium text-teal-dark truncate">{client.name}</p>
                 <p className="text-xs text-teal-dark/50 truncate">{client.email}</p>
@@ -64,7 +65,7 @@ export default function ClientsCard({ eventId, onAddClick }: { eventId: string; 
               <button
                 onClick={() => handleRemove(client.id)}
                 disabled={removingId === client.id}
-                className="p-1 rounded-lg hover:bg-white text-teal-dark/40 hover:text-red-600 shrink-0 disabled:opacity-50"
+                className="icon-btn-danger w-7 h-7 shrink-0 disabled:opacity-50"
                 title={t('clients.remove')}
               >
                 <X size={14} />

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import AuthShell from '../components/layout/AuthShell';
 import { useAuthStore } from '../store/authStore';
 import { isValidEmail } from '../lib/validation';
 
@@ -37,69 +38,67 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-sm bg-white rounded-xl shadow-lg p-6">
-        <h1 className="text-xl font-bold text-slate-900 mb-1">{t('app.name')}</h1>
-        <p className="text-sm text-slate-500 mb-5">{t('auth.signUp')}</p>
+    <AuthShell title={t('auth.signupTitle')} subtitle={t('auth.signupSubtitle')}>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-1">{t('auth.orgName')}</label>
+            <label className="field-label">{t('auth.orgName')}</label>
             <input
               value={orgName}
               onChange={(e) => setOrgName(e.target.value)}
-              className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"
+              className="input py-3"
               required
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-1">{t('auth.name')}</label>
+            <label className="field-label">{t('auth.name')}</label>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"
+              className="input py-3"
               required
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-1">{t('auth.email')}</label>
+            <label className="field-label">{t('auth.email')}</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"
+              className="input py-3"
               required
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-500 mb-1">{t('auth.password')}</label>
+            <label className="field-label">{t('auth.password')}</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"
+              className="input py-3"
               required
             />
           </div>
 
-          {error && <p className="text-xs text-red-600">{error}</p>}
+          {error && (
+            <p role="alert" className="text-sm text-terracotta bg-terracotta-light/70 rounded-xl px-3.5 py-2.5">{error}</p>
+          )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white font-medium py-2.5 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+            className="btn-primary w-full py-3 text-[15px] mt-2"
           >
             {loading ? '...' : t('auth.createAccount')}
           </button>
         </form>
 
-        <p className="text-xs text-slate-500 text-center mt-4">
+        <p className="text-sm text-teal-dark/60 text-center mt-8">
           {t('auth.haveAccount')}{' '}
-          <Link to="/login" className="text-blue-600 font-medium hover:underline">
+          <Link to="/login" className="font-semibold text-teal-deep underline decoration-gold/60 decoration-2 underline-offset-4 hover:decoration-gold">
             {t('auth.signInLink')}
           </Link>
         </p>
-      </div>
-    </div>
+    </AuthShell>
   );
 }

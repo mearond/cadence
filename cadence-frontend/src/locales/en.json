@@ -7,7 +7,10 @@
     "events": "Events",
     "vendors": "Vendors",
     "staff": "Staff",
-    "logout": "Logout"
+    "logout": "Logout",
+    "operations": "Operations",
+    "collapse": "Collapse",
+    "menu": "Open menu"
   },
   "auth": {
     "signIn": "Sign In",
@@ -21,7 +24,11 @@
     "noAccount": "Don't have an account?",
     "signInLink": "Sign in",
     "signUpLink": "Sign up",
-    "invalidEmail": "Please enter a valid email address."
+    "invalidEmail": "Please enter a valid email address.",
+    "loginTitle": "Sign in",
+    "loginSubtitle": "Pick up where your team left off.",
+    "signupTitle": "Set up your agency",
+    "signupSubtitle": "You will be the owner, and can add your team afterwards."
   },
   "dashboard": {
     "welcomeBack": "Welcome back",
@@ -37,7 +44,14 @@
       "medium": "Medium",
       "high": "High",
       "critical": "Critical"
-    }
+    },
+    "greeting": "Good to see you, {{name}}",
+    "upcomingCount_one": "upcoming event",
+    "upcomingCount_other": "upcoming events",
+    "pipeline": "Events by status",
+    "totalEvents_one": "{{count}} event",
+    "totalEvents_other": "{{count}} events",
+    "loadError": "The dashboard didn't load. Refresh the page to try again."
   },
   "eventsPage": {
     "title": "Events",
@@ -59,7 +73,10 @@
       "religious": "Religious",
       "memorial": "Memorial",
       "other": "Other"
-    }
+    },
+    "all": "All",
+    "emptyTitle": "No events yet",
+    "delete": "Delete event"
   },
   "eventForm": {
     "createTitle": "Create New Event",
@@ -82,7 +99,11 @@
     "startDate": "Start Date",
     "endDate": "End Date",
     "guestCount": "Guests",
-    "notSet": "Not set"
+    "notSet": "Not set",
+    "dates": "Dates",
+    "until": "until",
+    "notFound": "This event isn't available",
+    "notFoundHint": "It may have been deleted, or the link is wrong."
   },
   "eventTabs": {
     "overview": "Overview",
@@ -110,7 +131,11 @@
     "totalEstimated": "Total Estimated",
     "totalActual": "Total Actual",
     "totalVat": "VAT (15%)",
-    "save": "Save"
+    "save": "Save",
+    "overBy": "{{amount}} over the estimate",
+    "percentUsed": "{{percent}}% of the estimate spent",
+    "noEstimate": "Add estimated amounts to track spending against them.",
+    "of": "of"
   },
   "vendors": {
     "add": "Add Vendor",
@@ -118,7 +143,7 @@
     "name": "Vendor Name",
     "amount": "Contract Amount (ETB)",
     "paymentStatus": "Payment Status",
-    "updateError": "Could not update the payment status.",
+    "updateError": "Could not update vendor.",
     "save": "Save",
     "status": {
       "unpaid": "Not Paid",
@@ -139,19 +164,19 @@
     "booked": "Booked Vendors",
     "invalidEmail": "Please enter a valid email address.",
     "editTitle": "Edit Vendor",
-    "updateError": "Could not update vendor.",
     "confirmDelete": "Delete this vendor? This cannot be undone."
   },
-
   "tasks": {
     "add": "Add Task",
     "empty": "No tasks yet.",
     "title": "Title",
     "priority": "Priority",
     "save": "Save",
-    "checkpoints": "checkpoints done"
+    "checkpoints": "checkpoints done",
+    "progress": "{{done}} of {{total}} done",
+    "markDone": "Mark as done",
+    "markPending": "Mark as not done"
   },
-
   "portal": {
     "myEvents": "My Events",
     "noEvents": "No events yet.",
@@ -170,9 +195,13 @@
         "approved": "Approved",
         "changes_requested": "Changes Requested"
       }
-    }
+    },
+    "noAccess": "It may have been removed, or your access was changed. Contact your planner.",
+    "happeningNow": "Happening now",
+    "today": "It's today",
+    "daysToGo_one": "day to go",
+    "daysToGo_other": "days to go"
   },
-
   "approvals": {
     "empty": "No approval requests yet.",
     "itemType": "Item type (e.g. budget, vendor, timeline)",
@@ -186,7 +215,6 @@
       "changes_requested": "Changes Requested"
     }
   },
-
   "inviteClient": {
     "title": "Invite Client",
     "name": "Client Name",
@@ -202,7 +230,6 @@
     "emailFailed": "Could not send the email — share these credentials with the client manually.",
     "invalidEmail": "Please enter a valid email address."
   },
-
   "vendorsPage": {
     "title": "Vendors",
     "addNew": "Add New",
@@ -212,9 +239,10 @@
     "mostPopular": "Most Popular",
     "allVendors": "All Vendors",
     "bookings": "bookings",
-    "empty": "No vendors yet. Add your first one to get started."
+    "empty": "No vendors yet. Add your first one to get started.",
+    "subtitle_one": "{{count}} vendor in your directory",
+    "subtitle_other": "{{count}} vendors in your directory"
   },
-
   "setPassword": {
     "title": "Set Your Password",
     "subtitle": "Choose a new password to secure your account.",
@@ -224,7 +252,6 @@
     "tooShort": "Password must be at least 8 characters.",
     "mismatch": "Passwords do not match."
   },
-
   "staffPage": {
     "title": "Staff",
     "addNew": "Add New",
@@ -248,9 +275,10 @@
     "created": "Staff member added. Share these credentials with them.",
     "empty": "No staff members yet. Add your first one to get started.",
     "noAccess": "You don't have access to the staff list.",
-    "confirmDelete": "Remove this staff member? This cannot be undone."
+    "confirmDelete": "Remove this staff member? This cannot be undone.",
+    "subtitle_one": "{{count}} person on your team",
+    "subtitle_other": "{{count}} people on your team"
   },
-
   "rating": {
     "title": "Rate Your Experience",
     "prompt": "How was your experience working with us on this event?",
@@ -260,7 +288,6 @@
     "clientRating": "Client Rating",
     "notRatedYet": "The client hasn't rated this event yet."
   },
-
   "overview": {
     "viewAll": "View all",
     "more": "more",
@@ -268,13 +295,16 @@
     "approvalsHint": "Pending approval requests from this event",
     "allClear": "All caught up — no pending approvals."
   },
-
-    "clients": {
+  "clients": {
     "title": "Clients",
     "addNew": "Add Client",
     "empty": "No clients linked to this event yet.",
     "remove": "Remove",
     "confirmRemove": "Remove this client from this event? They will keep their account but lose access to this event.",
     "removeError": "Could not remove this client."
+  },
+  "authPanel": {
+    "headline": "Every wedding, conference and ceremony, planned in one place.",
+    "body": "Timelines, budgets in birr, vendors and client approvals, shared with your team and your clients."
   }
 }

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { motion } from 'framer-motion';
+import CountUp from '../shared/CountUp';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { fetchBudgetItems, fetchBudgetSummary, addBudgetItem, updateBudgetItem, deleteBudgetItem } from '../../lib/events';
 
@@ -81,24 +83,51 @@ export default function BudgetTab({ eventId }: { eventId: string }) {
 
   return (
     <div className="space-y-4">
-      {summary && (
-        <div className="grid grid-cols-3 gap-4">
-          <div className="bg-white rounded-2xl border border-sage/30 p-4">
-            <p className="text-xs text-teal-dark/50 mb-1">{t('budget.totalEstimated')}</p>
-            <p className="text-lg font-bold text-teal-dark">{fmt(summary.total_estimated)}</p>
+      {summary && (() => {
+        const est = Number(summary.total_estimated) || 0;
+        const act = Number(summary.total_actual) || 0;
+        const pct = est > 0 ? Math.min(100, (act / est) * 100) : act > 0 ? 100 : 0;
+        const over = est > 0 && act > est;
+        return (
+          <div className="card p-6">
+            <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 mb-5">
+              <div>
+                <p className="text-sm text-teal-dark/55 mb-1">{t('budget.totalActual')}</p>
+                <p className="font-display text-4xl font-semibold text-teal-dark leading-none">
+                  <CountUp value={act} /> <span className="text-xl text-teal-dark/50">ETB</span>
+                </p>
+              </div>
+              <dl className="flex gap-8 text-sm">
+                <div>
+                  <dt className="text-teal-dark/55">{t('budget.totalEstimated')}</dt>
+                  <dd className="font-semibold text-teal-dark mt-0.5">{fmt(summary.total_estimated)}</dd>
+                </div>
+                <div>
+                  <dt className="text-teal-dark/55">{t('budget.totalVat')}</dt>
+                  <dd className="font-semibold text-[#8a6416] mt-0.5">{fmt(summary.total_vat)}</dd>
+                </div>
+              </dl>
+            </div>
+            <div className="h-2.5 rounded-full bg-teal-dark/[0.07] overflow-hidden">
+              <motion.div
+                className={`h-full rounded-full ${over ? 'bg-terracotta' : 'bg-gradient-to-r from-teal-deep to-gold'}`}
+                initial={{ width: 0 }}
+                animate={{ width: `${pct}%` }}
+                transition={{ duration: 1, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              />
+            </div>
+            <p className={`mt-2.5 text-[13px] ${over ? 'text-terracotta font-medium' : 'text-teal-dark/55'}`}>
+              {est > 0
+                ? over
+                  ? t('budget.overBy', { amount: fmt(String(act - est)) })
+                  : t('budget.percentUsed', { percent: Math.round(pct) })
+                : t('budget.noEstimate')}
+            </p>
           </div>
-          <div className="bg-white rounded-2xl border border-sage/30 p-4">
-            <p className="text-xs text-teal-dark/50 mb-1">{t('budget.totalActual')}</p>
-            <p className="text-lg font-bold text-teal-dark">{fmt(summary.total_actual)}</p>
-          </div>
-          <div className="bg-white rounded-2xl border border-gold/30 p-4">
-            <p className="text-xs text-teal-dark/50 mb-1">{t('budget.totalVat')}</p>
-            <p className="text-lg font-bold text-gold">{fmt(summary.total_vat)}</p>
-          </div>
-        </div>
-      )}
+        );
+      })()}
 
-      <div className="bg-white rounded-2xl border border-sage/30 p-6">
+      <div className="card p-6">
         {items.length === 0 && formMode === 'none' && <p className="text-sm text-teal-dark/50 mb-4">{t('budget.empty')}</p>}
 
         <div className="space-y-1 mb-4">
@@ -119,18 +148,21 @@ export default function BudgetTab({ eventId }: { eventId: string }) {
                 onCancel={resetForm}
               />
             ) : (
-              <div key={item.id} className="flex items-center justify-between py-2 border-b border-sage/20 last:border-0 text-sm group">
+              <div key={item.id} className="flex items-center justify-between gap-3 py-3 border-b border-teal-dark/[0.06] last:border-0 text-sm group">
                 <div>
-                  <p className="text-teal-dark font-medium">{item.name}</p>
-                  <p className="text-xs text-teal-dark/40">{item.category}</p>
+                  <p className="text-[15px] text-teal-dark font-medium">{item.name}</p>
+                  <p className="text-[13px] text-teal-dark/45 capitalize">{item.category}</p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <p className="text-teal-dark/70">{fmt(item.actual_amount_etb)}</p>
-                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => startEdit(item)} className="text-teal-dark/40 hover:text-teal-deep p-1">
+                  <p className="text-right tabular-nums">
+                    <span className="font-semibold text-teal-dark">{fmt(item.actual_amount_etb)}</span>
+                    <span className="block text-xs text-teal-dark/45">{t('budget.of')} {fmt(item.estimated_amount_etb)}</span>
+                  </p>
+                  <div className="flex items-center gap-1 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                    <button onClick={() => startEdit(item)} className="icon-btn w-7 h-7">
                       <Pencil size={13} />
                     </button>
-                    <button onClick={() => handleDelete(item.id)} className="text-teal-dark/40 hover:text-terracotta p-1">
+                    <button onClick={() => handleDelete(item.id)} className="icon-btn-danger w-7 h-7">
                       <Trash2 size={13} />
                     </button>
                   </div>
@@ -155,7 +187,7 @@ export default function BudgetTab({ eventId }: { eventId: string }) {
             onCancel={resetForm}
           />
         ) : formMode === 'none' ? (
-          <button onClick={startAdd} className="flex items-center gap-1.5 text-sm text-gold font-semibold">
+          <button onClick={startAdd} className="btn-ghost text-teal-deep -ml-3">
             <Plus size={15} />
             {t('budget.add')}
           </button>
@@ -191,13 +223,13 @@ function BudgetForm({
   onCancel: () => void;
 }) {
   return (
-    <div className="grid grid-cols-2 gap-2 pt-3 pb-2 border-t border-sage/20">
-      <input placeholder={t('budget.category')} value={category} onChange={(e) => setCategory(e.target.value)} className="border border-sage/40 rounded-lg px-2.5 py-2 text-sm" />
-      <input placeholder={t('budget.name')} value={name} onChange={(e) => setName(e.target.value)} className="border border-sage/40 rounded-lg px-2.5 py-2 text-sm" />
-      <input type="number" placeholder={t('budget.estimated')} value={estimated} onChange={(e) => setEstimated(e.target.value)} className="border border-sage/40 rounded-lg px-2.5 py-2 text-sm" />
-      <input type="number" placeholder={t('budget.actual')} value={actual} onChange={(e) => setActual(e.target.value)} className="border border-sage/40 rounded-lg px-2.5 py-2 text-sm" />
+    <div className="grid grid-cols-2 gap-2 pt-3 pb-2 border-t border-teal-dark/[0.07]">
+      <input placeholder={t('budget.category')} value={category} onChange={(e) => setCategory(e.target.value)} className="bg-white border border-teal-dark/15 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:border-teal-deep focus:ring-4 focus:ring-teal-deep/10" />
+      <input placeholder={t('budget.name')} value={name} onChange={(e) => setName(e.target.value)} className="bg-white border border-teal-dark/15 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:border-teal-deep focus:ring-4 focus:ring-teal-deep/10" />
+      <input type="number" placeholder={t('budget.estimated')} value={estimated} onChange={(e) => setEstimated(e.target.value)} className="bg-white border border-teal-dark/15 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:border-teal-deep focus:ring-4 focus:ring-teal-deep/10" />
+      <input type="number" placeholder={t('budget.actual')} value={actual} onChange={(e) => setActual(e.target.value)} className="bg-white border border-teal-dark/15 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:border-teal-deep focus:ring-4 focus:ring-teal-deep/10" />
       <div className="col-span-2 flex gap-2">
-        <button onClick={onSave} className="bg-gold text-white text-sm font-semibold px-4 py-2 rounded-full">
+        <button onClick={onSave} className="btn-gold">
           {t('budget.save')}
         </button>
         <button onClick={onCancel} className="text-sm text-teal-dark/50 px-2 py-2">

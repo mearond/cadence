@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
+import Modal from '../shared/Modal';
 import { useTranslation } from 'react-i18next';
-import { X } from 'lucide-react';
 import { createVendor, updateVendor, fetchVendorCategories, type Vendor, type VendorCategory } from '../../lib/events';
 import { isValidEmail, sanitizePhoneInput } from '../../lib/validation';
 
@@ -64,32 +64,25 @@ export default function VendorFormModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-sage/30">
-          <h2 className="text-lg font-bold text-teal-dark">{isEdit ? t('vendors.editTitle') : t('vendors.createTitle')}</h2>
-          <button onClick={onClose} className="p-1 rounded-lg hover:bg-sage-light text-teal-dark/50">
-            <X size={18} />
-          </button>
-        </div>
+    <Modal title={isEdit ? t('vendors.editTitle') : t('vendors.createTitle')} onClose={onClose} width="md">
 
-        <form onSubmit={handleSubmit} className="px-6 py-4 space-y-3">
+        <form onSubmit={handleSubmit} className="px-6 pt-2 pb-6 space-y-4">
           <div>
-            <label className="block text-xs font-medium text-teal-dark/60 mb-1">{t('vendors.name')}</label>
+            <label className="field-label">{t('vendors.name')}</label>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm"
+              className="input-sm"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-teal-dark/60 mb-1">{t('vendors.category')}</label>
+            <label className="field-label">{t('vendors.category')}</label>
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
-              className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm"
+              className="input-sm"
             >
               <option value="">{t('vendors.categoryNone')}</option>
               {categories.map((c) => (
@@ -102,43 +95,42 @@ export default function VendorFormModal({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-teal-dark/60 mb-1">{t('vendors.phone')}</label>
+              <label className="field-label">{t('vendors.phone')}</label>
               <input
                 value={phone}
                 onChange={(e) => setPhone(sanitizePhoneInput(e.target.value))}
                 inputMode="numeric"
                 maxLength={15}
-                className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm"
+                className="input-sm"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-teal-dark/60 mb-1">{t('vendors.email')}</label>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm" />
+              <label className="field-label">{t('vendors.email')}</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="input-sm" />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-teal-dark/60 mb-1">{t('vendors.tin')}</label>
-            <input value={tinNumber} onChange={(e) => setTinNumber(e.target.value)} className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm" />
+            <label className="field-label">{t('vendors.tin')}</label>
+            <input value={tinNumber} onChange={(e) => setTinNumber(e.target.value)} className="input-sm" />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-teal-dark/60 mb-1">{t('vendors.notes')}</label>
-            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className="w-full border border-sage/40 rounded-lg px-3 py-2 text-sm resize-none" />
+            <label className="field-label">{t('vendors.notes')}</label>
+            <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={2} className="input-sm resize-none" />
           </div>
 
-          {error && <p className="text-xs text-red-600">{error}</p>}
+          {error && <p role="alert" className="text-sm text-terracotta bg-terracotta-light/70 rounded-xl px-3.5 py-2.5">{error}</p>}
 
           <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 rounded-full text-sm font-medium text-teal-dark/60 hover:bg-sage-light">
+            <button type="button" onClick={onClose} className="btn-ghost">
               {t('vendors.cancel')}
             </button>
-            <button type="submit" disabled={saving} className="px-4 py-2 rounded-full text-sm font-semibold bg-gold text-white hover:bg-gold/90 disabled:opacity-50">
+            <button type="submit" disabled={saving} className="btn-primary">
               {saving ? '...' : t('vendors.save')}
             </button>
           </div>
         </form>
-      </div>
-    </div>
+    </Modal>
   );
 }

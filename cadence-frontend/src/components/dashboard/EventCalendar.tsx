@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 import {
   toEthiopian,
   ethiopianToGregorian,
@@ -59,11 +60,15 @@ export default function EventCalendar({ events }: { events: CalendarEvent[] }) {
   const navigate = useNavigate();
   const isAmharic = i18n.language === 'am';
 
+  // Starts on today (not the 1st) so the Amharic view opens on today's Ethiopian month,
+  // which usually begins partway through a Gregorian month.
   const [cursor, setCursor] = useState(() => {
     const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth(), 1);
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
   });
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  // -1 when moving back a month, 1 forward: the new month slides in from that side.
+  const [direction, setDirection] = useState(0);
 
   const eventsByGregDay = useMemo(() => {
     const map = new Map<string, CalendarEvent[]>();
@@ -155,6 +160,7 @@ export default function EventCalendar({ events }: { events: CalendarEvent[] }) {
   }, [isAmharic, cursor, cursorEth, eventsByGregDay, eventsByEthDay, todayEth, todayKey]);
 
   const goToPreviousMonth = () => {
+    setDirection(-1);
     if (isAmharic) {
       let m = cursorEth.month - 1;
       let y = cursorEth.year;
@@ -170,6 +176,7 @@ export default function EventCalendar({ events }: { events: CalendarEvent[] }) {
   };
 
   const goToNextMonth = () => {
+    setDirection(1);
     if (isAmharic) {
       let m = cursorEth.month + 1;
       let y = cursorEth.year;
@@ -188,15 +195,15 @@ export default function EventCalendar({ events }: { events: CalendarEvent[] }) {
   const selectedEvents = selectedCell?.dayEvents ?? [];
 
   return (
-    <div className="bg-white rounded-2xl border border-sage/30 p-6">
+    <div className="card p-5 sm:p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-semibold text-teal-dark/60 uppercase tracking-wide">{t('dashboard.calendar')}</h2>
-        <div className="flex items-center gap-2">
-          <button onClick={goToPreviousMonth} className="p-1.5 rounded-full hover:bg-sage-light text-teal-dark/60">
+        <h2 className="section-title">{t('dashboard.calendar')}</h2>
+        <div className="flex items-center gap-1">
+          <button onClick={goToPreviousMonth} className="icon-btn" aria-label="Previous month">
             <ChevronLeft size={15} />
           </button>
-          <p className="text-sm font-semibold text-teal-dark w-32 text-center capitalize">{monthLabel}</p>
-          <button onClick={goToNextMonth} className="p-1.5 rounded-full hover:bg-sage-light text-teal-dark/60">
+          <p className="font-display text-[15px] font-semibold text-teal-dark w-36 text-center capitalize">{monthLabel}</p>
+          <button onClick={goToNextMonth} className="icon-btn" aria-label="Next month">
             <ChevronRight size={15} />
           </button>
         </div>
@@ -204,13 +211,19 @@ export default function EventCalendar({ events }: { events: CalendarEvent[] }) {
 
       <div className="grid grid-cols-7 mb-1">
         {weekDayLabels.map((label) => (
-          <div key={label} className="text-center text-[11px] font-semibold text-teal-dark/40 py-1.5 uppercase">
+          <div key={label} className="text-center text-xs font-medium text-teal-dark/45 py-2">
             {label}
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-7 gap-1">
+      <motion.div
+        key={monthLabel}
+        className="grid grid-cols-7 gap-1"
+        initial={{ opacity: 0, x: direction * 24 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      >
         {cells.map((cell) => {
           const isSelected = cell.key === selectedKey;
           const bigLabel = isAmharic ? cell.ethDay : cell.gregDate.getDate();
@@ -220,20 +233,20 @@ export default function EventCalendar({ events }: { events: CalendarEvent[] }) {
             <button
               key={cell.key}
               onClick={() => setSelectedKey(cell.dayEvents.length > 0 ? cell.key : null)}
-              className={`aspect-square rounded-xl flex flex-col items-center justify-center gap-0.5 text-xs transition-colors ${
+              className={`h-12 sm:h-[62px] rounded-xl flex flex-col items-center justify-center gap-0.5 text-sm transition-colors ${
                 !cell.inMonth ? 'text-teal-dark/20' : 'text-teal-dark'
               } ${
                 isSelected
-                  ? 'bg-teal-deep text-white'
+                  ? 'bg-teal-deep text-white shadow-[0_8px_18px_-10px_rgb(19_95_90/0.9)]'
                   : cell.isToday
-                  ? 'bg-gold-light/40'
+                  ? 'bg-gold-light/35 ring-2 ring-gold/70 ring-inset font-semibold'
                   : cell.dayEvents.length > 0
-                  ? 'hover:bg-sage-light'
-                  : ''
+                  ? 'bg-sage-light/50 hover:bg-sage-light'
+                  : 'hover:bg-teal-dark/[0.03]'
               }`}
             >
-              <span className={cell.isToday && !isSelected ? 'font-bold' : ''}>{bigLabel}</span>
-              <span className={`text-[9px] leading-none ${isSelected ? 'text-white/70' : 'text-teal-dark/35'}`}>
+              <span className={cell.isToday && !isSelected ? 'font-semibold' : ''}>{bigLabel}</span>
+              <span className={`text-[10px] leading-none ${isSelected ? 'text-white/70' : 'text-teal-dark/35'}`}>
                 {smallLabel}
               </span>
               {cell.dayEvents.length > 0 && (
@@ -249,10 +262,10 @@ export default function EventCalendar({ events }: { events: CalendarEvent[] }) {
             </button>
           );
         })}
-      </div>
+      </motion.div>
 
       {selectedEvents.length > 0 && (
-        <div className="mt-4 pt-4 border-t border-sage/20 space-y-1.5">
+        <div className="mt-4 pt-4 border-t border-teal-dark/[0.07] space-y-1">
           {selectedEvents.map((ev) => {
             const displayName = i18n.language === 'am' && ev.name_am ? ev.name_am : ev.name;
             return (

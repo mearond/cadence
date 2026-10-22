@@ -1,19 +1,23 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { LogOut, Languages } from 'lucide-react';
+import { LogOut, Menu } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
+import { useUIStore } from '../../store/uiStore';
+import LanguageToggle from '../shared/LanguageToggle';
+
+const ROLE_KEYS: Record<string, string> = {
+  owner: 'staffPage.roleOwner',
+  manager: 'staffPage.roleManager',
+  coordinator: 'staffPage.roleCoordinator',
+  staff: 'staffPage.roleStaff',
+};
 
 export default function Topbar() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
-
-  const toggleLanguage = () => {
-    const newLang = i18n.language === 'en' ? 'am' : 'en';
-    i18n.changeLanguage(newLang);
-    localStorage.setItem('cadence_lang', newLang);
-  };
+  const setMobileNavOpen = useUIStore((s) => s.setMobileNavOpen);
 
   const handleLogout = () => {
     logout();
@@ -24,27 +28,30 @@ export default function Topbar() {
     ?.split(' ')
     .map((w) => w[0])
     .slice(0, 2)
-    .join('');
+    .join('')
+    .toUpperCase();
 
   return (
-     <header className="h-[72px] bg-teal-deep/5 backdrop-blur-sm border-b border-teal-deep/10 flex items-center justify-between px-8 sticky top-0 z-10">      <div />
-      <div className="flex items-center gap-3">
-        <button
-          onClick={toggleLanguage}
-          className="flex items-center gap-1.5 text-xs font-semibold px-3.5 py-2 rounded-full border border-gold/40 text-teal-dark hover:bg-gold-light/20 transition-colors"
-        >
-          <Languages size={13} />
-          {i18n.language === 'en' ? 'አማርኛ' : 'English'}
-        </button>
+    <header className="h-16 md:h-[72px] flex items-center justify-between gap-3 px-4 md:px-10 sticky top-0 z-30 bg-cream/75 backdrop-blur-xl border-b border-teal-dark/[0.06]">
+      <button onClick={() => setMobileNavOpen(true)} className="icon-btn md:hidden w-10 h-10" aria-label={t('nav.menu')}>
+        <Menu size={20} />
+      </button>
+      <div className="hidden md:block" />
 
-        <div className="flex items-center gap-2.5 pl-3 border-l border-sage/40">
-          <span className="w-8 h-8 rounded-full bg-teal-deep text-white text-xs font-semibold flex items-center justify-center">
+      <div className="flex items-center gap-2 sm:gap-3">
+        <LanguageToggle />
+        <div className="flex items-center gap-3 pl-2 sm:pl-4 sm:ml-1 sm:border-l border-teal-dark/10">
+          <span className="w-9 h-9 rounded-full bg-gradient-to-br from-teal-deep to-teal-dark text-gold-light text-xs font-semibold grid place-items-center ring-2 ring-paper shadow-sm">
             {initials}
           </span>
-          <span className="text-sm text-teal-dark font-medium hidden sm:block">{user?.name}</span>
+          <span className="hidden sm:flex flex-col leading-tight">
+            <span className="text-sm font-semibold text-teal-dark">{user?.name}</span>
+            {user?.role && ROLE_KEYS[user.role] && (
+              <span className="text-xs text-teal-dark/50">{t(ROLE_KEYS[user.role])}</span>
+            )}
+          </span>
         </div>
-
-        <button onClick={handleLogout} className="p-2 text-teal-dark/50 hover:text-gold transition-colors" title={t('nav.logout')}>
+        <button onClick={handleLogout} className="icon-btn w-9 h-9" title={t('nav.logout')} aria-label={t('nav.logout')}>
           <LogOut size={17} />
         </button>
       </div>
