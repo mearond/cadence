@@ -73,7 +73,7 @@ export default function Staff() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+      <div className="stagger-grid grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
         {staff.map((member, i) => (
           <motion.div
             key={member.id}

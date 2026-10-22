@@ -9,8 +9,9 @@
     "staff": "ሰራተኞች",
     "logout": "ውጣ",
     "operations": "የዝግጅት ስራዎች",
-    "collapse": "ሰብስብ",
-    "menu": "ምናሌ ክፈት"
+    "collapse": "የጎን አሞሌውን ሰብስብ",
+    "menu": "ምናሌ ክፈት",
+    "expand": "የጎን አሞሌውን ዘርጋ"
   },
   "auth": {
     "signIn": "ግባ",

@@ -62,11 +62,11 @@ type Tab = 'timeline' | 'budget' | 'vendors' | 'tasks' | 'approvals';
 function CardHeader({ icon, title, onViewAll, t }: { icon: React.ReactNode; title: string; onViewAll: () => void; t: (k: string) => string }) {
   return (
     <div className="flex items-center justify-between mb-3">
-      <h3 className="flex items-center gap-1.5 text-sm font-semibold text-teal-dark">
-        {icon}
+      <h3 className="flex items-center gap-2.5 font-display text-[15px] font-semibold text-teal-dark">
+        <span className="icon-tile">{icon}</span>
         {title}
       </h3>
-      <button onClick={onViewAll} className="text-xs font-semibold text-teal-deep hover:text-teal-dark">
+      <button onClick={onViewAll} className="text-[13px] font-semibold text-teal-deep hover:text-teal-dark underline-offset-4 hover:underline">
         {t('overview.viewAll')}
       </button>
     </div>
@@ -128,9 +128,9 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
   const pendingApprovals = approvals.filter((a) => a.status === 'pending');
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="stagger-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <div className="card p-5">
-        <CardHeader icon={<Clock size={15} className="text-teal-deep/60" />} title={t('eventTabs.timeline')} onViewAll={() => onNavigate('timeline')} t={t} />
+        <CardHeader icon={<Clock size={15} className="text-teal-deep" />} title={t('eventTabs.timeline')} onViewAll={() => onNavigate('timeline')} t={t} />
         {timeline.length === 0 ? (
           <p className="text-sm text-teal-dark/40">{t('timeline.empty')}</p>
         ) : (
@@ -148,7 +148,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
 
       {showBudget && (
       <div className="card p-5">
-        <CardHeader icon={<Wallet size={15} className="text-teal-deep/60" />} title={t('eventTabs.budget')} onViewAll={() => onNavigate('budget')} t={t} />
+        <CardHeader icon={<Wallet size={15} className="text-teal-deep" />} title={t('eventTabs.budget')} onViewAll={() => onNavigate('budget')} t={t} />
         {budget ? (
           <div className="space-y-1.5 text-sm">
             <div className="flex items-center justify-between">
@@ -172,7 +172,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
 
       {showVendors && (
       <div className="card p-5">
-        <CardHeader icon={<Building2 size={15} className="text-teal-deep/60" />} title={t('eventTabs.vendors')} onViewAll={() => onNavigate('vendors')} t={t} />
+        <CardHeader icon={<Building2 size={15} className="text-teal-deep" />} title={t('eventTabs.vendors')} onViewAll={() => onNavigate('vendors')} t={t} />
         {vendors.length === 0 ? (
           <p className="text-sm text-teal-dark/40">{t('vendors.empty')}</p>
         ) : (
@@ -194,7 +194,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
       )}
 
       <div className="card p-5">
-        <CardHeader icon={<ListChecks size={15} className="text-teal-deep/60" />} title={t('eventTabs.tasks')} onViewAll={() => onNavigate('tasks')} t={t} />
+        <CardHeader icon={<ListChecks size={15} className="text-teal-deep" />} title={t('eventTabs.tasks')} onViewAll={() => onNavigate('tasks')} t={t} />
         {tasks.length === 0 ? (
           <p className="text-sm text-teal-dark/40">{t('tasks.empty')}</p>
         ) : (
@@ -222,7 +222,7 @@ export default function OverviewTab({ eventId, onNavigate }: { eventId: string; 
 
       {showApprovals && (
       <div className="card p-5 sm:col-span-2 lg:col-span-1">
-        <CardHeader icon={<Stamp size={15} className="text-teal-deep/60" />} title={t('eventTabs.approvals')} onViewAll={() => onNavigate('approvals')} t={t} />
+        <CardHeader icon={<Stamp size={15} className="text-teal-deep" />} title={t('eventTabs.approvals')} onViewAll={() => onNavigate('approvals')} t={t} />
         <p className="text-[11px] text-teal-dark/40 mb-2 -mt-1">{t('overview.approvalsHint')}</p>
         {approvals.length === 0 ? (
           <p className="text-sm text-teal-dark/40">{t('approvals.empty')}</p>

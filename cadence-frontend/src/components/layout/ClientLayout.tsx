@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { LogOut } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import Tilet from '../shared/Tilet';
@@ -42,14 +41,7 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
         </div>
         <Tilet size={10} tone="ink" weave />
       </header>
-      <motion.main
-        className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-      >
-        {children}
-      </motion.main>
+      <main className="stagger max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10">{children}</main>
     </div>
   );
 }

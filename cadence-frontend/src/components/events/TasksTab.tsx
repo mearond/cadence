@@ -104,7 +104,7 @@ export default function TasksTab({ eventId }: { eventId: string }) {
       })()}
       {tasks.length === 0 && formMode === 'none' && <p className="text-sm text-teal-dark/50 mb-4">{t('tasks.empty')}</p>}
 
-      <div className="space-y-1 mb-4">
+      <div className="stagger-grid space-y-1 mb-4">
         {tasks.map((task) =>
           formMode === task.id ? (
             <TaskForm key={task.id} t={t} title={title} setTitle={setTitle} priority={priority} setPriority={setPriority} onSave={handleSave} onCancel={resetForm} />

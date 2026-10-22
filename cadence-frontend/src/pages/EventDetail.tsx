@@ -141,7 +141,7 @@ export default function EventDetail() {
       </section>
 
       {event.status === 'completed' && (
-        <div className="card p-5 mt-5 flex flex-wrap items-center gap-x-6 gap-y-2">
+        <div className="card-gold p-5 mt-5 flex flex-wrap items-center gap-x-6 gap-y-2">
           <p className="section-title">{t('rating.clientRating')}</p>
           {rating ? (
             <div className="flex flex-wrap items-center gap-4">

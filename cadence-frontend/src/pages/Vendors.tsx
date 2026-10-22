@@ -65,7 +65,7 @@ export default function Vendors() {
 
       {!loading && (
         <>
-          <dl className="card grid grid-cols-3 divide-x divide-teal-dark/[0.07] mb-8">
+          <dl className="card-sage grid grid-cols-3 divide-x divide-teal-dark/[0.08] mb-8">
             {[
               { icon: Building2, label: t('vendorsPage.totalVendors'), value: vendors.length },
               { icon: Tag, label: t('vendorsPage.categoriesInUse'), value: categoriesInUse },
@@ -86,7 +86,7 @@ export default function Vendors() {
           {mostPopular.length > 0 && (
             <div className="mb-10">
               <h2 className="section-title text-lg mb-4">{t('vendorsPage.mostPopular')}</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="stagger-grid grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {mostPopular.map((v, i) => {
                   const categoryName = i18n.language === 'am' ? v.category_name_am : v.category_name_en;
                   return (
@@ -121,7 +121,7 @@ export default function Vendors() {
               <p className="text-sm text-teal-dark/50">{t('vendorsPage.empty')}</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="stagger-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {vendors.map((v, i) => {
                 const categoryName = i18n.language === 'am' ? v.category_name_am : v.category_name_en;
                 return (

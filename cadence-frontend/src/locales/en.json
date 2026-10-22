@@ -9,8 +9,9 @@
     "staff": "Staff",
     "logout": "Logout",
     "operations": "Operations",
-    "collapse": "Collapse",
-    "menu": "Open menu"
+    "collapse": "Collapse sidebar",
+    "menu": "Open menu",
+    "expand": "Expand sidebar"
   },
   "auth": {
     "signIn": "Sign In",

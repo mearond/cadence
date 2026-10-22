@@ -8,6 +8,7 @@ import DateDisplay from '../components/shared/DateDisplay';
 import EventCalendar from '../components/dashboard/EventCalendar';
 import { useAuthStore } from '../store/authStore';
 import Tilet from '../components/shared/Tilet';
+import DateBlock from '../components/shared/DateBlock';
 import CountUp from '../components/shared/CountUp';
 import { todayInBothCalendars } from '../lib/today';
 import { fetchDashboardSummary, type DashboardSummary } from '../lib/dashboard';
@@ -72,14 +73,14 @@ export default function Dashboard() {
         <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] items-end px-6 sm:px-10 pt-9 pb-8">
           <div>
             <p className="text-gold-light/90 text-[15px] mb-2">{t('dashboard.greeting', { name: firstName })}</p>
-            <h1 className="font-display font-semibold leading-[0.95] text-[clamp(2.4rem,5.5vw,4.25rem)]">
+            <h1 className="font-display font-semibold leading-[0.95] text-[clamp(1.85rem,3.6vw,2.9rem)]">
               {today.primary}
             </h1>
             <p className="mt-3 text-white/60">{today.secondary}</p>
           </div>
           <div className="flex items-end gap-4">
             <div className="text-right">
-              <p className="font-display text-5xl font-semibold leading-none text-gold-light">
+              <p className="font-display text-[2.6rem] font-semibold leading-none text-gold-light">
                 <CountUp value={upcomingCount} />
               </p>
               <p className="text-sm text-white/60 mt-1.5">{t('dashboard.upcomingCount', { count: upcomingCount })}</p>
@@ -120,7 +121,7 @@ export default function Dashboard() {
                 );
               })}
             </div>
-            <dl className="grid grid-cols-2 sm:grid-cols-5 gap-x-4 gap-y-4">
+            <dl className="stagger-grid grid grid-cols-2 sm:grid-cols-5 gap-x-4 gap-y-4">
               {statusOrder.map((status) => (
                 <button
                   key={status}
@@ -139,7 +140,7 @@ export default function Dashboard() {
             </dl>
           </section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="stagger-grid grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
               <EventCalendar events={data.allEvents} />
             </div>
@@ -152,7 +153,7 @@ export default function Dashboard() {
                 {data.upcomingEvents.length === 0 && (
                   <p className="text-sm text-teal-dark/40">{t('dashboard.noUpcoming')}</p>
                 )}
-                <div className="divide-y divide-teal-dark/[0.06]">
+                <div className="stagger-grid divide-y divide-teal-dark/[0.06]">
                   {data.upcomingEvents.map((event) => {
                     const displayName = i18n.language === 'am' && event.name_am ? event.name_am : event.name;
                     return (
@@ -161,8 +162,9 @@ export default function Dashboard() {
                         onClick={() => navigate(`/events/${event.id}`)}
                         className="w-full text-left flex items-start justify-between gap-3 rounded-xl -mx-2 px-2 py-2.5 hover:bg-teal-dark/[0.04] transition-colors"
                       >
-                        <div>
-                          <p className="text-[15px] font-medium text-teal-dark">{displayName}</p>
+                        <DateBlock iso={event.start_date} size="sm" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[15px] font-medium text-teal-dark truncate">{displayName}</p>
                           <span className="flex items-center gap-1 text-xs text-teal-dark/50 mt-0.5">
                             <CalendarDays size={11} />
                             <DateDisplay iso={event.start_date} />
@@ -183,7 +185,7 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="card p-6">
+              <div className="card-sage p-6">
                 <h2 className="section-title mb-4 flex items-center gap-1.5">
                   <ClipboardList size={14} />
                   {t('dashboard.pendingTasks')}
@@ -191,7 +193,7 @@ export default function Dashboard() {
                 {data.pendingTasks.length === 0 && (
                   <p className="text-sm text-teal-dark/40">{t('dashboard.noPendingTasks')}</p>
                 )}
-                <div className="divide-y divide-teal-dark/[0.06]">
+                <div className="stagger-grid divide-y divide-teal-dark/[0.06]">
                   {data.pendingTasks.map((task) => (
                     <button
                       key={task.id}

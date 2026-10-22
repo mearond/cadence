@@ -38,7 +38,7 @@ export default function ClientPortal() {
 
       {events.length === 0 && <p className="text-sm text-teal-dark/50">{t('portal.noEvents')}</p>}
 
-      <div className="space-y-3">
+      <div className="stagger-grid space-y-3">
         {events.map((event) => {
           const displayName = i18n.language === 'am' && event.name_am ? event.name_am : event.name;
           return (

@@ -60,7 +60,7 @@ export default function NewEvent() {
             <div className="max-w-2xl mx-auto">
         <PageHeader title={t('eventForm.createTitle')} />
 
-                <form onSubmit={handleSubmit} className="relative card overflow-hidden p-6 sm:p-8 pt-9 sm:pt-10 space-y-5">
+                <form onSubmit={handleSubmit} className="stagger-grid relative card overflow-hidden p-6 sm:p-8 pt-9 sm:pt-10 space-y-5">
           <div className="absolute inset-x-0 top-0">
             <Tilet size={9} weave />
           </div>

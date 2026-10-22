@@ -142,7 +142,7 @@ export default function ClientEventDetail() {
       <section className="card p-6 mb-6">
         <h2 className="section-title mb-4">{t('portal.timeline')}</h2>
         {timeline.length === 0 && <p className="text-sm text-teal-dark/40">{t('timeline.empty')}</p>}
-        <ol>
+        <ol className="stagger-grid">
           {timeline.map((item, i) => {
             const itemName = i18n.language === 'am' && item.title_am ? item.title_am : item.title;
             return (
@@ -180,7 +180,7 @@ export default function ClientEventDetail() {
       <section className="card p-6">
         <h2 className="section-title mb-4">{t('portal.approvals.title')}</h2>
         {approvals.length === 0 && <p className="text-sm text-teal-dark/40">{t('portal.approvals.empty')}</p>}
-        <div className="space-y-3">
+        <div className="stagger-grid space-y-3">
           {approvals.map((a) => (
             <div key={a.id} className={`rounded-2xl p-4 sm:p-5 border ${a.status === 'pending' ? 'border-gold/40 bg-gold-light/10' : 'border-teal-dark/[0.08]'}`}>
               <div className="flex items-center justify-between mb-1">

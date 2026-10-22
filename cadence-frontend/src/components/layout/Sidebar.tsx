@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
-import { LayoutGrid, CalendarDays, Building2, Users, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react';
+import { LayoutGrid, CalendarDays, Building2, Users, ChevronLeft, X } from 'lucide-react';
 import { useUIStore } from '../../store/uiStore';
 import { useCan } from '../../lib/permissions';
 import Tilet from '../shared/Tilet';
@@ -49,7 +49,7 @@ function NavLinks({ collapsed, layoutGroup }: { collapsed: boolean; layoutGroup:
   };
 
   return (
-    <nav className="flex-1 px-3 space-y-1">
+    <nav className="flex-1 px-3 pb-6 space-y-1">
       {main.map(renderLink)}
       {operations.length > 0 && (
         <div className="pt-5 mt-5 border-t border-white/10 space-y-1">
@@ -94,27 +94,28 @@ export default function Sidebar() {
       <motion.aside
         animate={{ width: collapsed ? 84 : 248 }}
         transition={{ type: 'spring', stiffness: 320, damping: 34 }}
-        className="hidden md:flex relative flex-col h-screen sticky top-0 shrink-0 bg-teal-ink text-white"
+        className="hidden md:flex relative z-40 flex-col h-screen sticky top-0 shrink-0 bg-teal-ink text-white"
       >
         <div className="py-6">
           <Brand collapsed={collapsed} />
         </div>
         <NavLinks collapsed={collapsed} layoutGroup="desktop" />
-        <div className={`p-3 ${collapsed ? 'flex justify-center' : ''}`}>
-          <button
-            onClick={toggleSidebar}
-            className={`flex items-center gap-3 h-10 rounded-xl text-sm text-white/50 hover:text-white hover:bg-white/[0.06] transition-colors ${
-              collapsed ? 'w-10 justify-center' : 'w-full px-3.5'
-            }`}
-            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
-            {!collapsed && <span>{t('nav.collapse')}</span>}
-          </button>
-        </div>
         <div className="absolute top-0 right-0 h-full">
           <Tilet vertical size={10} tone="ink" weave />
         </div>
+        {/* Round arrow on the sidebar's edge, halfway down, to collapse or expand it. */}
+        <motion.button
+          onClick={toggleSidebar}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          title={collapsed ? t('nav.expand') : t('nav.collapse')}
+          whileHover={{ scale: 1.12 }}
+          whileTap={{ scale: 0.92 }}
+          className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 grid place-items-center w-8 h-8 rounded-full bg-gradient-to-b from-gold-light to-gold text-teal-ink shadow-[0_6px_16px_-6px_rgb(10_40_38/0.7)] ring-4 ring-cream"
+        >
+          <motion.span animate={{ rotate: collapsed ? 180 : 0 }} transition={{ type: 'spring', stiffness: 400, damping: 26 }} className="grid place-items-center">
+            <ChevronLeft size={16} strokeWidth={2.6} />
+          </motion.span>
+        </motion.button>
       </motion.aside>
 
       {/* Phone: slides over the page */}

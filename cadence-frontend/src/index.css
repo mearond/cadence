@@ -14,8 +14,8 @@
   --color-gold-light: #ecca83;
   --color-sage: #93b88f;
   --color-sage-light: #e2ebde;
-  --color-cream: #eef1ec;       /* page background ("mist") */
-  --color-paper: #fbfcfa;       /* card surface */
+  --color-cream: #e9eee7;       /* page background ("mist") */
+  --color-paper: #f8faf5;       /* card surface: off-white with a sage tint, never pure white */
   --color-terracotta: #b4512c;  /* danger, critical priority */
   --color-terracotta-light: #f4e1d8;
 
@@ -33,6 +33,13 @@
   body {
     @apply bg-cream text-teal-dark font-sans;
     font-feature-settings: "ss01", "cv11";
+    /* Soft teal and gold glows plus a faint woven diamond texture, so large
+       light areas don't read as flat white. Fixed, so it stays put on scroll. */
+    background-image:
+      radial-gradient(60rem 40rem at 100% -10%, rgb(19 95 90 / 0.10), transparent 60%),
+      radial-gradient(50rem 36rem at -10% 110%, rgb(196 144 45 / 0.10), transparent 60%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cpath d='M14 6l8 8-8 8-8-8z' fill='none' stroke='%230e3735' stroke-opacity='0.05'/%3E%3C/svg%3E");
+    background-attachment: fixed;
   }
   h1, h2, h3 {
     @apply font-display;
@@ -56,7 +63,7 @@
 @utility card {
   background-color: var(--color-paper);
   border-radius: 1rem;
-  border: 1px solid rgb(14 55 53 / 0.07);
+  border: 1px solid rgb(14 55 53 / 0.08);
   box-shadow:
     0 1px 0 rgb(255 255 255 / 0.8) inset,
     0 1px 2px rgb(14 55 53 / 0.04),
@@ -164,6 +171,59 @@
     opacity: 0.7;
   }
 }
+
+/* Tinted surfaces to break up runs of light cards. */
+@utility card-sage {
+  @apply card;
+  background: linear-gradient(160deg, #e3ece0, #edf2ea);
+  border-color: rgb(19 95 90 / 0.12);
+}
+@utility card-gold {
+  @apply card;
+  background: linear-gradient(160deg, #f6ead0, #f8f1e2);
+  border-color: rgb(196 144 45 / 0.25);
+}
+/* Small coloured square behind a section icon. */
+@utility icon-tile {
+  @apply inline-grid place-items-center w-8 h-8 rounded-lg bg-sage-light text-teal-deep shrink-0;
+}
+
+/* Entrance animations.
+   .stagger: each direct child rises in, one after another (page sections).
+   .stagger-grid: the same for items in a grid or list, a little quicker.
+   "backwards" fill leaves no transform behind once finished, so fixed-position
+   pop-ups inside these elements still position correctly. */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.stagger > * {
+  animation: rise-in 0.6s var(--ease-out-soft) backwards;
+}
+.stagger-grid > * {
+  animation: rise-in 0.5s var(--ease-out-soft) backwards;
+}
+.stagger > :nth-child(1) { animation-delay: 0.02s; }
+.stagger > :nth-child(2) { animation-delay: 0.1s; }
+.stagger > :nth-child(3) { animation-delay: 0.18s; }
+.stagger > :nth-child(4) { animation-delay: 0.26s; }
+.stagger > :nth-child(5) { animation-delay: 0.34s; }
+.stagger > :nth-child(6) { animation-delay: 0.42s; }
+.stagger > :nth-child(n + 7) { animation-delay: 0.5s; }
+.stagger-grid > :nth-child(1) { animation-delay: 0.15s; }
+.stagger-grid > :nth-child(2) { animation-delay: 0.22s; }
+.stagger-grid > :nth-child(3) { animation-delay: 0.29s; }
+.stagger-grid > :nth-child(4) { animation-delay: 0.36s; }
+.stagger-grid > :nth-child(5) { animation-delay: 0.43s; }
+.stagger-grid > :nth-child(6) { animation-delay: 0.5s; }
+.stagger-grid > :nth-child(7) { animation-delay: 0.57s; }
+.stagger-grid > :nth-child(n + 8) { animation-delay: 0.64s; }
 
 /* The tilet band: woven border motif drawn by <Tilet />. */
 .tilet-weave {

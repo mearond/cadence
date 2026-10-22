@@ -130,7 +130,7 @@ export default function BudgetTab({ eventId }: { eventId: string }) {
       <div className="card p-6">
         {items.length === 0 && formMode === 'none' && <p className="text-sm text-teal-dark/50 mb-4">{t('budget.empty')}</p>}
 
-        <div className="space-y-1 mb-4">
+        <div className="stagger-grid space-y-1 mb-4">
           {items.map((item) =>
             formMode === item.id ? (
               <BudgetForm

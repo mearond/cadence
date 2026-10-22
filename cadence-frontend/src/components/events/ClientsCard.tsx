@@ -37,7 +37,7 @@ export default function ClientsCard({ eventId, onAddClick }: { eventId: string; 
   };
 
   return (
-    <div className="card p-5 mt-5">
+    <div className="card-sage p-5 mt-5">
       <div className="flex items-center justify-between mb-3">
         <p className="section-title">{t('clients.title')}</p>
         {canManage && (
@@ -55,7 +55,7 @@ export default function ClientsCard({ eventId, onAddClick }: { eventId: string; 
       ) : (
         <div className="flex flex-wrap gap-2">
           {clients.map((client) => (
-            <div key={client.id} className="flex items-center gap-3 bg-sage-light/60 rounded-full pl-1.5 pr-2 py-1.5">
+            <div key={client.id} className="flex items-center gap-3 bg-paper/80 rounded-full pl-1.5 pr-2 py-1.5">
               <span className="grid place-items-center w-8 h-8 rounded-full bg-teal-deep text-gold-light text-xs font-semibold shrink-0">{client.name.slice(0, 1).toUpperCase()}</span>
               <div className="min-w-0">
                 <p className="text-sm font-medium text-teal-dark truncate">{client.name}</p>
