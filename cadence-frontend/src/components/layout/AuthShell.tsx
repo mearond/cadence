@@ -89,17 +89,11 @@ export default function AuthShell({ title, subtitle, children }: Props) {
           </div>
         </div>
 
-        {/* Woven bands across the foot of the panel. */}
-        <div className="relative -mx-10 xl:-mx-14 -mb-9 space-y-2 pb-9">
-          <Tilet size={26} tone="gold" weave />
-          <div style={{ animationDelay: '0.15s' }} className="tilet-weave">
-            <Tilet size={18} tone="teal" />
-          </div>
-          <div style={{ animationDelay: '0.3s' }} className="tilet-weave">
-            <Tilet size={11} tone="gold" />
-          </div>
-          <div style={{ animationDelay: '0.45s' }} className="tilet-weave">
-            <Tilet size={7} tone="teal" />
+        {/* A single slim woven band across the foot of the panel, kept quiet. */}
+        <div className="relative -mx-10 xl:-mx-14 -mb-9 pb-9 space-y-1.5 opacity-80">
+          <Tilet size={10} tone="gold" weave />
+          <div style={{ animationDelay: '0.2s' }} className="tilet-weave">
+            <Tilet size={5} tone="teal" />
           </div>
         </div>
       </aside>
