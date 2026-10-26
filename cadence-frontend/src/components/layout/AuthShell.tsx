@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import Tilet from '../shared/Tilet';
+import AuthArt from './AuthArt';
 import LanguageToggle from '../shared/LanguageToggle';
 import { todayInBothCalendars } from '../../lib/today';
 
@@ -11,10 +12,6 @@ interface Props {
   children: ReactNode;
 }
 
-const rise = {
-  hidden: { opacity: 0, y: 14 },
-  show: { opacity: 1, y: 0 },
-};
 
 // Sign in, sign up and set password: an ink panel woven with tilet bands beside the form.
 export default function AuthShell({ title, subtitle, children }: Props) {
@@ -24,7 +21,7 @@ export default function AuthShell({ title, subtitle, children }: Props) {
   return (
     <div className="min-h-screen grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] bg-cream">
       {/* Brand panel */}
-      <aside className="relative hidden lg:flex flex-col justify-between overflow-hidden bg-teal-ink text-white p-12 xl:p-16">
+      <aside className="relative hidden lg:flex flex-col h-screen sticky top-0 overflow-hidden bg-teal-ink text-white px-10 xl:px-14 py-9">
         <div
           className="absolute inset-0 opacity-[0.55] pointer-events-none"
           style={{
@@ -39,31 +36,25 @@ export default function AuthShell({ title, subtitle, children }: Props) {
           <span className="font-display font-semibold text-2xl tracking-tight">{t('app.name')}</span>
         </div>
 
-        <motion.div
-          className="relative max-w-lg"
-          initial="hidden"
-          animate="show"
-          transition={{ staggerChildren: 0.12, delayChildren: 0.15 }}
+        <motion.h1
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+          className="relative mt-[clamp(1.25rem,4vh,3rem)] font-display text-[clamp(1.9rem,2.6vw,2.9rem)] leading-[1.05] font-semibold text-gold-light max-w-[16ch]"
         >
-          <motion.h1
-            variants={rise}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="font-display text-[clamp(2.4rem,3.6vw,3.6rem)] leading-[1.02] font-semibold text-gold-light"
-          >
-            {t('authPanel.headline')}
-          </motion.h1>
-          <motion.p
-            variants={rise}
-            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 text-lg leading-relaxed text-white/70 max-w-md"
-          >
-            {t('authPanel.body')}
-          </motion.p>
-        </motion.div>
+          {t('authPanel.headline')}
+        </motion.h1>
+
+        {/* The artwork takes whatever height is left, as a square, so it never runs into the bands. */}
+        <div className="relative flex-1 min-h-0 flex items-center justify-center py-[clamp(0.75rem,3vh,2rem)]">
+          <div className="h-full max-h-[480px] aspect-square max-w-full">
+            <AuthArt />
+          </div>
+        </div>
 
         <div className="relative">
-          <div className="space-y-2 mb-8 -mx-12 xl:-mx-16">
-            <Tilet size={18} tone="gold" weave />
+          <div className="space-y-1.5 mb-6 -mx-10 xl:-mx-14">
+            <Tilet size={14} tone="gold" weave />
             <div style={{ animationDelay: '0.15s' }} className="tilet-weave">
               <Tilet size={12} tone="teal" />
             </div>
