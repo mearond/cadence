@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import Tilet from '../shared/Tilet';
 import AuthArt from './AuthArt';
 import LanguageToggle from '../shared/LanguageToggle';
-import { todayInBothCalendars } from '../../lib/today';
+import { Clock, Wallet, Stamp } from 'lucide-react';
 
 interface Props {
   title: string;
@@ -13,13 +13,23 @@ interface Props {
 }
 
 
+const rise = {
+  hidden: { opacity: 0, y: 14 },
+  show: { opacity: 1, y: 0 },
+};
+
+const FEATURES = [
+  { icon: Clock, key: 'timelines' },
+  { icon: Wallet, key: 'budgets' },
+  { icon: Stamp, key: 'approvals' },
+];
+
 // Sign in, sign up and set password: an ink panel woven with tilet bands beside the form.
 export default function AuthShell({ title, subtitle, children }: Props) {
-  const { t, i18n } = useTranslation();
-  const today = todayInBothCalendars(i18n.language);
+  const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen grid lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] bg-cream">
+    <div className="min-h-screen grid lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] bg-cream">
       {/* Brand panel */}
       <aside className="relative hidden lg:flex flex-col h-screen sticky top-0 overflow-hidden bg-teal-ink text-white px-10 xl:px-14 py-9">
         <div
@@ -36,37 +46,61 @@ export default function AuthShell({ title, subtitle, children }: Props) {
           <span className="font-display font-semibold text-2xl tracking-tight">{t('app.name')}</span>
         </div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-          className="relative mt-[clamp(1.25rem,4vh,3rem)] font-display text-[clamp(1.9rem,2.6vw,2.9rem)] leading-[1.05] font-semibold text-gold-light max-w-[16ch]"
-        >
-          {t('authPanel.headline')}
-        </motion.h1>
+        {/* Text and artwork side by side on wide screens, stacked on narrower ones. */}
+        <div className="relative flex-1 min-h-0 grid grid-rows-[auto_minmax(0,1fr)] xl:grid-rows-1 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] items-center gap-x-10 gap-y-4 py-[clamp(1rem,4vh,2.5rem)]">
+          <motion.div
+            initial="hidden"
+            animate="show"
+            transition={{ staggerChildren: 0.12, delayChildren: 0.1 }}
+            className="max-w-xl"
+          >
+            <motion.h1
+              variants={rise}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="font-display text-[clamp(2.3rem,3.3vw,3.75rem)] leading-[1.02] font-semibold text-gold-light"
+            >
+              {t('authPanel.headline')}
+            </motion.h1>
+            <motion.p
+              variants={rise}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-5 text-[clamp(1rem,1.15vw,1.2rem)] leading-relaxed text-white/70 max-w-[40ch]"
+            >
+              {t('authPanel.body')}
+            </motion.p>
+            <motion.ul variants={rise} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="mt-6 flex flex-wrap gap-2">
+              {FEATURES.map(({ icon: Icon, key }) => (
+                <li
+                  key={key}
+                  className="flex items-center gap-2 rounded-full border border-gold/30 bg-white/[0.04] pl-2.5 pr-3.5 py-1.5 text-sm text-white/85"
+                >
+                  <Icon size={15} className="text-gold-light" />
+                  {t(`authPanel.features.${key}`)}
+                </li>
+              ))}
+            </motion.ul>
+          </motion.div>
 
-        {/* The artwork takes whatever height is left, as a square, so it never runs into the bands. */}
-        <div className="relative flex-1 min-h-0 flex items-center justify-center py-[clamp(0.75rem,3vh,2rem)]">
-          <div className="h-full max-h-[480px] aspect-square max-w-full">
-            <AuthArt />
+          {/* The artwork takes the space left (as a square), so it never runs into the bands. */}
+          <div className="h-full min-h-0 flex items-center justify-center">
+            <div className="h-full max-h-[400px] aspect-square max-w-full">
+              <AuthArt />
+            </div>
           </div>
         </div>
 
-        <div className="relative">
-          <div className="space-y-1.5 mb-6 -mx-10 xl:-mx-14">
-            <Tilet size={14} tone="gold" weave />
-            <div style={{ animationDelay: '0.15s' }} className="tilet-weave">
-              <Tilet size={12} tone="teal" />
-            </div>
-            <div style={{ animationDelay: '0.3s' }} className="tilet-weave">
-              <Tilet size={7} tone="gold" />
-            </div>
+        {/* Woven bands across the foot of the panel. */}
+        <div className="relative -mx-10 xl:-mx-14 -mb-9 space-y-2 pb-9">
+          <Tilet size={26} tone="gold" weave />
+          <div style={{ animationDelay: '0.15s' }} className="tilet-weave">
+            <Tilet size={18} tone="teal" />
           </div>
-          <p className="text-sm text-white/55">
-            <span className="text-white/85 font-medium">{today.primary}</span>
-            <span className="mx-2 text-white/25">/</span>
-            {today.secondary}
-          </p>
+          <div style={{ animationDelay: '0.3s' }} className="tilet-weave">
+            <Tilet size={11} tone="gold" />
+          </div>
+          <div style={{ animationDelay: '0.45s' }} className="tilet-weave">
+            <Tilet size={7} tone="teal" />
+          </div>
         </div>
       </aside>
 

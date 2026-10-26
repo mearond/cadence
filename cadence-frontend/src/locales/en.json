@@ -306,6 +306,11 @@
   },
   "authPanel": {
     "headline": "Plan every celebration, together.",
-    "body": "Timelines, budgets in birr, vendors and client approvals, shared with your team and your clients."
+    "body": "One place for your team and your clients, from the first booking to the last dance.",
+    "features": {
+      "timelines": "Day-of timelines",
+      "budgets": "Budgets in birr",
+      "approvals": "Client approvals"
+    }
   }
 }
