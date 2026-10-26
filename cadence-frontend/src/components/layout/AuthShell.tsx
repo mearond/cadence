@@ -83,8 +83,12 @@ export default function AuthShell({ title, subtitle, children }: Props) {
 
           {/* The artwork takes the space left (as a square), so it never runs into the bands. */}
           <div className="h-full min-h-0 flex items-center justify-center">
-            <div className="h-full max-h-[400px] aspect-square max-w-full">
-              <AuthArt />
+            {/* Always a square: the smaller of the space's width and height (capped),
+                so the cards keep their places around the diamond on any screen. */}
+            <div className="w-full h-full [container-type:size] grid place-items-center">
+              <div className="w-[min(100cqw,100cqh,420px)] aspect-square">
+                <AuthArt />
+              </div>
             </div>
           </div>
         </div>

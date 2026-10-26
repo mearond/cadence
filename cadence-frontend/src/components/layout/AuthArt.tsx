@@ -110,7 +110,7 @@ function Leaf({
       <motion.div
         animate={{ y: [0, -floatY, 0] }}
         transition={{ duration: 5 + floatY / 4, repeat: Infinity, ease: 'easeInOut', delay: delay + 0.8 }}
-        className="w-[30cqw] rounded-[4.5cqw] overflow-hidden bg-paper text-teal-dark shadow-[0_24px_50px_-18px_rgb(0_0_0/0.6)]"
+        className="w-[28cqw] rounded-[4.2cqw] overflow-hidden bg-paper text-teal-dark shadow-[0_24px_50px_-18px_rgb(0_0_0/0.6)]"
       >
         <div className="bg-gold text-teal-ink text-center text-[3.6cqw] font-semibold py-[1.8cqw]">{month}</div>
         <div className="text-center font-display font-semibold leading-none text-[11.5cqw] pt-[3.4cqw] pb-[2.2cqw]">{day}</div>
@@ -127,9 +127,9 @@ export default function AuthArt() {
   return (
     <div className="relative w-full h-full [container-type:size]">
       <Emblem />
-      <Leaf date={addDays(4)} type="wedding" icon={Heart} className="left-[0%] top-[6%]" delay={0.9} floatY={10} rotate={-8} />
-      <Leaf date={addDays(11)} type="conference" icon={Presentation} className="right-[0%] top-[30%]" delay={1.1} floatY={14} rotate={6} />
-      <Leaf date={addDays(23)} type="graduation" icon={GraduationCap} className="left-[20%] bottom-[0%]" delay={1.3} floatY={8} rotate={-3} />
+      <Leaf date={addDays(4)} type="wedding" icon={Heart} className="left-[4%] top-[10%]" delay={0.9} floatY={10} rotate={-8} />
+      <Leaf date={addDays(11)} type="conference" icon={Presentation} className="right-[2%] top-[30%]" delay={1.1} floatY={14} rotate={6} />
+      <Leaf date={addDays(23)} type="graduation" icon={GraduationCap} className="left-[24%] bottom-[4%]" delay={1.3} floatY={8} rotate={-3} />
     </div>
   );
 }
