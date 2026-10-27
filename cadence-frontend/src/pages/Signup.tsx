@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, Navigate } from 'react-router-dom';
+import { homePathFor } from '../lib/permissions';
 import { useTranslation } from 'react-i18next';
 import AuthShell from '../components/layout/AuthShell';
 import { useAuthStore } from '../store/authStore';
@@ -8,6 +9,8 @@ import { isValidEmail } from '../lib/validation';
 export default function Signup() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const currentToken = useAuthStore((st) => st.token);
+  const currentUser = useAuthStore((st) => st.user);
   const signup = useAuthStore((s) => s.signup);
 
   const [orgName, setOrgName] = useState('');
@@ -36,6 +39,11 @@ export default function Signup() {
     }
     navigate('/dashboard');
   };
+
+  // Already signed in (in this tab or another one): go to the home page instead.
+  if (currentToken && currentUser && !currentUser.mustChangePassword) {
+    return <Navigate to={homePathFor(currentUser.role)} replace />;
+  }
 
   return (
     <AuthShell title={t('auth.signupTitle')} subtitle={t('auth.signupSubtitle')}>

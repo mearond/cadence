@@ -21,6 +21,13 @@ api.interceptors.response.use(
     const url: string = error.config?.url ?? '';
     const isAuthAttempt = url.includes('/auth/login') || url.includes('/auth/signup');
     if (status === 401 && !isAuthAttempt && localStorage.getItem('cadence_token')) {
+      // Tell the sign-in page why, so it can explain instead of just reappearing.
+      const reason = error.response?.data?.code === 'ACCOUNT_REMOVED' ? 'removed' : 'expired';
+      try {
+        sessionStorage.setItem('cadence_signout_reason', reason);
+      } catch {
+        // storage unavailable: the sign-in page just won't show a reason
+      }
       localStorage.removeItem('cadence_token');
       localStorage.removeItem('cadence_user');
       window.location.assign('/login');

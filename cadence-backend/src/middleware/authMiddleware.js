@@ -6,7 +6,7 @@ export async function requireAuth(req, res, next) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'No token provided.' });
+    return res.status(401).json({ error: 'No token provided.', code: 'NO_SESSION' });
   }
 
   const token = authHeader.split(' ')[1];
@@ -15,7 +15,7 @@ export async function requireAuth(req, res, next) {
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET);
   } catch (err) {
-    return res.status(401).json({ error: 'Invalid or expired token.' });
+    return res.status(401).json({ error: 'Invalid or expired token.', code: 'SESSION_EXPIRED' });
   }
 
   // Read the role from the database, not the token, so a role change or a
@@ -23,7 +23,7 @@ export async function requireAuth(req, res, next) {
   try {
     const result = await pool.query('SELECT id, org_id, role FROM users WHERE id = $1', [decoded.userId]);
     if (result.rows.length === 0) {
-      return res.status(401).json({ error: 'Account no longer exists.' });
+      return res.status(401).json({ error: 'Account no longer exists.', code: 'ACCOUNT_REMOVED' });
     }
     const user = result.rows[0];
     req.user = { userId: user.id, orgId: user.org_id, role: user.role };

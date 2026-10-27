@@ -15,12 +15,14 @@ import SetPassword from './pages/SetPassword';
 import Vendors from './pages/Vendors';
 import Staff from './pages/Staff';
 import ErrorToast from './components/shared/ErrorToast';
+import SessionNotice from './components/shared/SessionNotice';
 import StaffShell from './components/layout/StaffShell';
 
 function App() {
   return (
     <BrowserRouter>
       <ErrorToast />
+      <SessionNotice />
       <Routes>
         <Route path="/" element={<HomeRedirect />} />
         <Route path="/login" element={<Login />} />

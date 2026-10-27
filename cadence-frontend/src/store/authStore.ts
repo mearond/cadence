@@ -31,17 +31,17 @@ function getErrorMessage(err: unknown, fallback: string): string {
 
 const storedToken = localStorage.getItem('cadence_token');
 const storedUserJson = localStorage.getItem('cadence_user');
-function readStoredUser(): User | null {
-  if (!storedUserJson) return null;
+function readStoredUser(json: string | null = localStorage.getItem('cadence_user')): User | null {
+  if (!json) return null;
   try {
-    return JSON.parse(storedUserJson);
+    return JSON.parse(json);
   } catch {
     // Corrupt value (e.g. edited by hand): treat as signed out rather than crash on load.
     localStorage.removeItem('cadence_user');
     return null;
   }
 }
-const storedUser = readStoredUser();
+const storedUser = readStoredUser(storedUserJson);
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
   user: storedUser,
@@ -103,3 +103,32 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     set({ token: null, user: null });
   },
 }));
+
+// All tabs of one browser share a single sign-in (it lives in localStorage).
+// When another tab signs in as someone else or signs out, follow it here and say
+// so, rather than carrying on with a stale name on screen and another person's
+// session underneath. The page reloads so nothing from the old account lingers.
+window.addEventListener('storage', (e) => {
+  if (e.key !== 'cadence_token' && e.key !== 'cadence_user' && e.key !== null) return;
+  const { user: current } = useAuthStore.getState();
+  const nextToken = localStorage.getItem('cadence_token');
+  const nextUser = readStoredUser();
+
+  try {
+    if (!nextToken) {
+      if (!current) return;
+      sessionStorage.setItem('cadence_signout_reason', 'elsewhere');
+    } else if (nextUser && current && nextUser.id === current.id) {
+      // Same person signed in again elsewhere: just pick up the new session quietly.
+      useAuthStore.setState({ token: nextToken, user: nextUser });
+      return;
+    } else if (nextUser) {
+      sessionStorage.setItem('cadence_switched_to', nextUser.name);
+    } else {
+      return; // token written before the user record; the next event has both
+    }
+  } catch {
+    // storage unavailable: still reload so the tab matches the real session
+  }
+  window.location.reload();
+});

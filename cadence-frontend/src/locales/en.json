@@ -349,5 +349,14 @@
     "badLinkTitle": "This link isn't complete",
     "badLinkBody": "Open the link from the email again, or ask for a new one.",
     "requestNew": "Send a new reset link"
+  },
+  "session": {
+    "switchedTitle": "You are now signed in as {{name}}.",
+    "switchedBody": "That account signed in from another tab, and tabs in one browser share a sign-in. To test two accounts, use a private window.",
+    "reason": {
+      "removed": "Your account was removed by your agency, so you have been signed out. If this is a mistake, contact the agency owner.",
+      "expired": "Your session ended. Please sign in again.",
+      "elsewhere": "You signed out in another tab of this browser."
+    }
   }
 }

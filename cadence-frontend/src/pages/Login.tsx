@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, Navigate } from 'react-router-dom';
+import { homePathFor } from '../lib/permissions';
 import { useTranslation } from 'react-i18next';
 import AuthShell from '../components/layout/AuthShell';
 import { useAuthStore } from '../store/authStore';
@@ -7,11 +8,23 @@ import { useAuthStore } from '../store/authStore';
 export default function Login() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const currentToken = useAuthStore((st) => st.token);
+  const currentUser = useAuthStore((st) => st.user);
   const login = useAuthStore((s) => s.login);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  // Why the person was sent here, if they were signed out (set by lib/api.ts or authStore).
+  const [signoutReason] = useState(() => {
+    try {
+      const reason = sessionStorage.getItem('cadence_signout_reason');
+      sessionStorage.removeItem('cadence_signout_reason');
+      return reason;
+    } catch {
+      return null;
+    }
+  });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,10 +48,27 @@ export default function Login() {
     }
   };
 
+  // Already signed in (in this tab or another one): go to the home page instead.
+  if (currentToken && currentUser && !currentUser.mustChangePassword) {
+    return <Navigate to={homePathFor(currentUser.role)} replace />;
+  }
+
   return (
     <AuthShell title={t('auth.loginTitle')} subtitle={t('auth.loginSubtitle')}>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        {signoutReason && (
+        <div
+          role="status"
+          className={`mb-6 rounded-2xl border px-4 py-3 text-sm leading-relaxed ${
+            signoutReason === 'removed'
+              ? 'border-terracotta/25 bg-terracotta-light/60 text-[#7d3418]'
+              : 'border-teal-deep/15 bg-sage-light/70 text-teal-dark'
+          }`}
+        >
+          {t(`session.reason.${signoutReason}`, { defaultValue: t('session.reason.expired') })}
+        </div>
+      )}
+      <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label className="field-label">{t('auth.email')}</label>
             <input
