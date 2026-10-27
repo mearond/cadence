@@ -29,7 +29,8 @@
     "loginTitle": "Sign in",
     "loginSubtitle": "Pick up where your team left off.",
     "signupTitle": "Set up your agency",
-    "signupSubtitle": "You will be the owner, and can add your team afterwards."
+    "signupSubtitle": "You will be the owner, and can add your team afterwards.",
+    "forgotLink": "Forgot password?"
   },
   "dashboard": {
     "welcomeBack": "Welcome back",
@@ -312,5 +313,29 @@
       "budgets": "Budgets in birr",
       "approvals": "Client approvals"
     }
+  },
+  "forgot": {
+    "title": "Reset your password",
+    "subtitle": "Enter the email you sign in with and we will send you a link to choose a new password.",
+    "send": "Send reset link",
+    "failed": "Could not send the link. Please try again.",
+    "sentTitle": "Check your email",
+    "sentBody": "If {{email}} has a Cadence account, a link to reset your password is on its way. It works once and expires in an hour.",
+    "checkSpam": "Nothing after a few minutes? Check your spam folder, or ask the agency owner to reset it for you.",
+    "backToSignIn": "Back to sign in",
+    "tryAgain": "Use a different email"
+  },
+  "reset": {
+    "title": "Choose a new password",
+    "subtitle": "Use at least 8 characters.",
+    "save": "Save new password",
+    "tooShort": "New password must be at least 8 characters.",
+    "mismatch": "The two passwords don't match.",
+    "failed": "Could not change your password. Please try again.",
+    "doneTitle": "Password changed",
+    "doneBody": "You can sign in with your new password now.",
+    "badLinkTitle": "This link isn't complete",
+    "badLinkBody": "Open the link from the email again, or ask for a new one.",
+    "requestNew": "Send a new reset link"
   }
 }

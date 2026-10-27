@@ -43,6 +43,7 @@ export default function Login() {
             <label className="field-label">{t('auth.email')}</label>
             <input
               type="email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="input py-3"
@@ -50,9 +51,15 @@ export default function Login() {
             />
           </div>
           <div>
-            <label className="field-label">{t('auth.password')}</label>
+            <div className="flex items-baseline justify-between">
+              <label className="field-label">{t('auth.password')}</label>
+              <Link to="/forgot-password" className="text-[13px] font-medium text-teal-deep hover:text-teal-dark underline-offset-4 hover:underline">
+                {t('auth.forgotLink')}
+              </Link>
+            </div>
             <input
               type="password"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="input py-3"

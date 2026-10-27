@@ -9,6 +9,8 @@ import EditEvent from './pages/EditEvent';
 import ClientPortal from './pages/ClientPortal';
 import ClientEventDetail from './pages/ClientEventDetail';
 import Signup from './pages/Signup';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import SetPassword from './pages/SetPassword';
 import Vendors from './pages/Vendors';
 import Staff from './pages/Staff';
@@ -23,6 +25,8 @@ function App() {
         <Route path="/" element={<HomeRedirect />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route element={<ProtectedRoute><StaffShell /></ProtectedRoute>}>
           <Route path="/dashboard" element={<ProtectedRoute permission="dashboard:view"><Dashboard /></ProtectedRoute>} />

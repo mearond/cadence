@@ -55,3 +55,19 @@ export async function sendStaffInviteEmail({ to, staffName, orgName, temporaryPa
     `,
   });
 }
+export async function sendPasswordResetEmail({ to, name, resetUrl, minutes }) {
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM || process.env.SMTP_USER,
+    to,
+    subject: 'Reset your Cadence password',
+    html: `
+      <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
+        <h2 style="color:#0D5C5C;">Reset your password</h2>
+        <p>Hi ${name},</p>
+        <p>Someone asked to reset the password for your Cadence account. If it was you, choose a new password with the button below. The link works once and expires in ${minutes} minutes.</p>
+        <a href="${resetUrl}" style="display:inline-block; background:#135f5a; color:#fff; padding:10px 20px; border-radius:999px; text-decoration:none; font-weight:600; margin:12px 0;">Choose a new password</a>
+        <p style="color:#5b6b69; font-size:13px;">If you didn't ask for this, ignore this email. Your password stays the same.</p>
+      </div>
+    `,
+  });
+}
