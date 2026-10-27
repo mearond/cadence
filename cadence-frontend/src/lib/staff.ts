@@ -35,6 +35,15 @@ export async function updateStaff(
   return response.data;
 }
 
-export async function deleteStaff(id: number): Promise<void> {
-  await api.delete(`/staff/${id}`);
+export interface TaskToReassign {
+  id: number;
+  title: string;
+  event_id: number;
+  event_name: string;
+}
+
+// Removes the account. Returns the unfinished tasks that were assigned to them.
+export async function deleteStaff(id: number): Promise<{ name: string; tasksToReassign: TaskToReassign[] }> {
+  const response = await api.delete(`/staff/${id}`);
+  return response.data;
 }

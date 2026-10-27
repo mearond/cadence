@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { CalendarDays, Users, ClipboardList } from 'lucide-react';
+import { CalendarDays, Users, ClipboardList, UserX } from 'lucide-react';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import DateDisplay from '../components/shared/DateDisplay';
 import EventCalendar from '../components/dashboard/EventCalendar';
@@ -202,7 +202,16 @@ export default function Dashboard() {
                     >
                       <div>
                         <p className="text-[15px] font-medium text-teal-dark">{task.title}</p>
-                        <p className="text-xs text-teal-dark/50 mt-0.5">{task.event_name}</p>
+                        <p className="text-xs text-teal-dark/50 mt-0.5">
+                          {task.event_name}
+                          {task.assigned_to_name && <span> · {task.assigned_to_name}</span>}
+                        </p>
+                        {task.removed_assignee_name && !task.assigned_to_name && (
+                          <p className="mt-1 inline-flex items-center gap-1 text-xs font-medium text-terracotta">
+                            <UserX size={12} />
+                            {t('tasks.needsAssignee', { name: task.removed_assignee_name })}
+                          </p>
+                        )}
                       </div>
                       <span className={`chip shrink-0 ${priorityColors[task.priority] || ''}`}>
                         {t(`dashboard.priority.${task.priority}`)}

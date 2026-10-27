@@ -177,7 +177,14 @@
     "checkpoints": "checkpoints done",
     "progress": "{{done}} of {{total}} done",
     "markDone": "Mark as done",
-    "markPending": "Mark as not done"
+    "markPending": "Mark as not done",
+    "assignee": "Assignee",
+    "unassigned": "Unassigned",
+    "assignSomeone": "Assign someone else",
+    "assigneeRemoved": "{{name}} was removed from staff",
+    "needsAssignee": "Needs a new assignee ({{name}} was removed)",
+    "reassignNotice_one": "1 task was assigned to {{names}}, who is no longer on staff. Please assign someone else.",
+    "reassignNotice_other": "{{count}} tasks were assigned to {{names}}, who are no longer on staff. Please assign someone else."
   },
   "portal": {
     "myEvents": "My Events",
@@ -279,7 +286,12 @@
     "noAccess": "You don't have access to the staff list.",
     "confirmDelete": "Remove this staff member? This cannot be undone.",
     "subtitle_one": "{{count}} person on your team",
-    "subtitle_other": "{{count}} people on your team"
+    "subtitle_other": "{{count}} people on your team",
+    "confirmDeleteNamed": "Remove {{name}}? Their account will be deleted and they won't be able to sign in. Tasks assigned to them will need someone new.",
+    "removedNoTasks": "{{name}} was removed. They had no unfinished tasks.",
+    "removedWithTasks_one": "{{name}} was removed. Please assign someone else to this task:",
+    "removedWithTasks_other": "{{name}} was removed. Please assign someone else to these {{count}} tasks:",
+    "dismiss": "Dismiss"
   },
   "rating": {
     "title": "Rate Your Experience",

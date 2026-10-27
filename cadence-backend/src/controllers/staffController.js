@@ -117,17 +117,42 @@ export async function deleteStaff(req, res) {
     return res.status(400).json({ error: 'You cannot remove your own account.' });
   }
 
+  const client = await pool.connect();
   try {
-    const result = await pool.query(
-      `DELETE FROM users WHERE id = $1 AND org_id = $2 AND role = ANY($3) RETURNING id`,
+    await client.query('BEGIN');
+
+    const target = await client.query(
+      'SELECT id, name FROM users WHERE id = $1 AND org_id = $2 AND role = ANY($3) FOR UPDATE',
       [id, req.user.orgId, ASSIGNABLE_ROLES]
     );
-    if (result.rows.length === 0) {
+    if (target.rows.length === 0) {
+      await client.query('ROLLBACK');
       return res.status(404).json({ error: 'Staff member not found.' });
     }
-    res.json({ message: 'Staff member removed.' });
+    const { name } = target.rows[0];
+
+    // Remember who held their tasks; unfinished ones are flagged for reassignment.
+    const affected = await client.query(
+      `UPDATE tasks t SET removed_assignee_name = $1
+       FROM events e
+       WHERE t.event_id = e.id AND e.org_id = $2 AND t.assigned_to = $3
+       RETURNING t.id, t.title, t.status, e.id AS event_id, e.name AS event_name`,
+      [name, req.user.orgId, id]
+    );
+
+    await client.query('DELETE FROM users WHERE id = $1', [id]);
+    await client.query('COMMIT');
+
+    const tasksToReassign = affected.rows
+      .filter((row) => row.status !== 'complete')
+      .map(({ id: taskId, title, event_id, event_name }) => ({ id: taskId, title, event_id, event_name }));
+
+    res.json({ message: 'Staff member removed.', name, tasksToReassign });
   } catch (err) {
+    await client.query('ROLLBACK').catch(() => {});
     console.error(err);
     res.status(500).json({ error: 'Could not remove staff member.' });
+  } finally {
+    client.release();
   }
 }

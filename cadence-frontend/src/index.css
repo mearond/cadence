@@ -276,3 +276,9 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* A gentle pulse to draw the eye to something that needs action (twice, then stops). */
+@keyframes attention {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(180 81 44 / 0); }
+  50% { box-shadow: 0 0 0 6px rgb(180 81 44 / 0.18); }
+}

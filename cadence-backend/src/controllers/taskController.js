@@ -1,6 +1,15 @@
 import { pool } from '../config/db.js';
 import { can } from '../lib/permissions.js';
 
+// An assignee must be a staff member (not a client) of the same agency.
+async function isValidAssignee(userId, orgId) {
+  const result = await pool.query(
+    "SELECT 1 FROM users WHERE id = $1 AND org_id = $2 AND role IN ('owner', 'manager', 'coordinator', 'staff')",
+    [userId, orgId]
+  );
+  return result.rows.length > 0;
+}
+
 async function verifyEventOwnership(eventId, orgId) {
   const result = await pool.query('SELECT id FROM events WHERE id = $1 AND org_id = $2', [eventId, orgId]);
   return result.rows.length > 0;
@@ -39,6 +48,10 @@ export async function createTask(req, res) {
   const owns = await verifyEventOwnership(eventId, req.user.orgId);
   if (!owns) return res.status(404).json({ error: 'Event not found.' });
 
+  if (assignedTo && !(await isValidAssignee(assignedTo, req.user.orgId))) {
+    return res.status(400).json({ error: 'Choose someone on your staff to assign this task to.' });
+  }
+
   try {
     const result = await pool.query(
       `INSERT INTO tasks (event_id, title, description, priority, assigned_to, due_date, created_by)
@@ -55,16 +68,23 @@ export async function createTask(req, res) {
 
 export async function updateTask(req, res) {
   const { eventId, id } = req.params;
-  const { title, description, status, priority, assignedTo, dueDate } = req.body;
+  const { title, description, status, priority, dueDate } = req.body;
+  // `assignedTo` present in the body (even as null) means "change the assignee".
+  const changesAssignee = Object.prototype.hasOwnProperty.call(req.body, 'assignedTo');
+  const assignedTo = req.body.assignedTo || null;
 
   // Event staff may only change a task's status; editing anything else needs tasks:manage.
-  const editsOtherFields = [title, description, priority, assignedTo, dueDate].some((v) => v !== undefined);
+  const editsOtherFields = changesAssignee || [title, description, priority, dueDate].some((v) => v !== undefined);
   if (editsOtherFields && !can(req.user.role, 'tasks:manage')) {
     return res.status(403).json({ error: 'You can only update the status of a task.' });
   }
 
   const owns = await verifyEventOwnership(eventId, req.user.orgId);
   if (!owns) return res.status(404).json({ error: 'Event not found.' });
+
+  if (changesAssignee && assignedTo && !(await isValidAssignee(assignedTo, req.user.orgId))) {
+    return res.status(400).json({ error: 'Choose someone on your staff to assign this task to.' });
+  }
 
   try {
     const result = await pool.query(
@@ -73,11 +93,12 @@ export async function updateTask(req, res) {
         description = COALESCE($2, description),
         status = COALESCE($3, status),
         priority = COALESCE($4, priority),
-        assigned_to = COALESCE($5, assigned_to),
-        due_date = COALESCE($6, due_date)
-       WHERE id = $7 AND event_id = $8
+        due_date = COALESCE($5, due_date),
+        assigned_to = CASE WHEN $8 THEN $9::int ELSE assigned_to END,
+        removed_assignee_name = CASE WHEN $8 THEN NULL ELSE removed_assignee_name END
+       WHERE id = $6 AND event_id = $7
        RETURNING *`,
-      [title, description, status, priority, assignedTo, dueDate, id, eventId]
+      [title, description, status, priority, dueDate, id, eventId, changesAssignee, assignedTo]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Task not found.' });
     res.json(result.rows[0]);

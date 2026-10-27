@@ -9,6 +9,8 @@ export interface DashboardTask {
   due_date: string | null;
   event_id: number;
   event_name: string;
+  assigned_to_name?: string | null;
+  removed_assignee_name?: string | null;
 }
 
 export interface DashboardStatusCount {

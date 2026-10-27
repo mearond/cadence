@@ -144,7 +144,7 @@ export async function fetchTasks(eventId: string) {
   const response = await api.get(`/events/${eventId}/tasks`);
   return response.data;
 }
-export async function addTask(eventId: string, data: { title: string; priority: string }) {
+export async function addTask(eventId: string, data: { title: string; priority: string; assignedTo?: number | null }) {
   const response = await api.post(`/events/${eventId}/tasks`, data);
   return response.data;
 }
@@ -229,7 +229,7 @@ export async function deleteTimelineItem(eventId: string, id: number): Promise<v
 export async function updateTask(
   eventId: string,
   id: number,
-  data: Partial<{ title: string; description: string; status: string; priority: string; assignedTo: number; dueDate: string }>
+  data: Partial<{ title: string; description: string; status: string; priority: string; assignedTo: number | null; dueDate: string }>
 ) {
   const response = await api.put(`/events/${eventId}/tasks/${id}`, data);
   return response.data;

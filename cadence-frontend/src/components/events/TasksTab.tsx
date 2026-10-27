@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AnimatePresence, motion } from 'framer-motion';
 
-import { Plus, CheckCircle2, Circle, Pencil, Trash2 } from 'lucide-react';
+import { Plus, CheckCircle2, Circle, Pencil, Trash2, UserX } from 'lucide-react';
 import { fetchTasks, addTask, updateTask, deleteTask } from '../../lib/events';
 import { useCan } from '../../lib/permissions';
+import { fetchStaff, type StaffMember } from '../../lib/staff';
 
 const PRIORITY_CHIP: Record<string, string> = {
   critical: 'bg-terracotta-light text-terracotta',
@@ -20,7 +21,21 @@ interface Task {
   status: string;
   checkpoint_count: number;
   checkpoint_done: number;
+  assigned_to: number | null;
+  assigned_to_name: string | null;
+  // Set when the assignee was removed from staff; cleared when someone new is assigned.
+  removed_assignee_name: string | null;
 }
+
+const initials = (name: string) =>
+  name
+    .split(' ')
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+
+const needsReassign = (task: Task) => !!task.removed_assignee_name && !task.assigned_to && task.status !== 'complete';
 
 const PRIORITIES = ['low', 'medium', 'high', 'critical'];
 
@@ -33,6 +48,8 @@ export default function TasksTab({ eventId }: { eventId: string }) {
   const [formMode, setFormMode] = useState<'none' | 'add' | number>('none');
   const [title, setTitle] = useState('');
   const [priority, setPriority] = useState('medium');
+  const [assignee, setAssignee] = useState('');
+  const [staff, setStaff] = useState<StaffMember[]>([]);
 
   const load = () => fetchTasks(eventId).then(setTasks);
 
@@ -40,30 +57,43 @@ export default function TasksTab({ eventId }: { eventId: string }) {
     load();
   }, [eventId]);
 
+  // People a task can be assigned to (only needed by those who can assign).
+  useEffect(() => {
+    if (canManage) fetchStaff().then(setStaff).catch(() => setStaff([]));
+  }, [canManage]);
+
+  const assignTo = async (task: Task, userId: string) => {
+    await updateTask(eventId, task.id, { assignedTo: userId ? Number(userId) : null });
+    load();
+  };
+
   const resetForm = () => {
     setTitle('');
     setPriority('medium');
+    setAssignee('');
     setFormMode('none');
   };
 
   const startAdd = () => {
     setTitle('');
     setPriority('medium');
+    setAssignee('');
     setFormMode('add');
   };
 
   const startEdit = (task: Task) => {
     setTitle(task.title);
     setPriority(task.priority);
+    setAssignee(task.assigned_to ? String(task.assigned_to) : '');
     setFormMode(task.id);
   };
 
   const handleSave = async () => {
     if (!title) return;
     if (formMode === 'add') {
-      await addTask(eventId, { title, priority });
+      await addTask(eventId, { title, priority, assignedTo: assignee ? Number(assignee) : null });
     } else if (typeof formMode === 'number') {
-      await updateTask(eventId, formMode, { title, priority });
+      await updateTask(eventId, formMode, { title, priority, assignedTo: assignee ? Number(assignee) : null });
     }
     resetForm();
     load();
@@ -102,12 +132,29 @@ export default function TasksTab({ eventId }: { eventId: string }) {
           </div>
         );
       })()}
+      {canManage && tasks.some(needsReassign) && (() => {
+        const flagged = tasks.filter(needsReassign);
+        const names = [...new Set(flagged.map((x) => x.removed_assignee_name))].join(', ');
+        return (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            role="status"
+            className="flex items-start gap-3 rounded-2xl border border-terracotta/25 bg-terracotta-light/60 px-4 py-3 mb-5"
+          >
+            <UserX size={18} className="text-terracotta shrink-0 mt-0.5" />
+            <p className="text-sm text-[#7d3418] leading-relaxed">
+              {t('tasks.reassignNotice', { count: flagged.length, names })}
+            </p>
+          </motion.div>
+        );
+      })()}
       {tasks.length === 0 && formMode === 'none' && <p className="text-sm text-teal-dark/50 mb-4">{t('tasks.empty')}</p>}
 
       <div className="stagger-grid space-y-1 mb-4">
         {tasks.map((task) =>
           formMode === task.id ? (
-            <TaskForm key={task.id} t={t} title={title} setTitle={setTitle} priority={priority} setPriority={setPriority} onSave={handleSave} onCancel={resetForm} />
+            <TaskForm key={task.id} t={t} title={title} setTitle={setTitle} priority={priority} setPriority={setPriority} assignee={assignee} setAssignee={setAssignee} staff={staff} onSave={handleSave} onCancel={resetForm} />
           ) : (
             <div key={task.id} className="flex items-center gap-3 py-3 border-b border-teal-dark/[0.06] last:border-0 text-[15px] group">
               <button
@@ -128,7 +175,42 @@ export default function TasksTab({ eventId }: { eventId: string }) {
                   )}
                 </AnimatePresence>
               </button>
-              <p className={`flex-1 transition-colors ${task.status === 'complete' ? 'text-teal-dark/40 line-through decoration-teal-dark/30' : 'text-teal-dark'}`}>{task.title}</p>
+              <div className="flex-1 min-w-0">
+                <p className={`transition-colors ${task.status === 'complete' ? 'text-teal-dark/40 line-through decoration-teal-dark/30' : 'text-teal-dark'}`}>{task.title}</p>
+                {needsReassign(task) ? (
+                  <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                    <span className="chip bg-terracotta-light text-terracotta">
+                      {t('tasks.assigneeRemoved', { name: task.removed_assignee_name })}
+                    </span>
+                    {canManage && (
+                      <select
+                        value=""
+                        onChange={(e) => assignTo(task, e.target.value)}
+                        aria-label={t('tasks.assignSomeone')}
+                        className="h-8 rounded-full border border-terracotta/40 bg-white pl-3 pr-8 text-[13px] font-medium text-terracotta focus:outline-none focus:ring-4 focus:ring-terracotta/15 animate-[attention_2.4s_ease-in-out_2]"
+                      >
+                        <option value="">{t('tasks.assignSomeone')}</option>
+                        {staff.map((m) => (
+                          <option key={m.id} value={m.id}>{m.name}</option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
+                ) : (
+                  <p className="mt-1 flex items-center gap-1.5 text-[13px] text-teal-dark/50">
+                    {task.assigned_to_name ? (
+                      <>
+                        <span className="grid place-items-center w-5 h-5 rounded-full bg-teal-deep text-gold-light text-[9px] font-semibold">
+                          {initials(task.assigned_to_name)}
+                        </span>
+                        {task.assigned_to_name}
+                      </>
+                    ) : (
+                      t('tasks.unassigned')
+                    )}
+                  </p>
+                )}
+              </div>
               {task.priority && task.status !== 'complete' && (
                 <span className={`chip hidden sm:inline-flex ${PRIORITY_CHIP[task.priority] ?? ''}`}>{t(`dashboard.priority.${task.priority}`)}</span>
               )}
@@ -157,7 +239,7 @@ export default function TasksTab({ eventId }: { eventId: string }) {
       </div>
 
       {formMode === 'add' ? (
-        <TaskForm t={t} title={title} setTitle={setTitle} priority={priority} setPriority={setPriority} onSave={handleSave} onCancel={resetForm} />
+        <TaskForm t={t} title={title} setTitle={setTitle} priority={priority} setPriority={setPriority} assignee={assignee} setAssignee={setAssignee} staff={staff} onSave={handleSave} onCancel={resetForm} />
       ) : formMode === 'none' && canManage ? (
         <button onClick={startAdd} className="btn-ghost text-teal-deep -ml-3">
           <Plus size={15} />
@@ -174,6 +256,9 @@ function TaskForm({
   setTitle,
   priority,
   setPriority,
+  assignee,
+  setAssignee,
+  staff,
   onSave,
   onCancel,
 }: {
@@ -182,17 +267,31 @@ function TaskForm({
   setTitle: (v: string) => void;
   priority: string;
   setPriority: (v: string) => void;
+  assignee: string;
+  setAssignee: (v: string) => void;
+  staff: StaffMember[];
   onSave: () => void;
   onCancel: () => void;
 }) {
   return (
-    <div className="flex gap-2 pt-3 pb-2 border-t border-teal-dark/[0.07]">
-      <input placeholder={t('tasks.title')} value={title} onChange={(e) => setTitle(e.target.value)} className="flex-1 bg-white border border-teal-dark/15 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:border-teal-deep focus:ring-4 focus:ring-teal-deep/10" />
+    <div className="flex flex-wrap gap-2 pt-3 pb-2 border-t border-teal-dark/[0.07]">
+      <input placeholder={t('tasks.title')} value={title} onChange={(e) => setTitle(e.target.value)} className="flex-1 min-w-[180px] bg-white border border-teal-dark/15 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:border-teal-deep focus:ring-4 focus:ring-teal-deep/10" />
       <select value={priority} onChange={(e) => setPriority(e.target.value)} className="bg-white border border-teal-dark/15 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:border-teal-deep focus:ring-4 focus:ring-teal-deep/10">
         {PRIORITIES.map((p) => (
           <option key={p} value={p}>
             {p.charAt(0).toUpperCase() + p.slice(1)}
           </option>
+        ))}
+      </select>
+      <select
+        value={assignee}
+        onChange={(e) => setAssignee(e.target.value)}
+        aria-label={t('tasks.assignee')}
+        className="bg-white border border-teal-dark/15 rounded-lg px-2.5 py-2 text-sm focus:outline-none focus:border-teal-deep focus:ring-4 focus:ring-teal-deep/10"
+      >
+        <option value="">{t('tasks.unassigned')}</option>
+        {staff.map((m) => (
+          <option key={m.id} value={m.id}>{m.name}</option>
         ))}
       </select>
       <button onClick={onSave} className="btn-gold">

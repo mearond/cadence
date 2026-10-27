@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, UserCircle2, Pencil, Trash2, Shield } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Plus, UserCircle2, Pencil, Trash2, Shield, UserX, X, ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import PageHeader from '../components/shared/PageHeader';
 import DashboardLayout from '../components/layout/DashboardLayout';
 import StaffFormModal from '../components/staff/StaffFormModal';
 import { useAuthStore } from '../store/authStore';
-import { fetchStaff, deleteStaff, type StaffMember } from '../lib/staff';
+import { fetchStaff, deleteStaff, type StaffMember, type TaskToReassign } from '../lib/staff';
 import { useCan, type StaffRole } from '../lib/permissions';
 
 const roleStyles: Record<StaffRole, { label: string; className: string }> = {
@@ -24,6 +25,8 @@ export default function Staff() {
   const [staff, setStaff] = useState<StaffMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalTarget, setModalTarget] = useState<'new' | StaffMember | null>(null);
+  // After removing someone: their unfinished tasks, which now need a new assignee.
+  const [removed, setRemoved] = useState<{ name: string; tasks: TaskToReassign[] } | null>(null);
 
   const load = () => fetchStaff().then(setStaff).finally(() => setLoading(false));
 
@@ -33,8 +36,9 @@ export default function Staff() {
   }, []);
 
   const handleDelete = async (member: StaffMember) => {
-    if (!confirm(t('staffPage.confirmDelete'))) return;
-    await deleteStaff(member.id);
+    if (!confirm(t('staffPage.confirmDeleteNamed', { name: member.name }))) return;
+    const result = await deleteStaff(member.id);
+    setRemoved({ name: result.name ?? member.name, tasks: result.tasksToReassign ?? [] });
     load();
   };
 
@@ -63,6 +67,55 @@ export default function Staff() {
           )
         }
       />
+
+      <AnimatePresence>
+        {removed && (
+          <motion.section
+            initial={{ opacity: 0, y: -8, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: 'auto' }}
+            exit={{ opacity: 0, y: -8, height: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            role="status"
+            className="overflow-hidden mb-6"
+          >
+            <div
+              className={`rounded-2xl border px-5 py-4 ${
+                removed.tasks.length ? 'border-terracotta/25 bg-terracotta-light/60' : 'border-teal-deep/15 bg-sage-light/70'
+              }`}
+            >
+              <div className="flex items-start gap-3">
+                <UserX size={20} className={`shrink-0 mt-0.5 ${removed.tasks.length ? 'text-terracotta' : 'text-teal-deep'}`} />
+                <div className="flex-1 min-w-0">
+                  <p className={`font-semibold ${removed.tasks.length ? 'text-[#7d3418]' : 'text-teal-dark'}`}>
+                    {removed.tasks.length
+                      ? t('staffPage.removedWithTasks', { name: removed.name, count: removed.tasks.length })
+                      : t('staffPage.removedNoTasks', { name: removed.name })}
+                  </p>
+                  {removed.tasks.length > 0 && (
+                    <ul className="mt-3 flex flex-wrap gap-2">
+                      {removed.tasks.map((task) => (
+                        <li key={task.id}>
+                          <Link
+                            to={`/events/${task.event_id}`}
+                            className="inline-flex items-center gap-1.5 rounded-full bg-paper border border-terracotta/20 pl-3 pr-2.5 py-1.5 text-sm text-teal-dark hover:border-terracotta/50 transition-colors"
+                          >
+                            <span className="font-medium">{task.title}</span>
+                            <span className="text-teal-dark/45">· {task.event_name}</span>
+                            <ArrowUpRight size={14} className="text-terracotta" />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                <button onClick={() => setRemoved(null)} className="icon-btn w-8 h-8 shrink-0" aria-label={t('staffPage.dismiss')}>
+                  <X size={16} />
+                </button>
+              </div>
+            </div>
+          </motion.section>
+        )}
+      </AnimatePresence>
 
       {loading && <div className="skeleton h-32" />}
 

@@ -177,7 +177,14 @@
     "checkpoints": "ተጠናቀዋል",
     "progress": "ከ{{total}} {{done}} ተጠናቋል",
     "markDone": "እንደተጠናቀቀ ምልክት አድርግ",
-    "markPending": "እንዳልተጠናቀቀ ምልክት አድርግ"
+    "markPending": "እንዳልተጠናቀቀ ምልክት አድርግ",
+    "assignee": "ተመዳቢ",
+    "unassigned": "ያልተመደበ",
+    "assignSomeone": "ሌላ ሰው መድብ",
+    "assigneeRemoved": "{{name}} ከሰራተኞች ተወግደዋል",
+    "needsAssignee": "አዲስ ተመዳቢ ያስፈልጋል ({{name}} ተወግደዋል)",
+    "reassignNotice_one": "1 ተግባር ከሰራተኞች ለተወገዱት ለ{{names}} ተመድቦ ነበር። እባክዎ ሌላ ሰው ይመድቡ።",
+    "reassignNotice_other": "{{count}} ተግባራት ከሰራተኞች ለተወገዱት ለ{{names}} ተመድበው ነበር። እባክዎ ሌላ ሰው ይመድቡ።"
   },
   "portal": {
     "myEvents": "የእኔ ዝግጅቶች",
@@ -279,7 +286,12 @@
     "noAccess": "የሰራተኞችን ዝርዝር ለማየት ፈቃድ የለዎትም።",
     "confirmDelete": "ይህን ሰራተኛ ያስወግዱ? ይህ መመለስ አይቻልም።",
     "subtitle_one": "በቡድንዎ ውስጥ {{count}} ሰው",
-    "subtitle_other": "በቡድንዎ ውስጥ {{count}} ሰዎች"
+    "subtitle_other": "በቡድንዎ ውስጥ {{count}} ሰዎች",
+    "confirmDeleteNamed": "{{name}}ን ያስወግዱ? አካውንታቸው ይሰረዛል፤ መግባት አይችሉም። ለእነሱ የተመደቡ ተግባራት አዲስ ሰው ያስፈልጋቸዋል።",
+    "removedNoTasks": "{{name}} ተወግደዋል። ያልተጠናቀቀ ተግባር አልነበራቸውም።",
+    "removedWithTasks_one": "{{name}} ተወግደዋል። እባክዎ ለዚህ ተግባር ሌላ ሰው ይመድቡ፦",
+    "removedWithTasks_other": "{{name}} ተወግደዋል። እባክዎ ለእነዚህ {{count}} ተግባራት ሌላ ሰው ይመድቡ፦",
+    "dismiss": "ዝጋ"
   },
   "rating": {
     "title": "ተሞክሮዎን ይገምግሙ",

@@ -25,11 +25,14 @@ export async function getDashboardSummary(req, res) {
     );
 
     const pendingTasksResult = await pool.query(
-      `SELECT t.id, t.title, t.priority, t.status, t.due_date, e.id AS event_id, e.name AS event_name
+      `SELECT t.id, t.title, t.priority, t.status, t.due_date, t.removed_assignee_name,
+              u.name AS assigned_to_name, e.id AS event_id, e.name AS event_name
        FROM tasks t
        JOIN events e ON t.event_id = e.id
+       LEFT JOIN users u ON u.id = t.assigned_to
        WHERE e.org_id = $1 AND t.status != 'complete'
        ORDER BY
+         (t.removed_assignee_name IS NOT NULL AND t.assigned_to IS NULL) DESC,
          CASE t.priority WHEN 'critical' THEN 0 WHEN 'high' THEN 1 WHEN 'medium' THEN 2 ELSE 3 END,
          t.due_date ASC NULLS LAST
        LIMIT 8`,
